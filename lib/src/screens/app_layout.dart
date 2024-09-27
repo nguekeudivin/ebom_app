@@ -22,7 +22,7 @@ class _AppLayoutState extends State<AppLayout> {
     const AccountScreen(), //4
     const CategoriesScreen(), //5
   ];
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   void _setCurrentIndex(int index) {
     setState(() {

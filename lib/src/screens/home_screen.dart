@@ -1,5 +1,6 @@
 import 'package:ebom/src/components/home_header.dart';
 import 'package:ebom/src/components/input_search.dart';
+import 'package:ebom/src/components/products/product_categories_slide.dart';
 import 'package:ebom/src/components/pub_banner.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
@@ -66,33 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                SizedBox(
-                  height: 108,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 80,
-                                height: 80,
-                                child:
-                                    Image.asset(AppAssets.telephoneIntelligent),
-                              ),
-                              Text('Category $index 1'),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                const ProductCategoriesSlide(),
                 const SizedBox(height: 24),
                 const PubBanner(image: AppAssets.bannerDrone),
                 const SizedBox(
@@ -201,6 +176,76 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 20),
                 const PubBanner(image: AppAssets.bannerSamsung),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Services Categories',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: Colors.blue, // Background color
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.borderGray,
+                        ), // Make the background circular
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CategoriesScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const ProductCategoriesSlide(),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Les meilleures services',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: Colors.blue, // Background color
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.borderGray,
+                        ), // Make the background circular
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CategoriesScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 96,
                 ),

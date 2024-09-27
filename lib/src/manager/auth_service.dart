@@ -7,7 +7,7 @@ import 'dart:convert';
 class AuthService {
   final String? baseUrl;
 
-  AuthService({this.baseUrl = AppApi.url});
+  AuthService({this.baseUrl = AppApi.account});
 
   Future<String> verifyOTP(String otp) {
     final Completer<String> completer = Completer();

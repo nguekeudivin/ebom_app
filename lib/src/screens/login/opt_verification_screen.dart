@@ -3,7 +3,7 @@ import 'package:ebom/src/components/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/app_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:ebom/src/services/auth_service.dart';
+import 'package:ebom/src/manager/auth_service.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({super.key});
