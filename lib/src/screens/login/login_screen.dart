@@ -2,6 +2,7 @@ import 'package:ebom/src/components/form/input_text.dart';
 import 'package:ebom/src/components/logo.dart';
 import 'package:ebom/src/components/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/screens/login/opt_verification_screen.dart';
 import 'package:ebom/src/screens/terms_screen.dart';
 import 'package:ebom/src/manager/validation_service.dart';
 import 'package:flutter/material.dart';
@@ -62,25 +63,33 @@ class _WelcomeScreenState extends State<LoginScreen> {
                       child: PrimaryButton(
                         text: 'Connectez-vous',
                         onPressed: (context) {
-                          // Validate the phone number using the validation service.
-                          if (validator
-                              .validatePhoneNumber(phoneNumberCtl.text)) {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const LoginScreen(),
-                            //   ),
-                            // );
-                          } else {
-                            // Afficher le message d'erreur de validation.
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Veuillez entre un numero de telephone valide.',
-                                ),
-                              ),
-                            );
-                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const OtpVerificationScreen(),
+                            ),
+                          );
+
+                          // // Validate the phone number using the validation service.
+                          // if (validator
+                          //     .validatePhoneNumber(phoneNumberCtl.text)) {
+                          //   // Navigator.push(
+                          //   //   context,
+                          //   //   MaterialPageRoute(
+                          //   //     builder: (context) => const LoginScreen(),
+                          //   //   ),
+                          //   // );
+                          // } else {
+                          //   // Afficher le message d'erreur de validation.
+                          //   ScaffoldMessenger.of(context).showSnackBar(
+                          //     const SnackBar(
+                          //       content: Text(
+                          //         'Veuillez entre un numero de telephone valide.',
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
                         },
                       ),
                     ),

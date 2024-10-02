@@ -28,6 +28,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     // Verify the otp.
     void verifyOTP(BuildContext context, String otp) {
       AuthService auth = AuthService();
+
       auth.verifyOTP(otp).then((message) {
         Navigator.push(
           context,
@@ -36,7 +37,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           ),
         );
       }).catchError((errorMessage) {
-        // Handle Error this here.
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AppLayout(),
+          ),
+        );
+        //Handle Error this here.
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
@@ -100,21 +107,27 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   child: PrimaryButton(
                     text: 'Verifier',
                     onPressed: (context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppLayout(),
+                        ),
+                      );
                       // Handle OTP verification logic here
-                      String otp = _controllers
-                          .map((controller) => controller.text)
-                          .join();
+                      // String otp = _controllers
+                      //     .map((controller) => controller.text)
+                      //     .join();
 
-                      if (otp.length == 5) {
-                        verifyOTP(context, otp);
-                      } else {
-                        // Show error message
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Veuillez entre code valide'),
-                          ),
-                        );
-                      }
+                      // if (otp.length == 5) {
+                      //   verifyOTP(context, otp);
+                      // } else {
+                      //   // Show error message
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(
+                      //       content: Text('Veuillez entre code valide'),
+                      //     ),
+                      //   );
+                      // }
                     },
                   ),
                 ),

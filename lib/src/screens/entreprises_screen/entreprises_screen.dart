@@ -1,7 +1,7 @@
-import 'package:ebom/src/components/header.dart';
-import 'package:ebom/src/components/input_search.dart';
+import 'package:ebom/src/components/header/big_header.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
+import 'package:ebom/src/screens/entreprise_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class EntreprisesScreen extends StatefulWidget {
@@ -28,29 +28,32 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
 
     // Adjust child aspect ratio based on screen size
 
-    return Padding(
-      padding: EdgeInsets.all(screenPadding),
-      child: Column(
-        children: [
-          const Header(title: 'Entreprises'),
-          const SizedBox(
-            height: 8,
-          ),
-          const InputSearch(),
-          const SizedBox(
-            height: 8,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Wrap(
-                children: List.generate(100, (index) {
-                  String description =
-                      'Des voitures de qualité avec une garantie fiable et sure';
-                  String displayDescription = (description.length > 40)
-                      ? '${description.substring(0, 40)}...'
-                      : description;
+    return Column(
+      children: [
+        const BigHeader(title: 'Nos entreprises'),
+        const SizedBox(
+          height: 8,
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Wrap(
+              children: List.generate(100, (index) {
+                String description =
+                    'Des voitures de qualité avec une garantie fiable et sure';
+                String displayDescription = (description.length > 40)
+                    ? '${description.substring(0, 40)}...'
+                    : description;
 
-                  return Container(
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EntrepriseDetailsScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
                     width: width / 2 - 2 * screenPadding,
                     height: imageHeight + descriptionHeight,
                     margin: EdgeInsets.only(
@@ -143,13 +146,13 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                         ),
                       ],
                     ),
-                  );
-                }),
-              ),
+                  ),
+                );
+              }),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

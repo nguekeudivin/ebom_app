@@ -1,7 +1,7 @@
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/account_screen.dart';
 import 'package:ebom/src/screens/categories_screen.dart';
-import 'package:ebom/src/screens/entreprises_screen.dart';
+import 'package:ebom/src/screens/entreprises_screen/entreprises_screen.dart';
 import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
 import 'package:ebom/src/screens/products_screen.dart';
 import 'package:ebom/src/screens/services_screen.dart';

@@ -33,49 +33,62 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
   String gender = '';
 
   void submit(BuildContext context) {
-    // Create a validator instance.
-    ValidationService validator = ValidationService();
-    // Define an array for storing errors.
-    List<String> errors = [];
-
-    // Proceed to validation.
-
-    // Validate the name
-    if (!validator.isRequired(nameCtl.text)) {
-      errors.add('Le nom est requis');
-    }
-
-    // Validate birthdate.
-    if (!validator.isRequired(birthdate)) {
-      errors.add('La date de naissance est requise');
-    }
-
-    // Validate the gender.
-    if (!validator.isRequired(gender)) {
-      errors.add('Le genre est requis');
-    }
-
-    // Check is there is errors and display them.
-    if (errors.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errors[0]),
-        ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RegisterScreen2(
-            data: RegisterData(
-              name: nameCtl.text,
-              gender: gender,
-              birthdate: birthdate,
-            ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RegisterScreen2(
+          data: RegisterData(
+            name: nameCtl.text,
+            gender: gender,
+            birthdate: birthdate,
           ),
         ),
-      );
-    }
+      ),
+    );
+
+    // // Create a validator instance.
+    // ValidationService validator = ValidationService();
+    // // Define an array for storing errors.
+    // List<String> errors = [];
+
+    // // Proceed to validation.
+
+    // // Validate the name
+    // if (!validator.isRequired(nameCtl.text)) {
+    //   errors.add('Le nom est requis');
+    // }
+
+    // // Validate birthdate.
+    // if (!validator.isRequired(birthdate)) {
+    //   errors.add('La date de naissance est requise');
+    // }
+
+    // // Validate the gender.
+    // if (!validator.isRequired(gender)) {
+    //   errors.add('Le genre est requis');
+    // }
+
+    // // Check is there is errors and display them.
+    // if (errors.isNotEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(errors[0]),
+    //     ),
+    //   );
+    // } else {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => RegisterScreen2(
+    //         data: RegisterData(
+    //           name: nameCtl.text,
+    //           gender: gender,
+    //           birthdate: birthdate,
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   @override

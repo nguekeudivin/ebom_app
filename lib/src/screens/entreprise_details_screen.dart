@@ -1,4 +1,5 @@
 import 'package:ebom/src/components/contact_info.dart';
+import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +19,9 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context); // Navigate back to the previous page
           },
@@ -27,6 +29,7 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [
@@ -69,6 +72,23 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Container(
+              color: AppColors.primary,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: const Text(
+                'Cami Toyota',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),

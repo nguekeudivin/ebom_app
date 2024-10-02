@@ -1,10 +1,10 @@
-import 'package:ebom/src/components/logo_square.dart';
 import 'package:ebom/src/resources/app_assets.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
   final String title;
-  const Header({required this.title, super.key});
+  final Color? color;
+  const Header({required this.title, this.color = Colors.white, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,11 @@ class Header extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
         Row(
           children: [

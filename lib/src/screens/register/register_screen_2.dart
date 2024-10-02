@@ -2,6 +2,7 @@ import 'package:ebom/src/components/form/input_text.dart';
 import 'package:ebom/src/components/logo.dart';
 import 'package:ebom/src/components/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/screens/app_layout.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
 import 'package:ebom/src/manager/auth_service.dart';
 import 'package:ebom/src/manager/validation_service.dart';
@@ -21,44 +22,51 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
   TextEditingController emailCtl = TextEditingController();
 
   void submit(BuildContext context) {
-    // Create a validator instance.
-    ValidationService validator = ValidationService();
-    // Define an array for storing errors.
-    List<String> errors = [];
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AppLayout(),
+      ),
+    );
 
-    // Proceed to validation.
+    // // Create a validator instance.
+    // ValidationService validator = ValidationService();
+    // // Define an array for storing errors.
+    // List<String> errors = [];
 
-    // Validate phone number.
-    if (!validator.isRequired(phoneNumberCtl.text)) {
-      errors.add('Le numero de telephone est requis');
-    }
+    // // Proceed to validation.
 
-    // Validate email.
-    if (!validator.isRequired(emailCtl.text)) {
-      errors.add("L'addresse email est requise.");
-    }
+    // // Validate phone number.
+    // if (!validator.isRequired(phoneNumberCtl.text)) {
+    //   errors.add('Le numero de telephone est requis');
+    // }
 
-    // Check is there is errors and display them.
-    if (errors.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errors[0]),
-        ),
-      );
-    } else {
-      AuthService auth = AuthService();
-      auth.register(
-        RegisterData(
-          name: widget.data.name,
-          birthdate: widget.data.birthdate,
-          gender: widget.data.gender,
-          phoneNumber: phoneNumberCtl.text,
-          email: emailCtl.text,
-        ),
-      );
-      // There is no errors then.
-      // Go to the next step.
-    }
+    // // Validate email.
+    // if (!validator.isRequired(emailCtl.text)) {
+    //   errors.add("L'addresse email est requise.");
+    // }
+
+    // // Check is there is errors and display them.
+    // if (errors.isNotEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(errors[0]),
+    //     ),
+    //   );
+    // } else {
+    //   AuthService auth = AuthService();
+    //   auth.register(
+    //     RegisterData(
+    //       name: widget.data.name,
+    //       birthdate: widget.data.birthdate,
+    //       gender: widget.data.gender,
+    //       phoneNumber: phoneNumberCtl.text,
+    //       email: emailCtl.text,
+    //     ),
+    //   );
+    //   // There is no errors then.
+    //   // Go to the next step.
+    // }
   }
 
   @override
@@ -131,7 +139,6 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     child: PrimaryButton(
-                      disabled: true,
                       text: "S'inscrire",
                       onPressed: submit,
                     ),

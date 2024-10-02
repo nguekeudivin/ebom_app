@@ -1,5 +1,5 @@
 import 'package:ebom/src/components/form/input_text_field.dart';
-import 'package:ebom/src/components/home_header.dart';
+import 'package:ebom/src/components/header/home_header.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/home_screen/banner_swiper_1.dart';
 import 'package:ebom/src/screens/home_screen/banner_swiper_2.dart';
