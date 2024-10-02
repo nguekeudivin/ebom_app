@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class PubBanner extends StatelessWidget {
   final String image;
   final BorderRadius borderRadius;
-  const PubBanner(
-      {required this.image,
-      this.borderRadius = const BorderRadius.all(Radius.circular(20)),
-      super.key,});
+  const PubBanner({
+    required this.image,
+    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class PubBanner extends StatelessWidget {
         borderRadius: borderRadius,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: borderRadius,
         child: Image.asset(
           image,
           fit: BoxFit.cover,

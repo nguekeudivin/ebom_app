@@ -2,7 +2,7 @@ import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/account_screen.dart';
 import 'package:ebom/src/screens/categories_screen.dart';
 import 'package:ebom/src/screens/entreprises_screen.dart';
-import 'package:ebom/src/screens/home_screen.dart';
+import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
 import 'package:ebom/src/screens/products_screen.dart';
 import 'package:ebom/src/screens/services_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class AppLayout extends StatefulWidget {
 class _AppLayoutState extends State<AppLayout> {
   // Pages for each bottom navigation link
   static final List<Widget> _pages = <Widget>[
-    const HomeScreen(), // 0
+    const HomeScreen2(), // 0
     const EntreprisesScreen(), // 1
     const ServicesScreen(), // 2
     const ProductsScreen(), // 3

@@ -1,4 +1,4 @@
-import 'package:ebom/src/components/Header.dart';
+import 'package:ebom/src/components/header.dart';
 import 'package:ebom/src/components/input_search.dart';
 import 'package:ebom/src/components/product_label.dart';
 import 'package:ebom/src/config/app_colors.dart';

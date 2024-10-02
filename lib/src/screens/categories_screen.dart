@@ -25,6 +25,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16),
         ),
+        
       ),
       body: Column(
         children: [

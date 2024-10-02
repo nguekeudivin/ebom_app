@@ -3,12 +3,16 @@ import 'package:ebom/src/resources/app_assets.dart';
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+  final double? paddingX;
+  final Color? textColor;
+
+  const HomeHeader(
+      {this.paddingX = 16, this.textColor = Colors.white, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(paddingX ?? 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -20,10 +24,11 @@ class HomeHeader extends StatelessWidget {
           Row(
             children: [
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: 'Hello',
-                  style: TextStyle(fontSize: 18),
-                  children: [
+                  style:
+                      TextStyle(fontSize: 18, color: textColor ?? Colors.black),
+                  children: const [
                     TextSpan(
                       text: ' Suzy',
                       style: TextStyle(
