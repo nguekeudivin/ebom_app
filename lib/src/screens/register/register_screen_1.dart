@@ -1,12 +1,11 @@
 import 'package:ebom/src/components/form/input_select.dart';
 import 'package:ebom/src/components/form/input_text.dart';
-import 'package:ebom/src/components/logo.dart';
+import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/components/form/input_date.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/manager/auth_service.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
-import 'package:ebom/src/screens/register/register_screen_2.dart';
-import 'package:ebom/src/types/auth_types.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen1 extends StatefulWidget {
@@ -32,18 +31,29 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
   String gender = '';
 
   void submit(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RegisterScreen2(
-          data: RegisterData(
-            name: nameCtl.text,
-            gender: gender,
-            birthdate: birthdate,
-          ),
-        ),
+    AuthService auth = AuthService();
+    auth.register(
+      RegisterData(
+        nom: 'Divin jordan',
+        naissance: '1999-08-02',
+        sexe: 'M',
+        telephone: '237655660502',
+        email: 'nguekeu3divin@gmail.com',
       ),
     );
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => RegisterScreen2(
+    //       data: RegisterData(
+    //         nom: nameCtl.text,
+    //         sexe: gender,
+    //         naissance: birthdate,
+    //       ),
+    //     ),
+    //   ),
+    // );
 
     // // Create a validator instance.
     // ValidationService validator = ValidationService();
@@ -80,9 +90,9 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
     //     MaterialPageRoute(
     //       builder: (context) => RegisterScreen2(
     //         data: RegisterData(
-    //           name: nameCtl.text,
-    //           gender: gender,
-    //           birthdate: birthdate,
+    //           nom: nameCtl.text,
+    //           sexe: gender,
+    //           naissance: birthdate,
     //         ),
     //       ),
     //     ),
@@ -136,8 +146,7 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
               height: 16,
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -174,12 +183,9 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
                   const SizedBox(
                     height: 32,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: PrimaryButton(
-                      text: 'Suivant',
-                      onPressed: submit,
-                    ),
+                  PrimaryButton(
+                    text: 'Suivant',
+                    onPressed: submit,
                   ),
                   const SizedBox(
                     height: 32,

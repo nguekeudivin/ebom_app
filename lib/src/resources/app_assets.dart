@@ -14,4 +14,20 @@ final class AppAssets {
   static const entreprise = 'assets/images/entreprise.png';
   static const companyBanner = 'assets/images/company-banner.png';
   static const companyBanner2 = 'assets/images/company-banner-2.png';
+  static const servicesImages = [
+    'assets/images/service-1.png',
+    'assets/images/service-2.png',
+    'assets/images/service-3.png',
+    'assets/images/service-4.png',
+    'assets/images/service-5.png',
+    'assets/images/service-6.png',
+  ];
+
+  static const productsImages = [
+    'assets/images/product-1.png',
+    'assets/images/product-2.png',
+    'assets/images/product-3.png',
+    'assets/images/product-4.png',
+    'assets/images/product-5.png',
+  ];
 }

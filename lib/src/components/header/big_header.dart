@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class BigHeader extends StatefulWidget {
   final String title;
-  const BigHeader({required this.title, super.key});
+  final String searchPlaceholder;
+  const BigHeader(
+      {required this.title, this.searchPlaceholder = '', super.key});
 
   @override
   State<BigHeader> createState() => _BigHeaderState();
@@ -36,9 +38,8 @@ class _BigHeaderState extends State<BigHeader> {
             borderColor: AppColors.primary,
             padding: const EdgeInsets.symmetric(
               horizontal: 24,
-              vertical: 0,
             ),
-            hintText: 'Secteur Automabile',
+            hintText: widget.searchPlaceholder,
             controller: inputCtl,
             prefixIcon: const Icon(Icons.search, color: AppColors.primary),
           ),

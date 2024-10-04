@@ -2,7 +2,6 @@ import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/app_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:ebom/src/manager/auth_service.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({super.key});
@@ -26,31 +25,31 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     // Verify the otp.
-    void verifyOTP(BuildContext context, String otp) {
-      AuthService auth = AuthService();
+    // void verifyOTP(BuildContext context, String otp) {
+    //   AuthService auth = AuthService();
 
-      auth.verifyOTP(otp).then((message) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AppLayout(),
-          ),
-        );
-      }).catchError((errorMessage) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AppLayout(),
-          ),
-        );
-        //Handle Error this here.
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-          ),
-        );
-      });
-    }
+    //   auth.verifyOTP(otp).then((message) {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => AppLayout(),
+    //       ),
+    //     );
+    //   }).catchError((errorMessage) {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => AppLayout(),
+    //       ),
+    //     );
+    //     //Handle Error this here.
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(errorMessage),
+    //       ),
+    //     );
+    //   });
+    // }
 
     return Scaffold(
       body: Center(

@@ -35,19 +35,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(
                 height: 16,
               ),
-              SettingsItem(
-                  text: 'Notifications',
-                  value: _receivedNotification,
-                  setValue: (value) {
-                    setState(
-                      () {
-                        _receivedNotification = value;
-                      },
-                    );
-                  }),
-              SizedBox(
+              settingsItem(
+                text: 'Notifications',
+                value: _receivedNotification,
+                setValue: (value) {
+                  setState(
+                    () {
+                      _receivedNotification = value;
+                    },
+                  );
+                },
+              ),
+              const SizedBox(
                 height: 16,
-              )
+              ),
             ],
           ),
         ),
@@ -56,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-Widget SettingsItem({
+Widget settingsItem({
   required String text,
   required bool value,
   required void Function(bool) setValue,
@@ -69,17 +70,18 @@ Widget SettingsItem({
       children: [
         Text(text),
         Switch(
-            value: value,
-            onChanged: (value) {
-              setValue(value);
-              // setState(() {
-              //   isSwitched = value;
-              // });
-            },
-            activeColor: AppColors.primary,
-            activeTrackColor: const Color.fromARGB(255, 143, 209, 250),
-            inactiveThumbColor: Colors.white,
-            inactiveTrackColor: AppColors.borderGray),
+          value: value,
+          onChanged: (value) {
+            setValue(value);
+            // setState(() {
+            //   isSwitched = value;
+            // });
+          },
+          activeColor: AppColors.primary,
+          activeTrackColor: const Color.fromARGB(255, 143, 209, 250),
+          inactiveThumbColor: Colors.white,
+          inactiveTrackColor: AppColors.borderGray,
+        ),
       ],
     ),
   );

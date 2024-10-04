@@ -20,7 +20,6 @@ class Entreprise {
   Entreprise({
     required this.id,
     required this.nom,
-    this.sigle = '',
     required this.email,
     required this.telephone,
     required this.rccm,
@@ -32,6 +31,7 @@ class Entreprise {
     required this.departement,
     required this.arrondissement,
     required this.ville,
+    this.sigle = '',
     this.pays = 'Cameroun',
     this.image = 'https://admin.bie-innov.com/storage/users/default.png',
   });

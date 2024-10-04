@@ -14,14 +14,14 @@ class Service {
   Service({
     required this.id,
     required this.nom,
-    this.prix = 0,
     required this.categorie,
     required this.description,
+    required this.userRole,
+    required this.userId,
+    this.prix = 0,
     this.details,
     this.image = 'https://admin.bie-innov.com/storage/services/default.jpg',
     this.vues = 0,
-    required this.userRole,
-    required this.userId,
   });
 
   // Factory method for creating an instance from JSON

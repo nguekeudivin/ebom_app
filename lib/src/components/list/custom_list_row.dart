@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomListRow extends StatelessWidget {
-  final Widget child;
+  final List<Widget> children;
   final double gap;
   final double px;
   final int cols;
 
   const CustomListRow({
-    required this.child,
+    required this.children,
     this.gap = 0,
     this.px = 0,
     this.cols = 2,
@@ -42,7 +42,7 @@ class CustomListRow extends StatelessWidget {
         return Container(
           width: (width - gap * (cols - 1) - 2 * px) / cols,
           margin: margin,
-          child: child,
+          child: children[index],
         );
       }),
     );

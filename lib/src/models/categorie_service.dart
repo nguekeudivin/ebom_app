@@ -12,13 +12,13 @@ class CategorieService {
     required this.id,
     required this.nom,
     required this.description,
+    required this.vues,
     this.icone =
         'https://admin.bie-innov.com/storage/type_entreprises/default_icone.png',
     this.image =
         'https://admin.bie-innov.com/storage/type_entreprises/default.png',
     this.banniere =
         'https://admin.bie-innov.com/storage/type_entreprises/default_banniere.png',
-    required this.vues,
   });
 
   // Factory method for creating an instance from JSON

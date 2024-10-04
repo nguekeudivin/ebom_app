@@ -1,5 +1,5 @@
 import 'package:ebom/src/components/form/input_text.dart';
-import 'package:ebom/src/components/logo.dart';
+import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/login/opt_verification_screen.dart';

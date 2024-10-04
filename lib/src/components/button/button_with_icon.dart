@@ -13,7 +13,7 @@ class ButtonWithIcon extends Button {
     required this.icon,
     required super.onPressed,
     this.space = 8,
-    this.color = AppColors.primary,
+    this.color = const Color.fromRGBO(0, 141, 227, 1),
     super.fontSize,
     super.isLoading,
     super.disabled,

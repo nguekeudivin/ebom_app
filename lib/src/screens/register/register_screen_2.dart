@@ -1,10 +1,9 @@
 import 'package:ebom/src/components/form/input_text.dart';
-import 'package:ebom/src/components/logo.dart';
+import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/app_layout.dart';
+import 'package:ebom/src/manager/auth_service.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
-import 'package:ebom/src/types/auth_types.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen2 extends StatefulWidget {
@@ -20,10 +19,20 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
   TextEditingController emailCtl = TextEditingController();
 
   void submit(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AppLayout(),
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => AppLayout(),
+    //   ),
+    // );
+    AuthService auth = AuthService();
+    auth.register(
+      RegisterData(
+        nom: widget.data.nom,
+        naissance: widget.data.naissance,
+        sexe: widget.data.sexe,
+        telephone: phoneNumberCtl.text,
+        email: emailCtl.text,
       ),
     );
 
@@ -32,7 +41,7 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
     // // Define an array for storing errors.
     // List<String> errors = [];
 
-    // // Proceed to validation.
+    // Proceed to validation.
 
     // // Validate phone number.
     // if (!validator.isRequired(phoneNumberCtl.text)) {
@@ -55,10 +64,10 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
     //   AuthService auth = AuthService();
     //   auth.register(
     //     RegisterData(
-    //       name: widget.data.name,
-    //       birthdate: widget.data.birthdate,
-    //       gender: widget.data.gender,
-    //       phoneNumber: phoneNumberCtl.text,
+    //       nom: widget.data.nom,
+    //       naissance: widget.data.naissance,
+    //       sexe: widget.data.sexe,
+    //       telephone: phoneNumberCtl.text,
     //       email: emailCtl.text,
     //     ),
     //   );
@@ -114,7 +123,7 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -135,7 +144,7 @@ class _WelcomeScreenState extends State<RegisterScreen2> {
                     height: 32,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: PrimaryButton(
                       text: "S'inscrire",
                       onPressed: submit,

@@ -8,10 +8,11 @@ class InputDate extends StatefulWidget {
   final String placeholder;
   final void Function(String) onChanged;
 
-  const InputDate(
-      {required this.onChanged,
-      required this.label,
-      required this.placeholder});
+  const InputDate({
+    required this.onChanged,
+    required this.label,
+    required this.placeholder,
+  });
 
   @override
   State<InputDate> createState() => _InputDateState();

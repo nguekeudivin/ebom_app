@@ -16,7 +16,7 @@ class _InputSearchState extends State<InputSearch> {
   @override
   Widget build(BuildContext context) {
     return InputTextField(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       hintText: widget.placeholder ?? '',
       controller: inputCtl,
       prefixIcon: const Icon(Icons.search, color: AppColors.primary),

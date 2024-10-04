@@ -36,7 +36,6 @@ class _HomeScreen2State extends State<HomeScreen2> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const HomeHeader(
-                  textColor: Colors.white,
                   paddingX: 0,
                 ),
                 const SizedBox(
@@ -66,8 +65,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                 ),
                 InputTextField(
                   borderColor: AppColors.primary,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   hintText: 'Ordinateur Lenovo',
                   controller: inputCtl,
                   prefixIcon:

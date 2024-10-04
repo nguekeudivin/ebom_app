@@ -30,34 +30,35 @@ class SimpleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: ElevatedButton(
-      onPressed: () => onPressed(context),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: borderRadius,
-          side: borderWidth != 0
-              ? BorderSide(width: borderWidth, color: borderColor)
-              : BorderSide.none,
-        ),
-        elevation: 0,
-        enableFeedback: true,
-        overlayColor: AppColors.primaryLight,
-        splashFactory: InkRipple.splashFactory,
-      ),
-      child: Center(
-        child: Visibility(
-          visible: !isLoading,
-          replacement: const SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator.adaptive(
-              valueColor: AlwaysStoppedAnimation(Colors.white),
-            ),
+      child: ElevatedButton(
+        onPressed: () => onPressed(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: borderRadius,
+            side: borderWidth != 0
+                ? BorderSide(width: borderWidth, color: borderColor)
+                : BorderSide.none,
           ),
-          child: child,
+          elevation: 0,
+          enableFeedback: true,
+          overlayColor: AppColors.primaryLight,
+          splashFactory: InkRipple.splashFactory,
+        ),
+        child: Center(
+          child: Visibility(
+            visible: !isLoading,
+            replacement: const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator.adaptive(
+                valueColor: AlwaysStoppedAnimation(Colors.white),
+              ),
+            ),
+            child: child,
+          ),
         ),
       ),
-    ));
+    );
   }
 }

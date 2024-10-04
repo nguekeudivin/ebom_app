@@ -1,8 +1,27 @@
 import 'dart:async';
 import 'package:ebom/src/config/app_api.dart';
-import 'package:ebom/src/types/auth_types.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+class RegisterData {
+  final String? appareil;
+  final String? nom;
+  final String? naissance;
+  final String? sexe;
+  final String? telephone;
+  final String? email;
+  final String? client;
+
+  RegisterData({
+    this.appareil,
+    this.nom,
+    this.naissance,
+    this.sexe,
+    this.telephone,
+    this.email,
+    this.client,
+  });
+}
 
 class AuthService {
   final String? baseUrl;
@@ -69,7 +88,9 @@ class AuthService {
 
   Future<bool> register(RegisterData data) {
     final Completer<bool> completer = Completer<bool>();
-    final url = Uri.parse('$baseUrl/register'); // Adjust the endpoint as needed
+    final url = Uri.parse(
+      '$baseUrl/auth/register/client',
+    );
 
     http
         .post(
@@ -78,11 +99,13 @@ class AuthService {
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        'name': data.name,
-        'birthdate': data.birthdate,
-        'gender': data.gender,
-        'phone_number': data.phoneNumber,
+        'appareil': data.appareil,
+        'nom': data.nom,
+        'naissance': data.naissance,
+        'sexe': data.sexe,
         'email': data.email,
+        'client': data.client,
+        'telephone': data.telephone,
       }),
     )
         .then((response) {

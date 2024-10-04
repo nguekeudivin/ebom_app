@@ -3,8 +3,8 @@ import 'package:ebom/src/screens/account/profile_screen.dart';
 import 'package:ebom/src/screens/categories_screen.dart';
 import 'package:ebom/src/screens/entreprises/entreprises_screen.dart';
 import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
-import 'package:ebom/src/screens/products_screen.dart';
-import 'package:ebom/src/screens/services_screen.dart';
+import 'package:ebom/src/screens/products/products_screen.dart';
+import 'package:ebom/src/screens/services/services_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppLayout extends StatefulWidget {
@@ -22,7 +22,7 @@ class _AppLayoutState extends State<AppLayout> {
     const ProfileScreen(), //4
     const CategoriesScreen(), //5
   ];
-  int _currentIndex = 4;
+  int _currentIndex = 3;
 
   void _setCurrentIndex(int index) {
     setState(() {

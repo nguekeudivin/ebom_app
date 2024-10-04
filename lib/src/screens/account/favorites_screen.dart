@@ -41,47 +41,49 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             return CustomListRow(
               gap: 16,
               px: 16,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderGray),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        SizedBox(
-                          height: imageHeight,
-                          width: double.infinity,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              AppAssets.productExample,
-                              fit: BoxFit.cover,
+              children: List.generate(2, (index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.borderGray),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: imageHeight,
+                            width: double.infinity,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                AppAssets.productExample,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          right: 4,
-                          top: 4,
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.favorite_outlined),
-                            color: Colors.red,
+                          Positioned(
+                            right: 4,
+                            top: 4,
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.favorite_outlined),
+                              color: Colors.red,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(truncate('Ordinateur Portable Lenovo', 50)),
-                    ),
-                  ],
-                ),
-              ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(truncate('Ordinateur Portable Lenovo', 50)),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             );
           }),
         ),

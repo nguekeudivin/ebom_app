@@ -5,11 +5,12 @@ class ContactDetail extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
-  const ContactDetail(
-      {required this.icon,
-      required this.label,
-      required this.value,
-      super.key});
+  const ContactDetail({
+    required this.icon,
+    required this.label,
+    required this.value,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
