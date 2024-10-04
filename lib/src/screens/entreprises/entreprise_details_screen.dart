@@ -1,4 +1,4 @@
-import 'package:ebom/src/components/contact_info.dart';
+import 'package:ebom/src/components/contact/contact_info.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
 import 'package:flutter/material.dart';

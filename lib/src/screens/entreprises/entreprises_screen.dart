@@ -1,7 +1,7 @@
 import 'package:ebom/src/components/header/big_header.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
-import 'package:ebom/src/screens/entreprise_details_screen.dart';
+import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class EntreprisesScreen extends StatefulWidget {

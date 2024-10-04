@@ -1,21 +1,21 @@
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<AccountScreen> createState() => _AccountSceenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _AccountSceenState extends State<AccountScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: const Text(
-          'Account',
+          'Edit Profile',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(

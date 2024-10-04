@@ -13,7 +13,7 @@ class PrimaryButton extends Button {
     super.fontSize,
     super.isLoading,
     super.disabled,
-    super.fixedSize,
+    super.fixedSize = const Size.fromHeight(48),
     super.backgroundColor = AppColors.primary,
     super.borderWidth = 0,
     super.borderColor = AppColors.primary,

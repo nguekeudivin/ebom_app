@@ -1,12 +1,11 @@
 import 'package:ebom/src/components/form/input_select.dart';
 import 'package:ebom/src/components/form/input_text.dart';
 import 'package:ebom/src/components/logo.dart';
-import 'package:ebom/src/components/primary_button.dart';
+import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/components/form/input_date.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
 import 'package:ebom/src/screens/register/register_screen_2.dart';
-import 'package:ebom/src/manager/validation_service.dart';
 import 'package:ebom/src/types/auth_types.dart';
 import 'package:flutter/material.dart';
 

@@ -1,23 +1,25 @@
-import 'package:ebom/src/components/form/input_text_field.dart';
+import 'package:ebom/src/components/form/input_text_area_field.dart';
 import 'package:flutter/material.dart';
 
-class InputText extends StatefulWidget {
+class InputTextArea extends StatefulWidget {
   final String label;
   final String? placeholder;
   final TextEditingController controller;
+  final int maxLines;
 
-  const InputText({
+  const InputTextArea({
     required this.label,
     required this.controller,
+    this.maxLines = 4,
     this.placeholder = '',
     super.key,
   });
 
   @override
-  State<InputText> createState() => _InputTextState();
+  State<InputTextArea> createState() => _InputTextAreaState();
 }
 
-class _InputTextState extends State<InputText>
+class _InputTextAreaState extends State<InputTextArea>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -45,7 +47,8 @@ class _InputTextState extends State<InputText>
         const SizedBox(
           height: 8,
         ),
-        InputTextField(
+        InputTextAreaField(
+          maxLines: widget.maxLines,
           controller: widget.controller,
           hintText: widget.placeholder ?? '', // Use the placeholder argument
         ),

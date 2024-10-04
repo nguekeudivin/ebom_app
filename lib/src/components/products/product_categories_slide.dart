@@ -1,5 +1,3 @@
-import 'package:ebom/src/manager/categorie_manager.dart';
-import 'package:ebom/src/models/categorie_service.dart';
 import 'package:ebom/src/resources/app_assets.dart';
 import 'package:flutter/material.dart';
 

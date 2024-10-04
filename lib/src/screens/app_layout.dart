@@ -1,7 +1,7 @@
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/account_screen.dart';
+import 'package:ebom/src/screens/account/profile_screen.dart';
 import 'package:ebom/src/screens/categories_screen.dart';
-import 'package:ebom/src/screens/entreprises_screen/entreprises_screen.dart';
+import 'package:ebom/src/screens/entreprises/entreprises_screen.dart';
 import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
 import 'package:ebom/src/screens/products_screen.dart';
 import 'package:ebom/src/screens/services_screen.dart';
@@ -19,10 +19,10 @@ class _AppLayoutState extends State<AppLayout> {
     const EntreprisesScreen(), // 1
     const ServicesScreen(), // 2
     const ProductsScreen(), // 3
-    const AccountScreen(), //4
+    const ProfileScreen(), //4
     const CategoriesScreen(), //5
   ];
-  int _currentIndex = 0;
+  int _currentIndex = 4;
 
   void _setCurrentIndex(int index) {
     setState(() {

@@ -1,5 +1,5 @@
 import 'package:ebom/src/components/logo.dart';
-import 'package:ebom/src/components/primary_button.dart';
+import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/register/register_screen_1.dart';
 import 'package:flutter/material.dart';

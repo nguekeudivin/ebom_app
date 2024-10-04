@@ -6,7 +6,7 @@ class Button extends StatelessWidget {
   final double? fontSize;
   final bool isLoading;
   final bool disabled;
-  final Size fixedSize;
+  final Size? fixedSize;
   final Color backgroundColor;
   final Color borderColor;
   final double borderWidth;
@@ -17,7 +17,7 @@ class Button extends StatelessWidget {
     this.isLoading = false,
     this.disabled = false,
     this.fontSize,
-    this.fixedSize = const Size.fromHeight(48),
+    this.fixedSize,
     this.backgroundColor = AppColors.primary,
     this.borderColor = AppColors.primary,
     this.borderWidth = 0,
@@ -39,8 +39,8 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     if (disabled) {
       return Container(
-        width: fixedSize.width,
-        height: fixedSize.height,
+        width: fixedSize?.width,
+        height: fixedSize?.height,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 143, 209, 250),
