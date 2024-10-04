@@ -8,6 +8,8 @@ final class AppColors {
   static const secondary = Color(0xFFFB923C); // dark gray
   static const secondaryLight = Color(0xFFFED7AA);
 
+  static const primaryLighter = Color(0XFFDBEAFE);
+
   static const dark = Color(0xFF030712);
   static const borderGray = Color(0xFFD1D5DB);
   static const gray700 = Color(0xFF3F3F46);

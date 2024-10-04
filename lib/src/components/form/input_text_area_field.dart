@@ -15,7 +15,7 @@ class InputTextAreaField extends StatelessWidget {
   final BorderRadius borderRadius;
   final EdgeInsets padding;
   final TextEditingController controller;
-  final int maxLines;
+  final dynamic maxLines;
 
   const InputTextAreaField({
     required this.hintText,
@@ -41,6 +41,7 @@ class InputTextAreaField extends StatelessWidget {
         borderRadius: borderRadius,
       ),
       child: TextFormField(
+        controller: controller,
         maxLines: maxLines,
         style: TextStyle(
           color: color,

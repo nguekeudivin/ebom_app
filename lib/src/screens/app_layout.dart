@@ -1,6 +1,7 @@
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/account/profile_screen.dart';
 import 'package:ebom/src/screens/categories_screen.dart';
+import 'package:ebom/src/screens/chat/chats_list_screen.dart';
 import 'package:ebom/src/screens/entreprises/entreprises_screen.dart';
 import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
 import 'package:ebom/src/screens/products/products_screen.dart';
@@ -19,10 +20,11 @@ class _AppLayoutState extends State<AppLayout> {
     const EntreprisesScreen(), // 1
     const ServicesScreen(), // 2
     const ProductsScreen(), // 3
-    const ProfileScreen(), //4
-    const CategoriesScreen(), //5
+    const ChatsListScreen(), // 4
+    const ProfileScreen(), //5
+    const CategoriesScreen(), //6
   ];
-  int _currentIndex = 3;
+  int _currentIndex = 4;
 
   void _setCurrentIndex(int index) {
     setState(() {
@@ -56,8 +58,8 @@ class _AppLayoutState extends State<AppLayout> {
             label: 'Products',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Account',
+            icon: Icon(Icons.message),
+            label: 'Chats',
           ),
         ],
         currentIndex: _currentIndex,

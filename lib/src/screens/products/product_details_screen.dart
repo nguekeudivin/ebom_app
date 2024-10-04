@@ -1,7 +1,11 @@
 import 'package:ebom/src/components/button/button_with_icon.dart';
 import 'package:ebom/src/components/products/same_products.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/models/chart.dart';
+import 'package:ebom/src/models/message.dart';
+import 'package:ebom/src/models/product.dart';
 import 'package:ebom/src/resources/app_assets.dart';
+import 'package:ebom/src/screens/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -105,7 +109,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       icon: const Icon(Icons.message, color: Colors.white),
                       fixedSize: const Size.fromHeight(40),
                       text: 'Contactez Vendeur',
-                      onPressed: (context) {},
+                      onPressed: (context) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                              chat: Chat(
+                                name: 'Vendeur',
+                                image: AppAssets.productsImages[0],
+                                messages: [
+                                  Message(
+                                    id: 0,
+                                    senderId: 0,
+                                    receiverId: 1,
+                                    content:
+                                        'Bonjour je suis interesse par ce produit',
+                                    time: DateTime.now(),
+                                    produit: Produit(
+                                      id: 0,
+                                      nom: 'Ordinateur Lenovo',
+                                      marque: 'Lenovo',
+                                      prix: 200000,
+                                      categorie: 'Ordinateur',
+                                      description: '',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(

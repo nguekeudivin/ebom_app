@@ -8,8 +8,8 @@ class Produit {
   String? details; // Nullable field
   String image;
   int vues;
-  String userRole;
-  int userId;
+  String? userRole;
+  int? userId;
 
   // Constructor with default values for prix, image, and vues
   Produit({
@@ -18,8 +18,8 @@ class Produit {
     required this.marque,
     required this.categorie,
     required this.description,
-    required this.userRole,
-    required this.userId,
+    this.userRole,
+    this.userId,
     this.details,
     this.image = 'https://admin.bie-innov.com/storage/produits/default.jpg',
     this.vues = 0,

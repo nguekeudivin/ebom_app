@@ -5,4 +5,5 @@ final class AppApi {
 
   static const String data = 'https://test.datamarket.api.beigie-innov.com/v1';
   static const String account = 'https://test.accounts.api.beigie-innov.com/v1';
+  static const String chat = 'https://test.chat.api.beigie-innov.com/v1';
 }

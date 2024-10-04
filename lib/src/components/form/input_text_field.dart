@@ -39,6 +39,7 @@ class InputTextField extends StatelessWidget {
         borderRadius: borderRadius,
       ),
       child: TextFormField(
+        controller: controller,
         style: TextStyle(
           color: color,
           fontSize: 15,
