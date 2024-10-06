@@ -1,4 +1,4 @@
-import 'package:ebom/src/components/pub_banner.dart';
+import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +14,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -23,15 +25,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         title: const Text(
           'Categories Produits',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
         ),
-        
       ),
       body: Column(
         children: [
-          const PubBanner(
-            image: AppAssets.bannerGirl,
-          ),
           Expanded(
             child: GridView.count(
               // Create a grid with 2 columns. If you change the scrollDirection to

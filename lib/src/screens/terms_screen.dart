@@ -9,45 +9,48 @@ class TermsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 8),
-        child: PrimaryButton(
-          text: "J'accepte",
-          onPressed: (context) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const RegisterScreen(),
-              ),
-            );
-          },
-        ),
-      ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 16,
-              ),
-              Logo(),
-              SizedBox(height: 16),
-              Text(
-                "Conditions d'utilisation",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
-              SizedBox(height: 16),
-              Column(
+    return Container(
+      color: AppColors.primary,
+      child: SafeArea(
+        child: Scaffold(
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 8),
+            child: PrimaryButton(
+              text: "J'accepte",
+              onPressed: (context) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+          body: const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Logo(),
+                  SizedBox(height: 16),
                   Text(
-                    '''1. Acceptation des conditions
+                    "Conditions d'utilisation",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Column(
+                    children: [
+                      Text(
+                        '''1. Acceptation des conditions
 En utilisant notre application, vous acceptez de respecter ces conditions.
 
 2. Utilisation de l'application
@@ -61,13 +64,15 @@ Nous ne serons pas responsables des dommages résultant de l'utilisation de l'ap
 
 5. Modifications des conditions
 Nous nous réservons le droit de modifier ces conditions à tout moment.''',
-                    style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 16),
+                    ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 48),
                 ],
               ),
-              SizedBox(height: 48),
-            ],
+            ),
           ),
         ),
       ),

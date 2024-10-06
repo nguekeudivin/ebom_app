@@ -21,110 +21,116 @@ class _WelcomeScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Logo(),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
-                'Connexion',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 48,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 48,
+    return Container(
+      color: AppColors.primary,
+      child: SafeArea(
+        child: Scaffold(
+          body: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Logo(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text(
+                    'Connexion',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
                     ),
-                    InputText(
-                      controller: phoneNumberCtl,
-                      label: 'Numero de telephone',
-                      placeholder: '6*******',
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: PrimaryButton(
-                        text: 'Connectez-vous',
-                        onPressed: (context) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const OtpVerificationScreen(),
-                            ),
-                          );
-
-                          // // Validate the phone number using the validation service.
-                          // if (validator
-                          //     .validatePhoneNumber(phoneNumberCtl.text)) {
-                          //   // Navigator.push(
-                          //   //   context,
-                          //   //   MaterialPageRoute(
-                          //   //     builder: (context) => const LoginScreen(),
-                          //   //   ),
-                          //   // );
-                          // } else {
-                          //   // Afficher le message d'erreur de validation.
-                          //   ScaffoldMessenger.of(context).showSnackBar(
-                          //     const SnackBar(
-                          //       content: Text(
-                          //         'Veuillez entre un numero de telephone valide.',
-                          //       ),
-                          //     ),
-                          //   );
-                          // }
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32.0, vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Je n'ai pas encore de compte."),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const TermsScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "Je m'inscris",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.blue, // Underline color
-                              decorationThickness: 2.0, //
-                            ),
+                        const SizedBox(
+                          height: 48,
+                        ),
+                        InputText(
+                          controller: phoneNumberCtl,
+                          label: 'Numero de telephone',
+                          placeholder: '6*******',
+                        ),
+                        const SizedBox(
+                          height: 48,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          child: PrimaryButton(
+                            text: 'Connectez-vous',
+                            onPressed: (context) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OtpVerificationScreen(),
+                                ),
+                              );
+
+                              // // Validate the phone number using the validation service.
+                              // if (validator
+                              //     .validatePhoneNumber(phoneNumberCtl.text)) {
+                              //   // Navigator.push(
+                              //   //   context,
+                              //   //   MaterialPageRoute(
+                              //   //     builder: (context) => const LoginScreen(),
+                              //   //   ),
+                              //   // );
+                              // } else {
+                              //   // Afficher le message d'erreur de validation.
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //     const SnackBar(
+                              //       content: Text(
+                              //         'Veuillez entre un numero de telephone valide.',
+                              //       ),
+                              //     ),
+                              //   );
+                              // }
+                            },
                           ),
+                        ),
+                        const SizedBox(
+                          height: 48,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Je n'ai pas encore de compte."),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const TermsScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Je m'inscris",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor:
+                                      Colors.blue, // Underline color
+                                  decorationThickness: 2.0, //
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -16,63 +16,73 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Logo(),
-              const SizedBox(
-                height: 48,
+    return Container(
+      color: AppColors.primary,
+      child: SafeArea(
+        child: Scaffold(
+          body: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  const Logo(),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Image.asset(
+                    AppAssets.welcomeImage,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 16,
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Bienvenue sur Ebom ! Gagnez du temps en trouvant précisément le produit qu'il vous faut. Ebom simplifie votre recherche pour vous offrir une expérience rapide et efficace.",
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 48,
+                        ),
+                        PrimaryButton(
+                          text: 'Se Connecter',
+                          onPressed: (context) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        PrimaryButton(
+                          text: "S'inscrire",
+                          backgroundColor: AppColors.secondary,
+                          onPressed: (context) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TermsScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(
+                          height: 48,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Image.asset(
-                AppAssets.welcomeImage,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-                child: Column(
-                  children: [
-                    const Text(
-                      "Bienvenue sur Ebom ! Gagnez du temps en trouvant précisément le produit qu'il vous faut. Ebom simplifie votre recherche pour vous offrir une expérience rapide et efficace.",
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                    PrimaryButton(
-                      text: 'Se Connecter',
-                      onPressed: (context) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    PrimaryButton(
-                      text: "S'inscrire",
-                      backgroundColor: AppColors.secondary,
-                      onPressed: (context) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const TermsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

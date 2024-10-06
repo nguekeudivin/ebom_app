@@ -24,66 +24,74 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
     // Adjust child aspect ratio based on screen size
 
-    return Column(
-      children: [
-        const BigHeader(
-          title: 'Produits',
-          searchPlaceholder: 'Iphone 15 Pro Max',
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Wrap(
-              children: List.generate(15, (index) {
-                return CustomListRow(
-                  px: 16,
-                  gap: 16,
-                  children: List.generate(2, (colIndex) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProductDetailsScreen(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.borderGray),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: imageHeight,
-                              width: double.infinity,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  AppAssets
-                                      .productsImages[(index + colIndex) % 5],
-                                  fit: BoxFit.cover,
+    return Container(
+      color: AppColors.primary,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              const BigHeader(
+                title: 'Produits',
+                searchPlaceholder: 'Iphone 15 Pro Max',
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    children: List.generate(15, (index) {
+                      return CustomListRow(
+                        px: 16,
+                        gap: 16,
+                        children: List.generate(2, (colIndex) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProductDetailsScreen(),
                                 ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.borderGray),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: imageHeight,
+                                    width: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        AppAssets.productsImages[
+                                            (index + colIndex) % 5],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: ProductLabel(),
+                                  ),
+                                ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.all(8),
-                              child: ProductLabel(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                );
-              }),
-            ),
+                          );
+                        }),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

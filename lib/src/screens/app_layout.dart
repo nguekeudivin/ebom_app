@@ -6,7 +6,9 @@ import 'package:ebom/src/screens/entreprises/entreprises_screen.dart';
 import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
 import 'package:ebom/src/screens/products/products_screen.dart';
 import 'package:ebom/src/screens/services/services_screen.dart';
+import 'package:ebom/src/services/app_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppLayout extends StatefulWidget {
   @override
@@ -14,7 +16,6 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  // Pages for each bottom navigation link
   static final List<Widget> _pages = <Widget>[
     const HomeScreen2(), // 0
     const EntreprisesScreen(), // 1
@@ -24,48 +25,49 @@ class _AppLayoutState extends State<AppLayout> {
     const ProfileScreen(), //5
     const CategoriesScreen(), //6
   ];
-  int _currentIndex = 0;
-
-  void _setCurrentIndex(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_currentIndex],
-      // Display selected screen
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.primary,
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Entreprises',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.design_services),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'Products',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Chats',
-          ),
-        ],
-        currentIndex: _currentIndex,
-        selectedItemColor: AppColors.secondaryLight,
-        unselectedItemColor: Colors.white,
-        onTap: _setCurrentIndex,
+    return ChangeNotifierProvider(
+      create: (context) => AppLayoutNavigationProvider(),
+      child: Consumer<AppLayoutNavigationProvider>(
+        builder: (context, provider, child) {
+          return Scaffold(
+            body: _pages[provider.active],
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: AppColors.primary,
+              type: BottomNavigationBarType.fixed,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Accueil',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.business),
+                  label: 'Entreprises',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.design_services),
+                  label: 'Services',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_bag),
+                  label: 'Products',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.message),
+                  label: 'Chats',
+                ),
+              ],
+              currentIndex: provider.active,
+              selectedItemColor: AppColors.secondaryLight,
+              unselectedItemColor: Colors.white,
+              onTap: (index) {
+                provider.setActive(index);
+              },
+            ),
+          );
+        },
       ),
     );
   }

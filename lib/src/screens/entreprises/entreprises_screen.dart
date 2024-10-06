@@ -28,131 +28,141 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
 
     // Adjust child aspect ratio based on screen size
 
-    return Column(
-      children: [
-        const BigHeader(title: 'Nos entreprises'),
-        const SizedBox(
-          height: 8,
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Wrap(
-              children: List.generate(100, (index) {
-                String description =
-                    'Des voitures de qualité avec une garantie fiable et sure';
-                String displayDescription = (description.length > 40)
-                    ? '${description.substring(0, 40)}...'
-                    : description;
+    return Container(
+      color: AppColors.primary,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              const BigHeader(title: 'Nos entreprises'),
+              const SizedBox(
+                height: 8,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    children: List.generate(100, (index) {
+                      String description =
+                          'Des voitures de qualité avec une garantie fiable et sure';
+                      String displayDescription = (description.length > 40)
+                          ? '${description.substring(0, 40)}...'
+                          : description;
 
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EntrepriseDetailsScreen(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: width / 2 - 2 * screenPadding,
-                    height: imageHeight + descriptionHeight,
-                    margin: EdgeInsets.only(
-                      right: index % 2 == 0 ? gridGap : 0,
-                      bottom: gridGap,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.borderGray),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          height: imageHeight,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(
-                                10,
-                              ), // Set the desired radius for top-left corner
-                              topRight: Radius.circular(
-                                10,
-                              ), // Set the desired radius for top-right corner
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const EntrepriseDetailsScreen(),
                             ),
-                            child: Image.asset(
-                              AppAssets.entreprise,
-                              fit: BoxFit.cover,
-                            ),
+                          );
+                        },
+                        child: Container(
+                          width: width / 2 - 2 * screenPadding,
+                          height: imageHeight + descriptionHeight,
+                          margin: EdgeInsets.only(
+                            right: index % 2 == 0 ? gridGap : 0,
+                            bottom: gridGap,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColors.borderGray),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                height: imageHeight,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(
+                                      10,
+                                    ), // Set the desired radius for top-left corner
+                                    topRight: Radius.circular(
+                                      10,
+                                    ), // Set the desired radius for top-right corner
+                                  ),
+                                  child: Image.asset(
+                                    AppAssets.entreprise,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: imageHeight - 24,
+                                child: Container(
+                                  height: 24,
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(12.0),
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    // Centers the text both vertically and horizontally
+                                    child: Text(
+                                      'Cami Toyota',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: imageHeight - avatarSize / 2 - 2,
+                                right: 4,
+                                // Layer 2 with manual translation (acts like a higher z-index)
+                                child: Container(
+                                  width: avatarSize,
+                                  height: avatarSize,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white, width: 2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      20.0,
+                                    ), // Adjust the value to change roundness
+                                    child: Image.asset(
+                                      AppAssets.productExample,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: imageHeight + avatarSize / 2 - 4,
+                                child: SizedBox(
+                                  width: (width -
+                                          gridGap -
+                                          2 * screenPadding -
+                                          2 * labelPadding) /
+                                      2,
+                                  height: 100,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(labelPadding),
+                                    child: Text(
+                                      displayDescription,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Positioned(
-                          top: imageHeight - 24,
-                          child: Container(
-                            height: 24,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: const BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(12.0),
-                              ),
-                            ),
-                            child: const Center(
-                              // Centers the text both vertically and horizontally
-                              child: Text(
-                                'Cami Toyota',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: imageHeight - avatarSize / 2 - 2,
-                          right: 4,
-                          // Layer 2 with manual translation (acts like a higher z-index)
-                          child: Container(
-                            width: avatarSize,
-                            height: avatarSize,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2),
-                              shape: BoxShape.circle,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                20.0,
-                              ), // Adjust the value to change roundness
-                              child: Image.asset(
-                                AppAssets.productExample,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: imageHeight + avatarSize / 2 - 4,
-                          child: SizedBox(
-                            width: (width -
-                                    gridGap -
-                                    2 * screenPadding -
-                                    2 * labelPadding) /
-                                2,
-                            height: 100,
-                            child: Padding(
-                              padding: EdgeInsets.all(labelPadding),
-                              child: Text(
-                                displayDescription,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    }),
                   ),
-                );
-              }),
-            ),
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

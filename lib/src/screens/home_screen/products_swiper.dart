@@ -1,7 +1,9 @@
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
-import 'package:ebom/src/screens/categories_screen.dart';
+import 'package:ebom/src/screens/products/product_details_screen.dart';
+import 'package:ebom/src/services/app_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductsSwiper extends StatelessWidget {
   const ProductsSwiper({super.key});
@@ -41,12 +43,12 @@ class ProductsSwiper extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    Navigator.push(
+                    Provider.of<AppLayoutNavigationProvider>(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const CategoriesScreen(),
-                      ),
-                    );
+                      listen: false,
+                    ).setActiveScreen(
+                      'products_screen',
+                    ); // 3 is the index of
                   },
                   icon: const Icon(
                     Icons.arrow_forward,
@@ -69,56 +71,66 @@ class ProductsSwiper extends StatelessWidget {
               String displayName =
                   (name.length > 20) ? '${name.substring(0, 20)}...' : name;
 
-              return Container(
-                width: 150,
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderGray),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      height: 120,
-                      child: Image.asset(
-                        AppAssets.productExample,
-                        fit: BoxFit.cover,
-                      ),
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProductDetailsScreen(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Row(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 16,
+                  );
+                },
+                child: Container(
+                  width: 150,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.borderGray),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        height: 120,
+                        child: Image.asset(
+                          AppAssets.productExample,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 16,
+                                ),
+                                Text('4.5'),
+                              ],
+                            ),
+                            Text(
+                              displayName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text('4.5'),
-                            ],
-                          ),
-                          Text(
-                            displayName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          const Text(
-                            '150.000 FCFA',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
+                            const Text(
+                              '150.000 FCFA',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

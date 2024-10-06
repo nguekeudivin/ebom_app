@@ -95,142 +95,132 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 16),
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                color: AppColors.primary,
-                onPressed: () {
-                  Navigator.pop(context); // Go back to the previous screen
-                },
-              ),
-            ),
+    return Container(
+      color: AppColors.primary,
+      child: SafeArea(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                // const Logo(),
+                const SizedBox(
+                  height: 32,
+                ),
+                const Text(
+                  'Inscription',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-            // const Logo(),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              'Inscription',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-
-            const SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InputText(
-                    controller: nameCtl,
-                    label: 'Nom',
-                    placeholder: 'Entre votre nom',
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  InputDate(
-                    onChanged: (value) {
-                      setState(() {
-                        birthdate = value;
-                      });
-                    },
-                    label: 'Date de naissace',
-                    placeholder: 'Selectionnez votre date de naissance',
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  InputSelect(
-                    onChanged: (value) {
-                      setState(() {
-                        gender = value;
-                      });
-                    },
-                    label: 'Sexe',
-                    placeholder: 'Selectionnez votre sexe',
-                    options: _genderOptions,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  InputText(
-                    controller: phoneNumberCtl,
-                    label: 'Numero de telephone',
-                    placeholder: '6*******',
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  InputText(
-                    controller: emailCtl,
-                    label: 'Addresse email (Facultatif)',
-                    placeholder: 'afrikakemi@gmail.com',
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  PrimaryButton(
-                    text: 'Creer le compte',
-                    onPressed: submit,
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  Center(
-                    child: Wrap(
-                      alignment: WrapAlignment
-                          .center, // Horizontally center the children
-                      runAlignment: WrapAlignment
-                          .center, // Vertically center the children
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Text('Vous avez déjà un compte ?'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Connectez-vous',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.blue, // Underline color
-                              decorationThickness: 2.0, // Underline thickness
+                const SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InputText(
+                        controller: nameCtl,
+                        label: 'Nom',
+                        placeholder: 'Entre votre nom',
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      InputDate(
+                        onChanged: (value) {
+                          setState(() {
+                            birthdate = value;
+                          });
+                        },
+                        label: 'Date de naissace',
+                        placeholder: 'Selectionnez votre date de naissance',
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      InputSelect(
+                        onChanged: (value) {
+                          setState(() {
+                            gender = value;
+                          });
+                        },
+                        label: 'Sexe',
+                        placeholder: 'Selectionnez votre sexe',
+                        options: _genderOptions,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      InputText(
+                        controller: phoneNumberCtl,
+                        label: 'Numero de telephone',
+                        placeholder: '6*******',
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      InputText(
+                        controller: emailCtl,
+                        label: 'Addresse email (Facultatif)',
+                        placeholder: 'afrikakemi@gmail.com',
+                      ),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      PrimaryButton(
+                        text: 'Creer le compte',
+                        onPressed: submit,
+                      ),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Center(
+                        child: Wrap(
+                          alignment: WrapAlignment
+                              .center, // Horizontally center the children
+                          runAlignment: WrapAlignment
+                              .center, // Vertically center the children
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: Text('Vous avez déjà un compte ?'),
                             ),
-                          ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Connectez-vous',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor:
+                                      Colors.blue, // Underline color
+                                  decorationThickness:
+                                      2.0, // Underline thickness
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
