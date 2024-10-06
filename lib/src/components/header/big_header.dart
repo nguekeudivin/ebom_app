@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 class BigHeader extends StatefulWidget {
   final String title;
   final String searchPlaceholder;
-  const BigHeader(
-      {required this.title, this.searchPlaceholder = '', super.key});
+  const BigHeader({
+    required this.title,
+    this.searchPlaceholder = '',
+    super.key,
+  });
 
   @override
   State<BigHeader> createState() => _BigHeaderState();

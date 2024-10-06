@@ -1,21 +1,20 @@
 import 'package:ebom/src/components/form/input_select.dart';
 import 'package:ebom/src/components/form/input_text.dart';
-import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/components/form/input_date.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/services/auth_service.dart';
+import 'package:ebom/src/screens/app_layout.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
-class RegisterScreen1 extends StatefulWidget {
-  const RegisterScreen1({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen1> createState() => _WelcomeScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _WelcomeScreenState extends State<RegisterScreen1> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final List<SelectOption> _genderOptions = [
     SelectOption(label: 'Masculin', value: 'Masculin'),
     SelectOption(label: 'Feminin', value: 'Feminin'),
@@ -23,6 +22,8 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
 
   // Use the _nameCrl to handle input name.
   final TextEditingController nameCtl = TextEditingController();
+  TextEditingController phoneNumberCtl = TextEditingController();
+  TextEditingController emailCtl = TextEditingController();
 
   // Use direct handling for birthdate and gender because the component
   // That support theses inputs types  handles the control internally and
@@ -31,29 +32,21 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
   String gender = '';
 
   void submit(BuildContext context) {
-    AuthService auth = AuthService();
-    auth.register(
-      RegisterData(
-        nom: 'Divin jordan',
-        naissance: '1999-08-02',
-        sexe: 'M',
-        telephone: '237655660502',
-        email: 'nguekeu3divin@gmail.com',
-      ),
-    );
-
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => RegisterScreen2(
-    //       data: RegisterData(
-    //         nom: nameCtl.text,
-    //         sexe: gender,
-    //         naissance: birthdate,
-    //       ),
-    //     ),
+    // AuthService auth = AuthService();
+    // auth.register(
+    //   RegisterData(
+    //     nom: 'Divin jordan',
+    //     naissance: '1999-08-02',
+    //     sexe: 'M',
+    //     telephone: '237655660502',
+    //     email: 'nguekeu3divin@gmail.com',
     //   ),
     // );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AppLayout()),
+    );
 
     // // Create a validator instance.
     // ValidationService validator = ValidationService();
@@ -120,10 +113,8 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
                 },
               ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Logo(),
+
+            // const Logo(),
             const SizedBox(
               height: 16,
             ),
@@ -138,12 +129,9 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
             const SizedBox(
               height: 8,
             ),
-            const Text(
-              'Vos informations personnelles',
-              style: TextStyle(fontSize: 16),
-            ),
+
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
@@ -181,10 +169,26 @@ class _WelcomeScreenState extends State<RegisterScreen1> {
                     options: _genderOptions,
                   ),
                   const SizedBox(
+                    height: 16,
+                  ),
+                  InputText(
+                    controller: phoneNumberCtl,
+                    label: 'Numero de telephone',
+                    placeholder: '6*******',
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  InputText(
+                    controller: emailCtl,
+                    label: 'Addresse email (Facultatif)',
+                    placeholder: 'afrikakemi@gmail.com',
+                  ),
+                  const SizedBox(
                     height: 32,
                   ),
                   PrimaryButton(
-                    text: 'Suivant',
+                    text: 'Creer le compte',
                     onPressed: submit,
                   ),
                   const SizedBox(

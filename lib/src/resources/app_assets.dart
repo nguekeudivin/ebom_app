@@ -30,4 +30,7 @@ final class AppAssets {
     'assets/images/product-4.png',
     'assets/images/product-5.png',
   ];
+
+  static const orangeMoney = 'assets/images/om.png';
+  static const mtnMomo = 'assets/images/mtn-momo.png';
 }

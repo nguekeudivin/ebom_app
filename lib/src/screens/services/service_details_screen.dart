@@ -45,9 +45,10 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
               child: const Text(
                 "Service d'entretien",
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
             Container(

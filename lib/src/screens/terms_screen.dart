@@ -1,7 +1,7 @@
 import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/register/register_screen_1.dart';
+import 'package:ebom/src/screens/register/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class TermsScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class TermsScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const RegisterScreen1(),
+                builder: (context) => const RegisterScreen(),
               ),
             );
           },

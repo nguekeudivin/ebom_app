@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 class InputText extends StatefulWidget {
   final String label;
   final String? placeholder;
+  final EdgeInsets padding;
+
   final TextEditingController controller;
 
   const InputText({
     required this.label,
     required this.controller,
+    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
     this.placeholder = '',
     super.key,
   });
@@ -46,6 +49,7 @@ class _InputTextState extends State<InputText>
           height: 8,
         ),
         InputTextField(
+          padding: widget.padding,
           controller: widget.controller,
           hintText: widget.placeholder ?? '', // Use the placeholder argument
         ),

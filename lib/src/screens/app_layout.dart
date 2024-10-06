@@ -24,7 +24,7 @@ class _AppLayoutState extends State<AppLayout> {
     const ProfileScreen(), //5
     const CategoriesScreen(), //6
   ];
-  int _currentIndex = 4;
+  int _currentIndex = 0;
 
   void _setCurrentIndex(int index) {
     setState(() {

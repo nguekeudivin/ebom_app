@@ -2,9 +2,11 @@ import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/resources/app_assets.dart';
 import 'package:ebom/src/screens/account/about_screen.dart';
-import 'package:ebom/src/screens/account/contact_screen.dart';
+import 'package:ebom/src/screens/account/addresses_screen.dart';
 import 'package:ebom/src/screens/account/edit_profile_screen.dart';
+import 'package:ebom/src/screens/account/favorites_screen.dart';
 import 'package:ebom/src/screens/account/history_screen.dart';
+import 'package:ebom/src/screens/account/payment_methods_screen.dart';
 import 'package:ebom/src/screens/account/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -129,12 +131,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.credit_card_outlined,
                     text: 'Methode de paiements',
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const SettingsScreen(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PaymentMethodsScreen(),
+                        ),
+                      );
                     },
                   ),
                   profileLink(
@@ -144,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SettingsScreen(),
+                          builder: (context) => const AddressesScreen(),
                         ),
                       );
                     },
@@ -156,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SettingsScreen(),
+                          builder: (context) => const FavoritesScreen(),
                         ),
                       );
                     },
@@ -175,18 +177,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  profileLink(
-                    icon: Icons.contact_mail_outlined,
-                    text: 'Contactez-nous',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ContactScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  // profileLink(
+                  //   icon: Icons.contact_mail_outlined,
+                  //   text: 'Contactez-nous',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => ContactScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   profileLink(
                     icon: Icons.group_outlined,
                     text: 'Inviter un proche',
@@ -212,30 +214,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  profileLink(
-                    icon: Icons.feedback_outlined,
-                    text: 'Feedback',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ContactScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  // profileLink(
+                  //   icon: Icons.feedback_outlined,
+                  //   text: 'Feedback',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => ContactScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   profileLink(
                     icon: Icons.logout_outlined,
                     text: 'Deconnexion',
                     onPressed: () {
-                      //Implement logout.
-
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const SettingsScreen(),
-                      //   ),
-                      // );
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Deconnexion'),
+                            content: const Text('Voulez-vous vous deconnecter'),
+                            actions: [
+                              Row(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Oui',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Non',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                   const SizedBox(

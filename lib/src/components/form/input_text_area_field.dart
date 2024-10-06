@@ -50,8 +50,8 @@ class InputTextAreaField extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: TextStyle(
-            color: color,
+          hintStyle: const TextStyle(
+            color: Colors.grey,
             fontSize: 15,
           ),
           prefixIcon: prefixIcon,

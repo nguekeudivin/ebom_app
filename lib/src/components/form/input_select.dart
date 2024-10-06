@@ -13,6 +13,7 @@ class InputSelect extends StatefulWidget {
   final String label;
   final String placeholder;
   final List<SelectOption> options;
+  final dynamic value;
   final void Function(dynamic) onChanged;
 
   const InputSelect({
@@ -20,6 +21,7 @@ class InputSelect extends StatefulWidget {
     required this.label,
     required this.options,
     this.placeholder = '',
+    this.value,
     super.key,
   });
 
@@ -32,6 +34,12 @@ class _InputSelectState extends State<InputSelect> {
 
   @override
   Widget build(BuildContext context) {
+    if (_selectedValue != widget.value) {
+      setState(() {
+        _selectedValue = widget.value;
+      });
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
