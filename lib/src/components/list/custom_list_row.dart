@@ -39,8 +39,10 @@ class CustomListRow extends StatelessWidget {
           margin = EdgeInsets.all(gap / 2);
         }
 
+        final outWidth = ((width - gap * (cols - 1) - 2 * px) / cols)
+            .clamp(0.0, double.infinity);
         return Container(
-          width: (width - gap * (cols - 1) - 2 * px) / cols,
+          width: outWidth > 0 ? outWidth : 0,
           margin: margin,
           child: children[index],
         );

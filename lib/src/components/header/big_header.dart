@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 class BigHeader extends StatefulWidget {
   final String title;
   final String searchPlaceholder;
+  final TextEditingController searchController;
   const BigHeader({
     required this.title,
+    required this.searchController,
     this.searchPlaceholder = '',
     super.key,
   });
@@ -17,8 +19,6 @@ class BigHeader extends StatefulWidget {
 }
 
 class _BigHeaderState extends State<BigHeader> {
-  TextEditingController inputCtl = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,14 +37,36 @@ class _BigHeaderState extends State<BigHeader> {
           const SizedBox(
             height: 8,
           ),
-          InputTextField(
-            borderColor: AppColors.primary,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-            ),
-            hintText: widget.searchPlaceholder,
-            controller: inputCtl,
-            prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+          Row(
+            children: [
+              Expanded(
+                child: InputTextField(
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  borderColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ),
+                  hintText: widget.searchPlaceholder,
+                  controller: widget.searchController,
+                  // prefixIcon:
+                  //     const Icon(Icons.search, color: AppColors.primary),
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Background color
+                  shape: BoxShape
+                      .circle, // Optional: to make the background circular
+                ),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.search, color: AppColors.primary),
+                ),
+              ),
+            ],
           ),
         ],
       ),

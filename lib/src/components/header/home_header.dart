@@ -1,7 +1,9 @@
+import 'package:ebom/src/components/connexion/user_avatar.dart';
 import 'package:ebom/src/components/logo/logo_square.dart';
-import 'package:ebom/src/resources/app_assets.dart';
 import 'package:ebom/src/screens/account/profile_screen.dart';
+import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeHeader extends StatelessWidget {
   final double? paddingX;
@@ -25,42 +27,48 @@ class HomeHeader extends StatelessWidget {
               LogoSquare(),
             ],
           ),
-          Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  text: 'Hello',
-                  style:
-                      TextStyle(fontSize: 18, color: textColor ?? Colors.black),
-                  children: const [
-                    TextSpan(
-                      text: ' Suzy',
+          Consumer<ConnexionProvider>(
+            builder: (context, provider, child) {
+              return Row(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: 'Hello',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ), // Bold style
+                        fontSize: 18,
+                        color: textColor ?? Colors.black,
+                      ),
+                      children: [
+                        const TextSpan(text: ' '),
+                        TextSpan(
+                          text: provider.connexion != null
+                              ? provider.connexion?.nom
+                              : '',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ), // Bold style
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileScreen(),
-                    ),
-                  );
-                },
-                child: SizedBox.square(
-                  dimension: 40,
-                  child: Image.asset(
-                    AppAssets.avatar,
-                    fit: BoxFit.cover,
                   ),
-                ),
-              ),
-            ],
+                  const SizedBox(width: 16),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: const SizedBox.square(
+                      dimension: 40,
+                      child: UserAvatar(),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),

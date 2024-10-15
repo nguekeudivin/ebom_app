@@ -6,6 +6,7 @@ class InputTextField extends StatelessWidget {
   final bool obscureText;
 
   final Widget? prefixIcon;
+  //final Widget? suffixIcon;
 
   final Color color;
   final double borderWidth;
@@ -29,6 +30,7 @@ class InputTextField extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
     this.focusBorderColor = AppColors.primary,
     this.prefixIcon,
+    // this.suffixIcon,
   });
 
   @override
@@ -52,6 +54,7 @@ class InputTextField extends StatelessWidget {
             fontSize: 15,
           ),
           prefixIcon: prefixIcon,
+          //   suffixIcon: suffixIcon,
           contentPadding: padding,
           focusedBorder: OutlineInputBorder(
             borderRadius: borderRadius,

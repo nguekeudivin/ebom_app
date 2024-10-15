@@ -16,68 +16,92 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Container(
       color: AppColors.primary,
       child: SafeArea(
         child: Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
-              child: Column(
+          body: SingleChildScrollView(
+            child: SizedBox(
+              height: height,
+              child: Stack(
                 children: [
-                  const SizedBox(
-                    height: 48,
-                  ),
-                  const Logo(),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  Image.asset(
-                    AppAssets.welcomeImage,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 16,
+                  // Top Image Section
+                  SizedBox(
+                    height: height / 2 + 30,
+                    width: double.infinity,
+                    child: Image.asset(
+                      AppAssets.bannerGirl,
+                      fit: BoxFit.cover,
                     ),
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Bienvenue sur Ebom ! Gagnez du temps en trouvant précisément le produit qu'il vous faut. Ebom simplifie votre recherche pour vous offrir une expérience rapide et efficace.",
-                          textAlign: TextAlign.center,
+                  ),
+                  const Positioned(
+                    right: 16,
+                    top: 16,
+                    child: SizedBox(height: 50, child: Logo()),
+                  ),
+                  // Bottom Navigation Bar with Rounded Container
+                  Positioned(
+                    top: height / 2 - 30, // Adjust this value for the overlap
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50), // Top left radius
+                          topRight: Radius.circular(50), // Top right radius
                         ),
-                        const SizedBox(
-                          height: 48,
-                        ),
-                        PrimaryButton(
-                          text: 'Se Connecter',
-                          onPressed: (context) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        PrimaryButton(
-                          text: "S'inscrire",
-                          backgroundColor: AppColors.secondary,
-                          onPressed: (context) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const TermsScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          height: 48,
-                        ),
-                      ],
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32.0,
+                        vertical: 16,
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          const Text(
+                            "Bienvenue sur Ebom ! Gagnez du temps en trouvant précisément le produit qu'il vous faut. Ebom simplifie votre recherche pour vous offrir une expérience rapide et efficace.",
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 48,
+                          ),
+                          PrimaryButton(
+                            text: 'Se Connecter',
+                            onPressed: (context) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          PrimaryButton(
+                            text: "S'inscrire",
+                            backgroundColor: AppColors.darkBlue,
+                            onPressed: (context) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TermsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 48,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

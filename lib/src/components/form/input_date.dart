@@ -4,6 +4,7 @@ import 'package:ebom/src/config/app_colors.dart';
 // For formatting date
 
 class InputDate extends StatefulWidget {
+  final String value;
   final String label;
   final String placeholder;
   final void Function(String) onChanged;
@@ -12,6 +13,7 @@ class InputDate extends StatefulWidget {
     required this.onChanged,
     required this.label,
     required this.placeholder,
+    this.value = '',
   });
 
   @override
@@ -40,6 +42,12 @@ class _InputDateState extends State<InputDate> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _dateController.text = widget.value;
+  }
+
+  @override
   void dispose() {
     _dateController.dispose();
     super.dispose();
@@ -47,6 +55,10 @@ class _InputDateState extends State<InputDate> {
 
   @override
   Widget build(BuildContext context) {
+    if (_dateController.text == '') {
+      _dateController.text = widget.value;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

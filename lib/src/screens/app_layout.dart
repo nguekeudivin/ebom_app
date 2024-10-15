@@ -7,6 +7,7 @@ import 'package:ebom/src/screens/home_screen/home_screen_2.dart';
 import 'package:ebom/src/screens/products/products_screen.dart';
 import 'package:ebom/src/screens/services/services_screen.dart';
 import 'package:ebom/src/services/app_service.dart';
+import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,15 @@ class _AppLayoutState extends State<AppLayout> {
     const ProfileScreen(), //5
     const CategoriesScreen(), //6
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ConnexionProvider>(context, listen: false).loadConnexion();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

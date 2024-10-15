@@ -1,6 +1,6 @@
 class ValidationService {
   // Regular expression for Cameroonian phone number
-  static final RegExp _phoneRegExp = RegExp(r'^\+237[0-9]{9}$');
+  static final RegExp _phoneRegExp = RegExp(r'^6[5-9]\d{7}$');
 
   // Method to validate phone number
   bool validatePhoneNumber(String phoneNumber) {

@@ -84,8 +84,10 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChatScreen(chat: chats[index]),
+                                      builder: (context) => ChatScreen(
+                                        receiverId: 0,
+                                        chat: chats[index],
+                                      ),
                                     ),
                                   ),
                                 },

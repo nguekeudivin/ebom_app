@@ -3,40 +3,41 @@ import 'dart:convert';
 import 'package:ebom/src/config/app_api.dart';
 import 'package:http/http.dart' as http;
 
-class CategorieManager {
+class ProductService {
   final String baseUrl;
 
-  CategorieManager({this.baseUrl = AppApi.data});
+  ProductService({this.baseUrl = AppApi.data});
 
   // Method to get all product categories using Completer
-  Future<List<dynamic>> productCategories() {
+  Future<List<dynamic>> items() {
     final completer = Completer<List<dynamic>>();
 
-    http.get(Uri.parse('$baseUrl/categories/produits')).then((response) {
+    http.get(Uri.parse('$baseUrl/produits')).then((response) {
       if (response.statusCode == 200) {
-        completer.complete(json.decode(response.body));
+        final res = json.decode(response.body);
+        completer.complete(res['data']);
       } else {
         completer.completeError('Failed to load product categories');
       }
     }).catchError((error) {
-      completer.completeError('Error: $error');
+      completer.completeError(error.toString());
     });
 
     return completer.future;
   }
 
-  // Method to get all service categories using Completer
-  Future<List<dynamic>> serviceCategories() {
+  Future<List<dynamic>> dynamicItems(String apiUri) {
     final completer = Completer<List<dynamic>>();
 
-    http.get(Uri.parse('$baseUrl/categories/services')).then((response) {
+    http.get(Uri.parse('$baseUrl/$apiUri')).then((response) {
       if (response.statusCode == 200) {
-        completer.complete(json.decode(response.body));
+        final res = json.decode(response.body);
+        completer.complete(res['data']);
       } else {
-        completer.completeError('Failed to load service categories');
+        completer.completeError('Failed to load product categories');
       }
     }).catchError((error) {
-      completer.completeError('Error: $error');
+      completer.completeError(error.toString());
     });
 
     return completer.future;

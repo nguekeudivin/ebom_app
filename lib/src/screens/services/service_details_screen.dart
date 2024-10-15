@@ -1,10 +1,13 @@
-import 'package:ebom/src/components/contact/contact_info.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/resources/app_assets.dart';
+import 'package:ebom/src/models/entreprise.dart';
+import 'package:ebom/src/models/service.dart';
+import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
+import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:flutter/material.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
-  const ServiceDetailsScreen({super.key});
+  final Service service;
+  const ServiceDetailsScreen({required this.service, super.key});
 
   @override
   State<ServiceDetailsScreen> createState() => _ServiceDetailsState();
@@ -13,6 +16,15 @@ class ServiceDetailsScreen extends StatefulWidget {
 class _ServiceDetailsState extends State<ServiceDetailsScreen> {
   double bannerHeight = 180;
   double logoSize = 100;
+  final EntrepriseService entrepriseService = EntrepriseService();
+  late Future<Entreprise> vendor;
+
+  @override
+  void initState() {
+    super.initState();
+
+    vendor = entrepriseService.getEntreprise(widget.service.userId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +45,8 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
             SizedBox(
               height: bannerHeight,
               width: double.infinity,
-              child: Image.asset(
-                AppAssets.servicesImages[0],
+              child: Image.network(
+                widget.service.image,
                 fit: BoxFit.cover,
               ),
             ),
@@ -42,39 +54,133 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
               color: AppColors.primary,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: const Text(
-                "Service d'entretien",
-                style: TextStyle(
+              child: Text(
+                widget.service.nom,
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: const ContactInfo(
-                userName: 'John Doe',
-                phoneNumber: '+1 555 123 4567',
-                address: '123 Flutter St, Widget City',
-                email: 'johndoe@example.com',
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: const Column(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
                   Text(
-                    'This is a fake description of the company. The company should a provide details informations about themselve.',
+                    widget.service.description,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    'This is a fake description of the company. The company should a provide details informations about themselve.',
-                  ),
+                  Text(widget.service.details),
                 ],
               ),
+            ),
+            FutureBuilder(
+              future: vendor,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  //return const Text(snapshot.error.toString())
+                  return const Text(
+                    "Les informations de l'entreprise sont indisponibles",
+                  );
+                } else if (!snapshot.hasData) {
+                  return const Text('');
+                }
+
+                var vendor = snapshot.data!;
+
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                  color: AppColors.primary,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "L'entreprise",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EntrepriseDetailsScreen(
+                                    entreprise: vendor,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 3),
+                                shape: BoxShape.circle,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  50,
+                                ), // Adjust the value to change roundness
+                                child: Image.network(
+                                  vendor.image,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                vendor.nom,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                vendor.telephone,
+                                style: const TextStyle(
+                                  //  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                vendor.email,
+                                style: const TextStyle(
+                                  //   fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ],
         ),

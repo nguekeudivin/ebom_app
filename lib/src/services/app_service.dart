@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppLayoutNavigationProvider extends ChangeNotifier {
-  int _active = 0;
+  int _active = 2;
 
   int get active => _active;
 
@@ -12,6 +12,12 @@ class AppLayoutNavigationProvider extends ChangeNotifier {
 
   void setActiveScreen(String name) {
     switch (name) {
+      case 'entreprises_screen':
+        _active = 1;
+        break;
+      case 'services_screen':
+        _active = 2;
+        break;
       case 'products_screen':
         _active = 3;
         break;

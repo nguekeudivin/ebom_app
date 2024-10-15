@@ -1,6 +1,6 @@
 import 'package:ebom/src/components/button/primary_button.dart';
+import 'package:ebom/src/components/connexion/user_avatar.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/resources/app_assets.dart';
 import 'package:ebom/src/screens/account/about_screen.dart';
 import 'package:ebom/src/screens/account/addresses_screen.dart';
 import 'package:ebom/src/screens/account/edit_profile_screen.dart';
@@ -8,7 +8,10 @@ import 'package:ebom/src/screens/account/favorites_screen.dart';
 import 'package:ebom/src/screens/account/history_screen.dart';
 import 'package:ebom/src/screens/account/payment_methods_screen.dart';
 import 'package:ebom/src/screens/account/settings_screen.dart';
+import 'package:ebom/src/screens/welcome_screen.dart';
+import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -52,20 +55,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100.0), // Rounded corners
-                  child: Image.asset(
-                    AppAssets.bannerGirl,
-                    width: 150.0, // Image size
-                    height: 150.0,
-                    fit: BoxFit.cover,
+                  child: const UserAvatar(
+                    width: 100,
+                    height: 100,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Suzy Jane',
+            Text(
+              Provider.of<ConnexionProvider>(context).connexion?.nom ?? '',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 16,
@@ -241,6 +242,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   TextButton(
                                     onPressed: () {
+                                      ConnexionService conn =
+                                          ConnexionService();
+                                      conn.logout().then((status) {
+                                        // Remove connexion.
+                                        Provider.of<ConnexionProvider>(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          listen: false,
+                                        ).removeConnexion();
+                                        // Redirect to welcome screen.
+                                        Navigator.push(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const WelcomeScreen(),
+                                          ),
+                                        );
+                                      });
                                       Navigator.of(context).pop();
                                     },
                                     child: const Text(

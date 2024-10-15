@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
   final Chat chat;
-  const ChatScreen({required this.chat, super.key});
+  final int receiverId;
+  const ChatScreen({required this.receiverId, required this.chat, super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -126,7 +127,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: messageController,
                     borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     backgroundColor: AppColors.primaryLighter,
                     borderColor: AppColors.primaryLighter,
                     maxLines: null,

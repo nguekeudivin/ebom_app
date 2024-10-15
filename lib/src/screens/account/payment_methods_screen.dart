@@ -14,13 +14,7 @@ class PaymentMethodsScreen extends StatefulWidget {
 }
 
 class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
-  List<PaymentMethod> paymentMethods = [
-    PaymentMethod(
-      provider: 'ORANGE_MONEY',
-      name: 'NGUEKEU Divin',
-      phoneNumber: '237655660502',
-    ),
-  ];
+  List<PaymentMethod> paymentMethods = [];
 
   int? currentIndex;
 

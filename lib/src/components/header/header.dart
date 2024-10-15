@@ -1,4 +1,4 @@
-import 'package:ebom/src/resources/app_assets.dart';
+import 'package:ebom/src/components/connexion/user_avatar.dart';
 import 'package:ebom/src/screens/account/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -29,12 +29,9 @@ class Header extends StatelessWidget {
               ),
             );
           },
-          child: SizedBox.square(
+          child: const SizedBox.square(
             dimension: 40,
-            child: Image.asset(
-              AppAssets.avatar,
-              fit: BoxFit.cover,
-            ),
+            child: UserAvatar(),
           ),
         ),
       ],

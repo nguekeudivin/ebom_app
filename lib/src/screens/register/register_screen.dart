@@ -2,9 +2,12 @@ import 'package:ebom/src/components/form/input_select.dart';
 import 'package:ebom/src/components/form/input_text.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/components/form/input_date.dart';
+import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/app_layout.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
+import 'package:ebom/src/screens/login/opt_verification_screen.dart';
+import 'package:ebom/src/services/auth_service.dart';
+import 'package:ebom/src/services/validation_service.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,6 +18,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  List<String> _errors = [];
+  bool _isLoading = false;
+
   final List<SelectOption> _genderOptions = [
     SelectOption(label: 'Masculin', value: 'Masculin'),
     SelectOption(label: 'Feminin', value: 'Feminin'),
@@ -31,66 +37,125 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String birthdate = '';
   String gender = '';
 
-  void submit(BuildContext context) {
-    // AuthService auth = AuthService();
-    // auth.register(
-    //   RegisterData(
-    //     nom: 'Divin jordan',
-    //     naissance: '1999-08-02',
-    //     sexe: 'M',
-    //     telephone: '237655660502',
-    //     email: 'nguekeu3divin@gmail.com',
-    //   ),
-    // );
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AppLayout()),
+  void showValidationErrors(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Erreur'),
+          content: Container(
+            color: Colors.red,
+            padding: const EdgeInsets.all(8),
+            child:
+                Text(_errors[0], style: const TextStyle(color: Colors.white)),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
+  }
 
-    // // Create a validator instance.
-    // ValidationService validator = ValidationService();
-    // // Define an array for storing errors.
-    // List<String> errors = [];
+  void submit(BuildContext context) {
+    setState(() {
+      _errors = [];
+    });
+    // Create a validator instance.
+    ValidationService validator = ValidationService();
+    // Define an array for storing errors.
 
-    // // Proceed to validation.
+    // Proceed to validation.
 
-    // // Validate the name
-    // if (!validator.isRequired(nameCtl.text)) {
-    //   errors.add('Le nom est requis');
-    // }
+    // Validate the name
+    if (!validator.isRequired(nameCtl.text)) {
+      setState(() {
+        _errors.add('Le nom est requis');
+      });
+    }
 
-    // // Validate birthdate.
-    // if (!validator.isRequired(birthdate)) {
-    //   errors.add('La date de naissance est requise');
-    // }
+    // Validate birthdate.
+    if (!validator.isRequired(birthdate)) {
+      setState(() {
+        _errors.add('La date de naissance est requise');
+      });
+    }
 
-    // // Validate the gender.
-    // if (!validator.isRequired(gender)) {
-    //   errors.add('Le genre est requis');
-    // }
+    // Validate the gender.
+    if (!validator.isRequired(gender)) {
+      setState(() {
+        _errors.add('Le genre est requis');
+      });
+    }
 
-    // // Check is there is errors and display them.
-    // if (errors.isNotEmpty) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(errors[0]),
-    //     ),
-    //   );
-    // } else {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => RegisterScreen2(
-    //         data: RegisterData(
-    //           nom: nameCtl.text,
-    //           sexe: gender,
-    //           naissance: birthdate,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
+    // Validate the gender.
+    if (!validator.validatePhoneNumber(phoneNumberCtl.text)) {
+      setState(() {
+        _errors.add('Le numero de telephone est invalide');
+      });
+    }
+
+    // Check is there is errors and display them.
+    if (_errors.isNotEmpty) {
+      showValidationErrors(context);
+    } else {
+      AuthService auth = AuthService();
+
+      auth.getDeviceId(context).then((deviceId) {
+        RegisterData data = RegisterData(
+          appareil: deviceId,
+          nom: nameCtl.text,
+          naissance: birthdate,
+          sexe: gender,
+          telephone: phoneNumberCtl.text,
+          email: emailCtl.text,
+          role: 'client',
+        );
+
+        setState(() {
+          _isLoading = true;
+        });
+        auth.register(data).then((status) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (status) {
+            Navigator.push(
+              // ignore: use_build_context_synchronously
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    OtpVerificationScreen(mode: 'register', data: data),
+              ),
+            );
+          } else {
+            setState(() {
+              _errors.add(
+                "Une erreur c'est produite lors de la creation du compte",
+              );
+            });
+            // ignore: use_build_context_synchronously
+            showValidationErrors(context);
+          }
+        }).catchError((error) {
+          setState(() {
+            _isLoading = false;
+          });
+          setState(() {
+            _errors.add(
+              error,
+            );
+          });
+          // ignore: use_build_context_synchronously
+          showValidationErrors(context);
+        });
+      });
+    }
   }
 
   @override
@@ -102,21 +167,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                // const Logo(),
                 const SizedBox(
-                  height: 32,
+                  height: 16,
                 ),
-                const Text(
-                  'Inscription',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
+                const Logo(),
                 const SizedBox(
-                  height: 8,
+                  height: 16,
                 ),
                 Padding(
                   padding:
@@ -176,6 +232,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       PrimaryButton(
                         text: 'Creer le compte',
                         onPressed: submit,
+                        isLoading: _isLoading,
+                        // onPressed: demo,
                       ),
                       const SizedBox(
                         height: 32,

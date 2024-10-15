@@ -1,10 +1,10 @@
 class Service {
   int id;
   String nom;
-  int prix;
+  String prix;
   String categorie;
   String description;
-  String? details; // Nullable field
+  String details; // Nullable field
   String image;
   int vues;
   String userRole;
@@ -18,8 +18,8 @@ class Service {
     required this.description,
     required this.userRole,
     required this.userId,
-    this.prix = 0,
-    this.details,
+    this.prix = '',
+    this.details = '',
     this.image = 'https://admin.bie-innov.com/storage/services/default.jpg',
     this.vues = 0,
   });
@@ -38,6 +38,22 @@ class Service {
       vues: json['vues'] ?? 0,
       userRole: json['user_role'],
       userId: json['user_id'],
+    );
+  }
+
+  factory Service.fromDynamic(dynamic data) {
+    return Service(
+      id: data['id'] is String ? int.parse(data['id']) : data['id'],
+      nom: data['nom'] ?? '',
+      prix: data['prix'] ?? '',
+      categorie: data['categorie'] ?? '',
+      description: data['description'] ?? '',
+      details: data['details'] ?? '',
+      image: data['image'] ??
+          'https://admin.bie-innov.com/storage/services/default.jpg',
+      vues: data['vues'] ?? 0,
+      userRole: data['user_role'] ?? '',
+      userId: data['user_id'] ?? 0,
     );
   }
 

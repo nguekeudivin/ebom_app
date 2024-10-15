@@ -1,12 +1,10 @@
-import 'package:ebom/src/models/product.dart';
-
 class Message {
   final int id;
   final String content;
   final int senderId;
   final int receiverId;
   final DateTime time;
-  final Produit? produit;
+  final dynamic produit;
 
   Message({
     required this.id,

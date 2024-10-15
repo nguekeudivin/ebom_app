@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:ebom/generated/locale_keys.g.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageService {
@@ -25,16 +23,16 @@ class ImageService {
               children: <Widget>[
                 ListTile(
                   leading: const Icon(Icons.camera_alt),
-                  title: Text(
-                    LocaleKeys.image_service_choose_camera.tr(),
+                  title: const Text(
+                    'Camera',
                   ),
                   onTap: () =>
                       pick(context, ImageSource.camera).then(onImagePicked),
                 ),
                 ListTile(
                   leading: const Icon(Icons.photo_library),
-                  title: Text(
-                    LocaleKeys.image_service_choose_gallery.tr(),
+                  title: const Text(
+                    'Gallery',
                   ),
                   onTap: () =>
                       pick(context, ImageSource.gallery).then(onImagePicked),

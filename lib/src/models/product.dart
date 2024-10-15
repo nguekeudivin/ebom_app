@@ -1,4 +1,4 @@
-class Produit {
+class Product {
   int id;
   String nom;
   String marque;
@@ -12,7 +12,7 @@ class Produit {
   int? userId;
 
   // Constructor with default values for prix, image, and vues
-  Produit({
+  Product({
     required this.id,
     required this.nom,
     required this.marque,
@@ -27,8 +27,8 @@ class Produit {
   });
 
   // Factory method for creating an instance from JSON
-  factory Produit.fromJson(Map<String, dynamic> json) {
-    return Produit(
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
       id: json['id'],
       nom: json['nom'],
       marque: json['marque'],
@@ -59,5 +59,22 @@ class Produit {
       'user_role': userRole,
       'user_id': userId,
     };
+  }
+
+  factory Product.fromDynamic(dynamic json) {
+    return Product(
+      id: json['id'],
+      nom: json['nom'],
+      marque: json['marque'],
+      prix: json['prix'] ?? 0,
+      categorie: json['categorie'],
+      description: json['description'],
+      details: json['details'],
+      image: json['image'] ??
+          'https://admin.bie-innov.com/storage/produits/default.jpg',
+      vues: json['vues'] ?? 0,
+      userRole: json['user_role'],
+      userId: json['user_id'],
+    );
   }
 }

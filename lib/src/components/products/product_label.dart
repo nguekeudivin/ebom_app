@@ -1,16 +1,13 @@
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
 class ProductLabel extends StatelessWidget {
-  const ProductLabel({super.key});
+  final dynamic product;
+  const ProductLabel({this.product, super.key});
 
   @override
   Widget build(BuildContext context) {
-    String name = 'Notebook Gamer 2024';
-    // Using string interpolation and truncating the name
-    String displayName =
-        (name.length > 20) ? '${name.substring(0, 20)}...' : name;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -25,14 +22,14 @@ class ProductLabel extends StatelessWidget {
           ],
         ),
         Text(
-          displayName,
+          truncate(product['nom'], 40),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Text(
-          '150.000 FCFA',
-          style: TextStyle(
+        Text(
+          '${product['prix']} FCFA',
+          style: const TextStyle(
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
           ),

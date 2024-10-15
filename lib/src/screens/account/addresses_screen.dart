@@ -13,13 +13,7 @@ class AddressesScreen extends StatefulWidget {
 }
 
 class _AddressesScreenState extends State<AddressesScreen> {
-  List<Address> addresses = [
-    Address(
-      place: 'Maison',
-      label: 'Douala-Logpom',
-      description: 'Derriere le marche de logpom',
-    ),
-  ];
+  List<Address> addresses = [];
 
   int? currentIndex;
 

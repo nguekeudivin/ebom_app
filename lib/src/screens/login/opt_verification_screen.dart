@@ -1,10 +1,17 @@
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/app_layout.dart';
+import 'package:ebom/src/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({super.key});
+  final RegisterData data;
+  final String mode;
+  const OtpVerificationScreen({
+    required this.data,
+    required this.mode,
+    super.key,
+  });
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -12,44 +19,75 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final List<TextEditingController> _controllers =
-      List.generate(5, (_) => TextEditingController());
+      List.generate(6, (_) => TextEditingController());
+  bool _isLoading = false;
 
   void _onChanged(String value, int index) {
-    if (value.length == 1 && index < 4) {
+    if (value.length == 1 && index < 5) {
       FocusScope.of(context).nextFocus(); // Move to next input
     } else if (value.isEmpty && index > 0) {
       FocusScope.of(context).previousFocus(); // Move to previous input
     }
   }
 
+  void verifyOTP(BuildContext context, String otp) {
+    AuthService auth = AuthService();
+
+    setState(() {
+      _isLoading = true;
+    });
+    auth.verifyOTP(otp, widget.data, widget.mode).then((message) {
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.push(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(
+          builder: (context) => AppLayout(),
+        ),
+      );
+    }).catchError((response) {
+      setState(() {
+        _isLoading = false;
+      });
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            //title: const Text('Erreur'),
+            content: Container(
+              //color: Colors.red,
+              padding: const EdgeInsets.only(top: 16),
+              child: Text(
+                response.message,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Verify the otp.
-    // void verifyOTP(BuildContext context, String otp) {
-    //   AuthService auth = AuthService();
 
-    //   auth.verifyOTP(otp).then((message) {
-    //     Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => AppLayout(),
-    //       ),
-    //     );
-    //   }).catchError((errorMessage) {
-    //     Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => AppLayout(),
-    //       ),
-    //     );
-    //     //Handle Error this here.
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text(errorMessage),
-    //       ),
-    //     );
-    //   });
-    // }
+    String phoneNumberStart = widget.data.telephone.substring(0, 3);
+    String phoneNumberEnd = widget.data.telephone.substring(
+      widget.data.telephone.length - 2,
+      widget.data.telephone.length,
+    );
 
     return Container(
       color: AppColors.primary,
@@ -71,17 +109,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       ),
                     ),
                     const SizedBox(height: 48),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        'Veuillez entrer le code à 06 chiffres envoyé sur le numéro  650 *** **7',
+                        'Veuillez entrer le code à 6 chiffres envoyé sur le numéro  $phoneNumberStart****$phoneNumberEnd',
                         textAlign: TextAlign.center,
                       ),
                     ),
                     const SizedBox(height: 48),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(5, (index) {
+                      children: List.generate(6, (index) {
                         return SizedBox(
                           width: 50,
                           child: TextField(
@@ -108,17 +146,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: PrimaryButton(
                         text: 'Verifier',
+                        isLoading: _isLoading,
                         onPressed: (context) {
-                          Navigator.push(
+                          verifyOTP(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => AppLayout(),
-                            ),
+                            _controllers
+                                .map((controller) => controller.text)
+                                .join(),
                           );
                           // Handle OTP verification logic here
-                          // String otp = _controllers
-                          //     .map((controller) => controller.text)
-                          //     .join();
 
                           // if (otp.length == 5) {
                           //   verifyOTP(context, otp);

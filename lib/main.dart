@@ -1,5 +1,8 @@
+import 'package:ebom/src/services/categories_service.dart';
+import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'src/app.dart';
@@ -10,6 +13,12 @@ void main() async {
   if (kIsWeb) setPathUrlStrategy();
 
   runApp(
-    const EbomApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ConnexionProvider()),
+        ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+      ],
+      child: const EbomApp(),
+    ),
   );
 }

@@ -3,8 +3,10 @@ import 'package:ebom/src/components/header/home_header.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/home_screen/banner_swiper_1.dart';
 import 'package:ebom/src/screens/home_screen/banner_swiper_2.dart';
-import 'package:ebom/src/screens/home_screen/categories_swiper.dart';
+import 'package:ebom/src/components/products/categories_swiper.dart';
+import 'package:ebom/src/screens/home_screen/entreprises_swiper.dart';
 import 'package:ebom/src/screens/home_screen/products_swiper.dart';
+import 'package:ebom/src/screens/home_screen/services_swiper.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen2 extends StatefulWidget {
@@ -95,6 +97,16 @@ class _HomeScreen2State extends State<HomeScreen2> {
                 const SizedBox(height: 24),
                 const BannerSwiper2(),
                 const SizedBox(height: 24),
+                const EntreprisesSwiper(),
+                const SizedBox(
+                  height: 24,
+                ),
+                const BannerSwiper2(),
+                const SizedBox(height: 24),
+                const ServicesSwiper(),
+                const SizedBox(
+                  height: 32,
+                )
               ],
             ),
           ),
