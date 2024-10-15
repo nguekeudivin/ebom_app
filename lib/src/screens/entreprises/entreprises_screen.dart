@@ -4,7 +4,9 @@ import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/entreprise.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
+import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EntreprisesScreen extends StatefulWidget {
   const EntreprisesScreen({super.key});
@@ -23,6 +25,17 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
     super.initState();
     // Initialize the futures
     entreprises = service.items();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      String searchKeyword =
+          Provider.of<SearchProvider>(context, listen: false).keyword;
+      if (searchKeyword != '') {
+        setState(() {
+          entreprises = service.search(searchKeyword);
+          _searchController.text = searchKeyword;
+        });
+      }
+    });
   }
 
   @override
@@ -30,6 +43,12 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
     // Dispose the controller when the widget is removed
     _searchController.dispose();
     super.dispose();
+  }
+
+  void search() {
+    setState(() {
+      entreprises = service.search(_searchController.text);
+    });
   }
 
   @override
@@ -58,6 +77,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                 title: 'Nos entreprises',
                 searchController: _searchController,
                 searchPlaceholder: 'Entrer un mot cle',
+                onSearch: search,
               ),
               const SizedBox(
                 height: 8,
@@ -72,7 +92,12 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                       } else if (snapshot.hasError) {
                         return const Text("Une erreur c'est produite");
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Text('');
+                        return const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            "Nous n'avons trouvez aucune entreprise correspondante a votre recherche",
+                          ),
+                        );
                       }
 
                       double rowCount = snapshot.data!.length / 2;

@@ -106,7 +106,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                 const ServicesSwiper(),
                 const SizedBox(
                   height: 32,
-                )
+                ),
               ],
             ),
           ),

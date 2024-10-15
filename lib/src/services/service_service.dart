@@ -30,4 +30,37 @@ class ServiceService {
 
     return completer.future;
   }
+
+  Future<List<Service>> search(String keyword) {
+    final completer = Completer<List<Service>>();
+    String url = AppApi.search;
+    http
+        .post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        {'keyword': keyword},
+      ),
+    )
+        .then((response) {
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        List<Service> list = [];
+        for (int i = 0; i < res['data']['services'].length; i++) {
+          list.add(Service.fromDynamic(res['data']['services'][i]));
+        }
+        completer.complete(list);
+      } else {
+        completer.complete([]);
+        // completer.completeError('Failed to load product categories');
+      }
+    }).catchError((error) {
+      completer.complete([]);
+      //completer.completeError(error.toString());
+    });
+
+    return completer.future;
+  }
 }

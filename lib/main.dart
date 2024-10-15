@@ -1,5 +1,6 @@
 import 'package:ebom/src/services/categories_service.dart';
 import 'package:ebom/src/services/connexion_service.dart';
+import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ConnexionProvider()),
         ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (context) => SearchProvider()),
       ],
       child: const EbomApp(),
     ),

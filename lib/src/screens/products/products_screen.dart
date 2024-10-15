@@ -4,7 +4,9 @@ import 'package:ebom/src/components/products/product_label.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
 import 'package:ebom/src/services/product_service.dart';
+import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -17,12 +19,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
   final ProductService service = ProductService();
   late Future<List<dynamic>> products;
   final TextEditingController _searchController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     // Initialize the futures
     products = service.items();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      String searchKeyword =
+          Provider.of<SearchProvider>(context, listen: false).keyword;
+      if (searchKeyword != '') {
+        setState(() {
+          products = service.search(searchKeyword);
+          _searchController.text = searchKeyword;
+        });
+      }
+    });
   }
 
   @override
@@ -30,6 +44,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
     // Dispose the controller when the widget is removed
     _searchController.dispose();
     super.dispose();
+  }
+
+  void search() {
+    setState(() {
+      products = service.search(_searchController.text);
+    });
   }
 
   @override
@@ -52,6 +72,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 title: 'Produits',
                 searchPlaceholder: 'Entrer un mot cle',
                 searchController: _searchController,
+                onSearch: search,
+                searchLoading: isLoading,
               ),
               const SizedBox(
                 height: 8,
@@ -66,7 +88,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       } else if (snapshot.hasError) {
                         return const Text("Une erreur c'est produite");
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Text('');
+                        return const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            "Nous n'avons trouvez aucun produit correspondant a votre recherche",
+                          ),
+                        );
                       }
 
                       double rowCount = snapshot.data!.length / 2;

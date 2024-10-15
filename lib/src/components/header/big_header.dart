@@ -7,10 +7,14 @@ class BigHeader extends StatefulWidget {
   final String title;
   final String searchPlaceholder;
   final TextEditingController searchController;
+  final void Function() onSearch;
+  final bool searchLoading;
   const BigHeader({
     required this.title,
     required this.searchController,
+    required this.onSearch,
     this.searchPlaceholder = '',
+    this.searchLoading = false,
     super.key,
   });
 
@@ -61,9 +65,19 @@ class _BigHeaderState extends State<BigHeader> {
                   shape: BoxShape
                       .circle, // Optional: to make the background circular
                 ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.search, color: AppColors.primary),
+                child: Visibility(
+                  visible: !widget.searchLoading,
+                  replacement: const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator.adaptive(
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                    ),
+                  ),
+                  child: IconButton(
+                    onPressed: widget.onSearch,
+                    icon: const Icon(Icons.search, color: AppColors.primary),
+                  ),
                 ),
               ),
             ],

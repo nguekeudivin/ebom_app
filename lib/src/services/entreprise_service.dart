@@ -17,7 +17,7 @@ class EntrepriseService {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         List<Entreprise> list = [];
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < res['data'].length; i++) {
           list.add(Entreprise.fromDynamic(res['data'][i]));
         }
         completer.complete(list);
@@ -43,6 +43,39 @@ class EntrepriseService {
       }
     }).catchError((error) {
       completer.completeError(error.toString());
+    });
+
+    return completer.future;
+  }
+
+  Future<List<Entreprise>> search(String keyword) {
+    final completer = Completer<List<Entreprise>>();
+    String url = AppApi.search;
+    http
+        .post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        {'keyword': keyword},
+      ),
+    )
+        .then((response) {
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        List<Entreprise> list = [];
+        for (int i = 0; i < res['data']['entreprises'].length; i++) {
+          list.add(Entreprise.fromDynamic(res['data']['entreprises'][i]));
+        }
+        completer.complete(list);
+      } else {
+        completer.complete([]);
+        // completer.completeError('Failed to load product categories');
+      }
+    }).catchError((error) {
+      completer.complete([]);
+      //completer.completeError(error.toString());
     });
 
     return completer.future;
