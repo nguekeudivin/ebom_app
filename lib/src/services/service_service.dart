@@ -17,7 +17,29 @@ class ServiceService {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         List<Service> list = [];
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < res['data'].length; i++) {
+          list.add(Service.fromDynamic(res['data'][i]));
+        }
+        completer.complete(list);
+      } else {
+        completer.completeError('Failed to load product categories');
+      }
+    }).catchError((error) {
+      completer.completeError(error.toString());
+    });
+
+    return completer.future;
+  }
+
+  // Method to get all product categories using Completer
+  Future<List<Service>> dynamicItems(String apiUri) {
+    final completer = Completer<List<Service>>();
+
+    http.get(Uri.parse('$baseUrl/$apiUri')).then((response) {
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        List<Service> list = [];
+        for (int i = 0; i < res['data'].length; i++) {
           list.add(Service.fromDynamic(res['data'][i]));
         }
         completer.complete(list);

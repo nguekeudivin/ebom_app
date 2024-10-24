@@ -49,6 +49,30 @@ class ConnexionService {
     prefs.setString('ebom_token', data['token']);
   }
 
+  Future<dynamic> checkConnexionStatus() async {
+    Completer<bool> completer = Completer();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String device = prefs.getString('ebom_device') as String;
+
+    String baseUrl = AppApi.account;
+    http
+        .get(Uri.parse('$baseUrl/connexion/$device/active'))
+        .then((response) async {
+      if (response.statusCode == 200) {
+        print("active");
+        completer.complete(true);
+      } else {
+        print("inactive");
+        completer.complete(false);
+      }
+    }).catchError((error) {
+      completer.completeError("une erreur s'est produite");
+    });
+
+    return completer.future;
+  }
+
   Future<dynamic> getUser() async {
     Connexion connexion = await getConnexion() as Connexion;
     Completer<dynamic> completer = Completer();

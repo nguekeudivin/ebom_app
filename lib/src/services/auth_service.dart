@@ -121,12 +121,23 @@ class AuthService {
       },
       body: json.encode(
         {
-          'appareil': data.appareil,
+          'appareil': "mon appareil",
           'telephone': data.telephone,
         },
       ),
     )
         .then((response) async {
+      print(response.statusCode);
+      if (response.statusCode == 307) {
+        var redirectUrl = response.headers['location'];
+        if (redirectUrl != null) {
+          var redirectedResponse = await http.get(Uri.parse(redirectUrl));
+          print(redirectedResponse.body);
+        }
+      } else {
+        print('Response code: ${response.statusCode}');
+      }
+
       final responseBody = json.decode(response.body);
 
       if (responseBody['data'] is String) {
@@ -167,7 +178,7 @@ class AuthService {
       // completer.completeError(
       //   "Une erreur s'est produite",
       // ); // Handle network error
-
+      print(error);
       completer.completeError(error.toString());
     });
     return completer.future;
@@ -198,7 +209,19 @@ class AuthService {
       ),
     )
         .then((response) {
+      print({
+        'appareil': data.appareil,
+        'nom': data.nom,
+        'sexe': data.sexe,
+        'naissance': data.naissance,
+        'telephone': data.telephone,
+        'email': data.email,
+        'role': 'client',
+      });
+      print("request");
+      print(response.statusCode);
       final responseBody = json.decode(response.body);
+      //print(responseBody);
 
       if (responseBody['data'] is String) {
         switch (responseBody['data']) {
@@ -225,12 +248,13 @@ class AuthService {
         if (responseBody['data']['telephone'] != null) {
           completer.complete(true);
         } else {
-          completer.completeError('Verifiez votre connexion internet');
+          completer.completeError('Verifiez votre connexion internet. E1');
         }
       }
     }).catchError((error) {
+      // print(error);
       completer.completeError(
-        'Verifiez votre connexion internet',
+        'Verifiez votre connexion internet.E2',
       ); // Handle network error
     });
     return completer.future;

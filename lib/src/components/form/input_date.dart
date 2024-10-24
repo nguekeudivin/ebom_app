@@ -78,7 +78,7 @@ class _InputDateState extends State<InputDate> {
               color: AppColors.primary, // Set the color to AppColors.primary
             ),
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: AppColors.borderGray, // Define the border color

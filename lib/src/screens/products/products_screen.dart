@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
+  final String keyword;
+  const ProductsScreen({this.keyword = '', super.key});
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -30,11 +31,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       String searchKeyword =
           Provider.of<SearchProvider>(context, listen: false).keyword;
+
+      int categoryId =
+          Provider.of<SearchProvider>(context, listen: false).categoryId;
+
       if (searchKeyword != '') {
         setState(() {
           products = service.search(searchKeyword);
           _searchController.text = searchKeyword;
         });
+        Provider.of<SearchProvider>(context, listen: false).setKeyword('');
+      }
+
+      if (categoryId != 0) {
+        setState(() {
+          products = service.searchByCategory(categoryId);
+        });
+        Provider.of<SearchProvider>(context, listen: false).setCategoryId(0);
       }
     });
   }
@@ -74,6 +87,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 searchController: _searchController,
                 onSearch: search,
                 searchLoading: isLoading,
+                screen: 'products_screen',
+                onFilter: (value) {
+                  setState(() {
+                    products = service.search(value);
+                  });
+                },
               ),
               const SizedBox(
                 height: 8,

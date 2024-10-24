@@ -1,3 +1,4 @@
+import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/categories_service.dart';
 import 'package:ebom/src/services/connexion_service.dart';
 import 'package:ebom/src/services/search_service.dart';
@@ -19,6 +20,9 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ConnexionProvider()),
         ChangeNotifierProvider(create: (context) => CategoriesProvider()),
         ChangeNotifierProvider(create: (context) => SearchProvider()),
+        ChangeNotifierProvider(
+          create: (context) => AppLayoutNavigationProvider(),
+        ),
       ],
       child: const EbomApp(),
     ),

@@ -183,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       InputText(
                         controller: nameCtl,
                         label: 'Nom',
-                        placeholder: 'Entre votre nom',
+                        placeholder: 'Entrez votre nom',
                       ),
                       const SizedBox(
                         height: 16,
@@ -195,7 +195,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           });
                         },
                         label: 'Date de naissace',
-                        placeholder: 'Selectionnez votre date de naissance',
+                        placeholder: 'Sélectionnez votre date de naissance',
                       ),
                       const SizedBox(
                         height: 16,
@@ -207,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           });
                         },
                         label: 'Sexe',
-                        placeholder: 'Selectionnez votre sexe',
+                        placeholder: 'Sélectionnez votre sexe',
                         options: _genderOptions,
                       ),
                       const SizedBox(
@@ -215,7 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       InputText(
                         controller: phoneNumberCtl,
-                        label: 'Numero de telephone',
+                        label: 'Numero de téléphone',
                         placeholder: '6*******',
                       ),
                       const SizedBox(
@@ -230,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 32,
                       ),
                       PrimaryButton(
-                        text: 'Creer le compte',
+                        text: 'Créer le compte',
                         onPressed: submit,
                         isLoading: _isLoading,
                         // onPressed: demo,
@@ -239,11 +239,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 32,
                       ),
                       Center(
-                        child: Wrap(
-                          alignment: WrapAlignment
-                              .center, // Horizontally center the children
-                          runAlignment: WrapAlignment
-                              .center, // Vertically center the children
+                        child: Column(
+                          // Vertically center the children
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(top: 8),

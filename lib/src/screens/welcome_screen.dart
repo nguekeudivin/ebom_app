@@ -1,10 +1,14 @@
 import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/models/connexion.dart';
 import 'package:ebom/src/resources/app_assets.dart';
+import 'package:ebom/src/screens/app_layout.dart';
 import 'package:ebom/src/screens/login/login_screen.dart';
 import 'package:ebom/src/screens/terms_screen.dart';
+import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -14,6 +18,35 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the futures
+    // nameCtl =
+    // phoneNumberCtl =
+    // emailCtl =
+
+    ConnexionService connService = ConnexionService();
+
+    Future.delayed(Duration.zero, () async {
+      final Connexion? connexion = await connService.getConnexion();
+
+      if (connexion != null) {
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+            builder: (context) => AppLayout(),
+          ),
+        );
+      } else {}
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ConnexionProvider>(context, listen: false).loadConnexion();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

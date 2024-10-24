@@ -11,7 +11,7 @@ class InputText extends StatefulWidget {
   const InputText({
     required this.label,
     required this.controller,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
     this.placeholder = '',
     super.key,
   });

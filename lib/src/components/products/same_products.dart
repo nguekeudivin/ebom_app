@@ -43,7 +43,13 @@ class _SameProductsState extends State<SameProducts> {
             future: products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const Center(
+                  child: SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               } else if (snapshot.hasError) {
                 return const Text("Une erreur c'est produite");
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

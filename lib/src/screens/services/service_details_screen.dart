@@ -54,19 +54,40 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
               color: AppColors.primary,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                widget.service.nom,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.service.categorie,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    widget.service.nom,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    '${widget.service.prix} XAF',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   Text(
                     widget.service.description,
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -84,12 +105,25 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
-                  //return const Text(snapshot.error.toString())
-                  return const Text(
-                    "Les informations de l'entreprise sont indisponibles",
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    color: AppColors.primary,
+                    child: const Text(
+                      "Les informations de l'entreprise sont indisponibles",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   );
                 } else if (!snapshot.hasData) {
-                  return const Text('');
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    color: AppColors.primary,
+                    child: const Text(
+                      "Les informations de l'entreprise sont indisponibles",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
                 }
 
                 var vendor = snapshot.data!;

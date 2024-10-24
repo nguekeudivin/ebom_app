@@ -37,9 +37,26 @@ class EntrepriseService {
     http.get(Uri.parse('$baseUrl/marketplace/entreprise/$id')).then((response) {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
-        completer.complete(Entreprise.fromDynamic(res['data']));
+
+        if (res['data']['id'] == null) {
+          completer.completeError('Aucune information');
+        } else {
+          if (res['data']['id'] is String) {
+            if (res['data']['id'] == '0') {
+              completer.completeError('Aucune information');
+            } else {
+              completer.complete(Entreprise.fromDynamic(res['data']));
+            }
+          } else {
+            if (res['data']['id'] == 0) {
+              completer.completeError('Aucune information');
+            } else {
+              completer.complete(Entreprise.fromDynamic(res['data']));
+            }
+          }
+        }
       } else {
-        completer.completeError("Une erreur c'est produite");
+        completer.completeError("Un probleme est survenu c'est produite");
       }
     }).catchError((error) {
       completer.completeError(error.toString());

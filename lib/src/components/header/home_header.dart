@@ -2,6 +2,7 @@ import 'package:ebom/src/components/connexion/user_avatar.dart';
 import 'package:ebom/src/components/logo/logo_square.dart';
 import 'package:ebom/src/screens/account/profile_screen.dart';
 import 'package:ebom/src/services/connexion_service.dart';
+import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,9 +23,17 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
+          Row(
             children: [
-              LogoSquare(),
+              Provider.of<SearchProvider>(context).keyword == ''
+                  ? const LogoSquare()
+                  : IconButton(
+                      onPressed: () {
+                        Provider.of<SearchProvider>(context, listen: false)
+                            .setKeyword('');
+                      },
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    ),
             ],
           ),
           Consumer<ConnexionProvider>(
@@ -61,9 +70,19 @@ class HomeHeader extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const SizedBox.square(
+                    child: SizedBox.square(
                       dimension: 40,
-                      child: UserAvatar(),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape:
+                              BoxShape.circle, // Ensures the border is circular
+                          border: Border.all(
+                            color: Colors.white, // White border
+                            width: 2, // Border width
+                          ),
+                        ),
+                        child: const UserAvatar(), // Your custom avatar widget
+                      ),
                     ),
                   ),
                 ],

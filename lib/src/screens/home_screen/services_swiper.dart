@@ -13,17 +13,17 @@ class ServicesSwiper extends StatefulWidget {
   final String apiUri;
   const ServicesSwiper({
     this.title = const Text(
-      'Les services a la une',
+      'Les services à la une',
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
     ),
     this.subtitle = const Text(
-      'Verifies',
+      'Verifiées',
       style: TextStyle(fontSize: 14),
     ),
-    this.apiUri = 'entreprises',
+    this.apiUri = 'services',
     super.key,
   });
 
@@ -39,7 +39,8 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
   void initState() {
     super.initState();
     // Initialize the futures
-    services = serviceService.items();
+
+    services = serviceService.dynamicItems(widget.apiUri);
   }
 
   @override
@@ -53,7 +54,7 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
 
     return Column(
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         FutureBuilder(
           future: services,
           builder: (context, snapshot) {
@@ -75,7 +76,7 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -110,6 +111,9 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(
+                  height: 8,
                 ),
                 SizedBox(
                   height: 180,

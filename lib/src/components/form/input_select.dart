@@ -71,7 +71,7 @@ class _InputSelectState extends State<InputSelect> {
               ), // Keep the border radius on focus
             ),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           ),
           value: _selectedValue, // Define the selected value
           items: widget.options.map((SelectOption option) {

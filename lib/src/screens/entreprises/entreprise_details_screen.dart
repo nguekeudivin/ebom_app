@@ -3,6 +3,7 @@ import 'package:ebom/src/components/contact/contact_info.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/entreprise.dart';
 import 'package:ebom/src/screens/home_screen/products_swiper.dart';
+import 'package:ebom/src/screens/home_screen/services_swiper.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:flutter/material.dart';
 
@@ -170,12 +171,22 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(_details.description),
             ),
+            const SizedBox(
+              height: 16,
+            ),
             ProductsSwiper(
               title: const Text(
                 'Les derniers produits',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               apiUri: 'entreprise/${_details.id}/produits',
+            ),
+            ServicesSwiper(
+              title: const Text(
+                'Les derniers services',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              apiUri: 'entreprise/${_details.id}/services',
             ),
           ],
         ),

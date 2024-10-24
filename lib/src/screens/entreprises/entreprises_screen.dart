@@ -35,6 +35,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
           _searchController.text = searchKeyword;
         });
       }
+      Provider.of<SearchProvider>(context, listen: false).setKeyword('');
     });
   }
 
@@ -78,6 +79,12 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                 searchController: _searchController,
                 searchPlaceholder: 'Entrer un mot cle',
                 onSearch: search,
+                screen: 'entreprises_screen',
+                onFilter: (value) {
+                  setState(() {
+                    entreprises = service.search(value);
+                  });
+                },
               ),
               const SizedBox(
                 height: 8,

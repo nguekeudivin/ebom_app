@@ -36,6 +36,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
           _searchController.text = searchKeyword;
         });
       }
+      Provider.of<SearchProvider>(context, listen: false).setKeyword('');
     });
   }
 
@@ -73,6 +74,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 searchPlaceholder: 'Entretien',
                 searchController: _searchController,
                 onSearch: search,
+                screen: 'services_screen',
+                onFilter: (String value) {
+                  setState(() {
+                    services = service.search(value);
+                  });
+                },
               ),
               const SizedBox(
                 height: 8,

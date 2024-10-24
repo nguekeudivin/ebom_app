@@ -1,6 +1,6 @@
 import 'package:ebom/src/components/products/product_categories_slide.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/categories_screen.dart';
+import 'package:ebom/src/screens/categories/entreprises_types_screen.dart';
 import 'package:flutter/material.dart';
 
 class EntreprisesCategoriesSwiper extends StatefulWidget {
@@ -26,13 +26,13 @@ class _EntreprisesCategoriesSwiperState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Toutes les secteurs d'activites",
+                    "Touts les secteurs d'activités",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Verifies et certifies',
-                    style: TextStyle(fontSize: 18),
-                  ),
+                  // Text(
+                  //   'Verifies et certifies',
+                  //   style: TextStyle(fontSize: 18),
+                  // ),
                 ],
               ),
               Container(
@@ -48,7 +48,7 @@ class _EntreprisesCategoriesSwiperState
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CategoriesScreen(),
+                        builder: (context) => const EntreprisesTypesScreen(),
                       ),
                     );
                   },

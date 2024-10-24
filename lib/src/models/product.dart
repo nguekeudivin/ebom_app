@@ -5,7 +5,7 @@ class Product {
   int prix;
   String categorie;
   String description;
-  String? details; // Nullable field
+  String details; // Nullable field
   String image;
   int vues;
   String? userRole;
@@ -20,7 +20,7 @@ class Product {
     required this.description,
     this.userRole,
     this.userId,
-    this.details,
+    this.details = '',
     this.image = 'https://admin.bie-innov.com/storage/produits/default.jpg',
     this.vues = 0,
     this.prix = 0,

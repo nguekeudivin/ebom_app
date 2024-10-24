@@ -124,6 +124,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   const SizedBox(
                     height: 16,
                   ),
+                  Text(
+                    widget.product['categorie'],
+                    style: const TextStyle(color: AppColors.gray700),
+                  ),
+                  Text(
+                    widget.product['nom'],
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -154,19 +165,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ],
                   ),
-                  Text(
-                    widget.product['nom'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   const SizedBox(
                     height: 8,
                   ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: AppColors.primaryLighter,
+                    ),
+                    child: Text(widget.product['marque']),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     widget.product['description'],
-                    //   style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.product['details'],
                   ),
                   const SizedBox(
                     height: 8,
@@ -183,12 +200,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
-                  //return const Text(snapshot.error.toString())
-                  return const Text(
-                    'Les informations du vendeurs sont indisponibles',
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    color: AppColors.primary,
+                    child: const Text(
+                      'Les informations du vendeurs sont indisponibles',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   );
                 } else if (!snapshot.hasData) {
-                  return const Text('');
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    color: AppColors.primary,
+                    child: const Text(
+                      'Les informations du vendeurs sont indisponibles',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
                 }
 
                 var vendor = snapshot.data!;

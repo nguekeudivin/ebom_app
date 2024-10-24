@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppLayoutNavigationProvider extends ChangeNotifier {
-  int _active = 2;
+  int _active = 0;
 
   int get active => _active;
 

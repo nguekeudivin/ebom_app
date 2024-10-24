@@ -11,14 +11,14 @@ class ProductsSwiper extends StatefulWidget {
   final String apiUri;
   const ProductsSwiper({
     this.title = const Text(
-      'Decouvrez les meilleurs offres',
+      'Découvrez les meilleurs offres',
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
     ),
     this.subtitle = const Text(
-      'Verifies et certifies',
+      'Verifiées et certifiées',
       style: TextStyle(fontSize: 14),
     ),
     this.apiUri = 'produits',

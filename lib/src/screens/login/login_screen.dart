@@ -146,49 +146,50 @@ class _WelcomeScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
-                          height: 48,
+                          height: 24,
                         ),
                         InputText(
                           controller: phoneNumberCtl,
-                          label: 'Entrez votre numero de telephone',
+                          label: 'Entrez votre numero de téléphone',
                           placeholder: '6*******',
                         ),
                         const SizedBox(
-                          height: 48,
+                          height: 32,
                         ),
                         PrimaryButton(
-                          text: 'Recevoir le code de connexion',
+                          text: 'Se connecter',
                           onPressed: submit,
                           isLoading: _isLoading,
                         ),
                         const SizedBox(
-                          height: 48,
+                          height: 32,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Je n'ai pas encore de compte."),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const TermsScreen(),
+                        Center(
+                          child: Column(
+                            children: [
+                              const Text("Je n'ai pas encore de compte."),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const TermsScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "Je m'inscris",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Colors.blue, // Underline color
+                                    decorationThickness: 2.0, //
                                   ),
-                                );
-                              },
-                              child: const Text(
-                                "Je m'inscris",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor:
-                                      Colors.blue, // Underline color
-                                  decorationThickness: 2.0, //
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),

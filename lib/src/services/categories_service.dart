@@ -33,7 +33,26 @@ class CategoriesService {
 
     http.get(Uri.parse('$baseUrl/categories/services')).then((response) {
       if (response.statusCode == 200) {
-        completer.complete(json.decode(response.body));
+        final res = json.decode(response.body);
+        completer.complete(res['data']);
+      } else {
+        completer.completeError('Failed to load service categories');
+      }
+    }).catchError((error) {
+      completer.completeError('Error: $error');
+    });
+
+    return completer.future;
+  }
+
+  // Method to get all service categories using Completer
+  Future<List<dynamic>> typeEntreprises() {
+    final completer = Completer<List<dynamic>>();
+
+    http.get(Uri.parse('$baseUrl/types/entreprises')).then((response) {
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        completer.complete(res['data']);
       } else {
         completer.completeError('Failed to load service categories');
       }

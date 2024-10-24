@@ -19,7 +19,7 @@ class EntreprisesSwiper extends StatefulWidget {
       ),
     ),
     this.subtitle = const Text(
-      'Certifies',
+      'Certifiées',
       style: TextStyle(fontSize: 14),
     ),
     this.apiUri = 'entreprises',
@@ -75,7 +75,7 @@ class _EntreprisesSwiperState extends State<EntreprisesSwiper> {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -110,6 +110,9 @@ class _EntreprisesSwiperState extends State<EntreprisesSwiper> {
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(
+                  height: 8,
                 ),
                 SizedBox(
                   height: imageHeight + avatarSize + 20,

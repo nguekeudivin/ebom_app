@@ -1,6 +1,9 @@
+import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/categories_service.dart';
+import 'package:ebom/src/services/search_service.dart';
 import 'package:ebom/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductCategoriesSlide extends StatefulWidget {
   const ProductCategoriesSlide({super.key});
@@ -41,24 +44,37 @@ class _ProductCategoriesSlideState extends State<ProductCategoriesSlide> {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               var category = snapshot.data![index];
-              return Container(
-                width: 130,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child:
-                            Image.network(category['image'], fit: BoxFit.cover),
-                      ),
-                      Text(
-                        truncate(category['nom'], 25),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+              return GestureDetector(
+                onTap: () {
+                  Provider.of<SearchProvider>(context, listen: false)
+                      .setKeyword(category['nom']);
+                  Provider.of<AppLayoutNavigationProvider>(
+                    context,
+                    listen: false,
+                  ).setActiveScreen('products_screen');
+                },
+                child: Container(
+                  width: 130,
+                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Image.network(category['icone'],
+                              fit: BoxFit.cover),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          truncate(category['nom'], 25),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

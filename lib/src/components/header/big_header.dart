@@ -1,6 +1,7 @@
 import 'package:ebom/src/components/form/input_text_field.dart';
 import 'package:ebom/src/components/header/header.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/screens/search/filter_screen.dart';
 import 'package:flutter/material.dart';
 
 class BigHeader extends StatefulWidget {
@@ -8,11 +9,15 @@ class BigHeader extends StatefulWidget {
   final String searchPlaceholder;
   final TextEditingController searchController;
   final void Function() onSearch;
+  final void Function(String filter) onFilter;
   final bool searchLoading;
+  final String screen;
   const BigHeader({
     required this.title,
     required this.searchController,
     required this.onSearch,
+    required this.onFilter,
+    required this.screen,
     this.searchPlaceholder = '',
     this.searchLoading = false,
     super.key,
@@ -41,46 +46,65 @@ class _BigHeaderState extends State<BigHeader> {
           const SizedBox(
             height: 8,
           ),
-          Row(
-            children: [
-              Expanded(
-                child: InputTextField(
-                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  borderColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                  ),
-                  hintText: widget.searchPlaceholder,
-                  controller: widget.searchController,
-                  // prefixIcon:
-                  //     const Icon(Icons.search, color: AppColors.primary),
-                ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(50),
               ),
-              const SizedBox(
-                width: 8,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Background color
-                  shape: BoxShape
-                      .circle, // Optional: to make the background circular
-                ),
-                child: Visibility(
-                  visible: !widget.searchLoading,
-                  replacement: const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator.adaptive(
-                      valueColor: AlwaysStoppedAnimation(Colors.white),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: InputTextField(
+                    borderColor: Colors.white,
+                    focusBorderColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
                     ),
+                    hintText: widget.searchPlaceholder,
+                    controller: widget.searchController,
+                    // prefixIcon:
+                    //     const Icon(Icons.search, color: AppColors.primary),
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white, // Background color
+                    shape: BoxShape
+                        .circle, // Optional: to make the background circular
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      print(widget.screen);
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterScreen(
+                            onFilter: widget.onFilter,
+                            screen: widget.screen,
+                          ),
+                        ),
+                      );
+                    },
+                    icon:
+                        const Icon(Icons.filter_list, color: AppColors.primary),
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white, // Background color
+                    shape: BoxShape
+                        .circle, // Optional: to make the background circular
                   ),
                   child: IconButton(
                     onPressed: widget.onSearch,
                     icon: const Icon(Icons.search, color: AppColors.primary),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

@@ -1,6 +1,6 @@
 import 'package:ebom/src/components/products/product_categories_slide.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/categories_screen.dart';
+import 'package:ebom/src/screens/categories/categories_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesSwiper extends StatelessWidget {
@@ -19,7 +19,7 @@ class CategoriesSwiper extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Toutes les categories',
+                    'Toutes les catégories',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -55,7 +55,7 @@ class CategoriesSwiper extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 24,
+          height: 16,
         ),
         const ProductCategoriesSlide(),
       ],

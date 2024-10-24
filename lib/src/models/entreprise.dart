@@ -126,7 +126,7 @@ class Entreprise {
       'logo': logo,
       'description': description,
       'url': url,
-      'banniere': banniere
+      'banniere': banniere,
     };
   }
 }

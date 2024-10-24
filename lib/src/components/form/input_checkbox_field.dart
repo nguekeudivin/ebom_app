@@ -24,9 +24,9 @@ class InputCheckboxField extends StatelessWidget {
             value: isChecked,
             onChanged: onChanged,
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 2),
           Padding(
-            padding: const EdgeInsets.only(top: 6.5),
+            padding: const EdgeInsets.only(top: 13),
             child: label,
           ),
         ],
