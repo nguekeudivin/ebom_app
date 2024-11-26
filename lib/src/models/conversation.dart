@@ -34,6 +34,18 @@ class Conversation {
     );
   }
 
+  factory Conversation.fromDynamic(Map<String, dynamic> json) {
+    return Conversation(
+      id: json['id'],
+      nom: json['nom'],
+      sigle: json['sigle'],
+      email: json['email'],
+      telephone: json['telephone'],
+      image: json['image'] ?? defaultImage,
+      role: json['role'],
+    );
+  }
+
   // Method to convert Conversation object to JSON
   Map<String, dynamic> toJson() {
     return {

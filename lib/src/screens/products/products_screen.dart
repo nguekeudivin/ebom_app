@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ebom/src/components/header/big_header.dart';
+import 'package:ebom/src/components/skeleton/image_skeleton.dart';
 import 'package:ebom/src/components/list/custom_list_row.dart';
+import 'package:ebom/src/components/skeleton/listing_skeleton.dart';
 import 'package:ebom/src/components/products/product_label.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
+import 'package:ebom/src/services/cache_service.dart';
 import 'package:ebom/src/services/product_service.dart';
 import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
@@ -17,36 +21,27 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  CacheService cacheService = CacheService();
   final ProductService service = ProductService();
+
   late Future<List<dynamic>> products;
+
   final TextEditingController _searchController = TextEditingController();
   bool isLoading = false;
+  bool isCached = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the futures
+
     products = service.items();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String searchKeyword =
-          Provider.of<SearchProvider>(context, listen: false).keyword;
-
       int categoryId =
           Provider.of<SearchProvider>(context, listen: false).categoryId;
 
-      if (searchKeyword != '') {
-        setState(() {
-          products = service.search(searchKeyword);
-          _searchController.text = searchKeyword;
-        });
-        Provider.of<SearchProvider>(context, listen: false).setKeyword('');
-      }
-
       if (categoryId != 0) {
-        setState(() {
-          products = service.searchByCategory(categoryId);
-        });
+        // searchByCategory(categoryId);
         Provider.of<SearchProvider>(context, listen: false).setCategoryId(0);
       }
     });
@@ -60,9 +55,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void search() {
-    setState(() {
-      products = service.search(_searchController.text);
-    });
+    products = service.search(_searchController.text);
+  }
+
+  void searchByCategory(int categoryId) {
+    // service.searchByCategory(categoryId, (items) {
+    //   setState(() {
+    //     products = items;
+    //   });
+    // }).then((items) => {products = items});
   }
 
   @override
@@ -88,9 +89,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 onSearch: search,
                 searchLoading: isLoading,
                 screen: 'products_screen',
-                onFilter: (value) {
+                onFilter: (int value) {
                   setState(() {
-                    products = service.search(value);
+                    products = service.searchByCategory(value);
                   });
                 },
               ),
@@ -103,7 +104,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     future: products,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const ListingSkeleton();
                       } else if (snapshot.hasError) {
                         return const Text("Une erreur c'est produite");
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -114,6 +115,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           ),
                         );
                       }
+                      // Save data into cache.
+                      cacheService.saveToCache('product_items', snapshot.data);
 
                       double rowCount = snapshot.data!.length / 2;
 
@@ -157,8 +160,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              child: Image.network(
-                                                product['image'],
+                                              child: CachedNetworkImage(
+                                                imageUrl: product['image'],
+                                                placeholder: (context, url) =>
+                                                    const ImageSkeleton(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const ImageSkeleton(),
                                                 fit: BoxFit.cover,
                                               ),
                                             ),

@@ -9,12 +9,15 @@ class ProductService {
   ProductService({this.baseUrl = AppApi.data});
 
   // Method to get all product categories using Completer
-  Future<List<dynamic>> items() {
+  Future<List<dynamic>> items() async {
     final completer = Completer<List<dynamic>>();
 
-    http.get(Uri.parse('$baseUrl/produits')).then((response) {
+    final url = '$baseUrl/produits';
+
+    http.get(Uri.parse(url)).then((response) {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
+        // Return the result.
         completer.complete(res['data']);
       } else {
         completer.completeError('Failed to load product categories');
@@ -26,7 +29,7 @@ class ProductService {
     return completer.future;
   }
 
-  Future<List<dynamic>> dynamicItems(String apiUri) {
+  Future<List<dynamic>> dynamicItems(String apiUri) async {
     final completer = Completer<List<dynamic>>();
 
     http.get(Uri.parse('$baseUrl/$apiUri')).then((response) {
@@ -43,9 +46,12 @@ class ProductService {
     return completer.future;
   }
 
-  Future<List<dynamic>> search(String keyword) {
+  Future<List<dynamic>> search(String keyword) async {
     final completer = Completer<List<dynamic>>();
+
     String url = AppApi.search;
+
+    // Initial request
     http
         .post(
       Uri.parse(url),
@@ -53,7 +59,7 @@ class ProductService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-        {'keyword': keyword},
+        {'search': keyword},
       ),
     )
         .then((response) {
@@ -62,35 +68,28 @@ class ProductService {
         completer.complete(res['data']['produits']);
       } else {
         completer.complete([]);
-
-        //completer.completeError('Failed to load product categories');
       }
     }).catchError((error) {
       completer.complete([]);
-      //completer.completeError(error.toString());
     });
 
     return completer.future;
   }
 
-  Future<List<dynamic>> searchByCategory(int id) {
+  Future<List<dynamic>> searchByCategory(int id) async {
     final completer = Completer<List<dynamic>>();
-    String url = AppApi.search;
-    http
-        .get(
-      Uri.parse('$baseUrl/produits/categorie/$id'),
-    )
-        .then((response) {
+
+    // Load the initial request.
+    http.get(Uri.parse('$baseUrl/produits/categorie/$id')).then((response) {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
+        // Save to cache.
         completer.complete(res['data']);
       } else {
         completer.complete([]);
-        //completer.completeError('Failed to load product categories');
       }
     }).catchError((error) {
       completer.complete([]);
-      //completer.completeError(error.toString());
     });
 
     return completer.future;

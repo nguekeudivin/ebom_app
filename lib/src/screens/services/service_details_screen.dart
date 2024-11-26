@@ -23,7 +23,7 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
   void initState() {
     super.initState();
 
-    vendor = entrepriseService.getEntreprise(widget.service.userId);
+    vendor = entrepriseService.getSimpleEntreprise(widget.service.userId);
   }
 
   @override

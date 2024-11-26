@@ -87,7 +87,7 @@ class _WelcomeScreenState extends State<LoginScreen> {
           if (response.status) {
             // if it's a new session then we send the code to phone number.
             if (response.newSession) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 // ignore: use_build_context_synchronously
                 context,
                 MaterialPageRoute(
@@ -97,7 +97,7 @@ class _WelcomeScreenState extends State<LoginScreen> {
               );
             } else {
               // If i's not a new session. We redirect the user to the applayout.
-              Navigator.push(
+              Navigator.pushReplacement(
                 // ignore: use_build_context_synchronously
                 context,
                 MaterialPageRoute(builder: (context) => AppLayout()),
@@ -112,7 +112,9 @@ class _WelcomeScreenState extends State<LoginScreen> {
           }
         }).catchError((error) {
           setState(() {
-            _errors.add('Verifier votre connexion internet');
+            _errors.add(
+              'Utilisateur non reconnu. Assurez vous que vous avez entre le bon numero de téléphone. Veuillez verifier egalement votre connexion internet.',
+            );
             _isLoading = false;
           });
 

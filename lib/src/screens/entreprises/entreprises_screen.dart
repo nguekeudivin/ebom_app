@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ebom/src/components/header/big_header.dart';
+import 'package:ebom/src/components/skeleton/image_skeleton.dart';
 import 'package:ebom/src/components/list/custom_list_row.dart';
+import 'package:ebom/src/components/skeleton/listing_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/entreprise.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
@@ -27,15 +30,15 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
     entreprises = service.items();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String searchKeyword =
-          Provider.of<SearchProvider>(context, listen: false).keyword;
-      if (searchKeyword != '') {
+      int categoryId =
+          Provider.of<SearchProvider>(context, listen: false).categoryId;
+
+      if (categoryId != 0) {
         setState(() {
-          entreprises = service.search(searchKeyword);
-          _searchController.text = searchKeyword;
+          entreprises = service.searchByCategory(categoryId);
         });
+        Provider.of<SearchProvider>(context, listen: false).setCategoryId(0);
       }
-      Provider.of<SearchProvider>(context, listen: false).setKeyword('');
     });
   }
 
@@ -62,12 +65,6 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
     // double descriptionHeight = 80;
     double avatarSize = 40;
 
-    // double gridGap = 16.0;
-    //double labelPadding = 8;
-    //double screenPadding = 16;
-
-    // Adjust child aspect ratio based on screen size
-
     return Container(
       color: AppColors.primary,
       child: SafeArea(
@@ -80,9 +77,9 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                 searchPlaceholder: 'Entrer un mot cle',
                 onSearch: search,
                 screen: 'entreprises_screen',
-                onFilter: (value) {
+                onFilter: (int value) {
                   setState(() {
-                    entreprises = service.search(value);
+                    entreprises = service.search('$value');
                   });
                 },
               ),
@@ -95,7 +92,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                     future: entreprises,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const ListingSkeleton();
                       } else if (snapshot.hasError) {
                         return const Text("Une erreur c'est produite");
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -159,35 +156,23 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                                       10,
                                                     ), // Set the desired radius for top-right corner
                                                   ),
-                                                  child: Image.network(
-                                                    entreprise.image,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: entreprise.image,
+                                                    placeholder: (
+                                                      context,
+                                                      url,
+                                                    ) =>
+                                                        const ImageSkeleton(),
+                                                    errorWidget: (
+                                                      context,
+                                                      url,
+                                                      error,
+                                                    ) =>
+                                                        const ImageSkeleton(),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
-                                              // Positioned(
-                                              //   top: imageHeight - 24,
-                                              //   child: Container(
-                                              //     height: 24,
-                                              //     padding: const EdgeInsets.symmetric(
-                                              //         horizontal: 8),
-                                              //     decoration: const BoxDecoration(
-                                              //       color: AppColors.primary,
-                                              //       borderRadius: BorderRadius.only(
-                                              //         topRight: Radius.circular(12.0),
-                                              //       ),
-                                              //     ),
-                                              //     child: Center(
-                                              //       // Centers the text both vertically and horizontally
-                                              //       child: Text(
-                                              //         entreprise['nom'],
-                                              //         style: const TextStyle(
-                                              //           color: Colors.white,
-                                              //         ),
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // ),
                                               Positioned(
                                                 top: imageHeight -
                                                     avatarSize / 2 -
@@ -216,26 +201,6 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              // Positioned(
-                                              //   top: imageHeight + avatarSize / 2 - 4,
-                                              //   child: SizedBox(
-                                              //     width: (width -
-                                              //             gridGap -
-                                              //             2 * screenPadding -
-                                              //             2 * labelPadding) /
-                                              //         2,
-                                              //     height: 100,
-                                              //     child: Padding(
-                                              //       padding:
-                                              //           EdgeInsets.all(labelPadding),
-                                              //       child: Text(
-                                              //         displayDescription,
-                                              //         style: const TextStyle(
-                                              //             fontSize: 12),
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // ),
                                             ],
                                           ),
                                         ),

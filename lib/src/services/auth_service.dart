@@ -121,23 +121,12 @@ class AuthService {
       },
       body: json.encode(
         {
-          'appareil': "mon appareil",
+          'appareil': data.appareil,
           'telephone': data.telephone,
         },
       ),
     )
         .then((response) async {
-      print(response.statusCode);
-      if (response.statusCode == 307) {
-        var redirectUrl = response.headers['location'];
-        if (redirectUrl != null) {
-          var redirectedResponse = await http.get(Uri.parse(redirectUrl));
-          print(redirectedResponse.body);
-        }
-      } else {
-        print('Response code: ${response.statusCode}');
-      }
-
       final responseBody = json.decode(response.body);
 
       if (responseBody['data'] is String) {
@@ -178,7 +167,6 @@ class AuthService {
       // completer.completeError(
       //   "Une erreur s'est produite",
       // ); // Handle network error
-      print(error);
       completer.completeError(error.toString());
     });
     return completer.future;
@@ -209,17 +197,6 @@ class AuthService {
       ),
     )
         .then((response) {
-      print({
-        'appareil': data.appareil,
-        'nom': data.nom,
-        'sexe': data.sexe,
-        'naissance': data.naissance,
-        'telephone': data.telephone,
-        'email': data.email,
-        'role': 'client',
-      });
-      print("request");
-      print(response.statusCode);
       final responseBody = json.decode(response.body);
       //print(responseBody);
 

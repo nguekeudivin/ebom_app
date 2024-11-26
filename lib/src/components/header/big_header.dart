@@ -9,7 +9,7 @@ class BigHeader extends StatefulWidget {
   final String searchPlaceholder;
   final TextEditingController searchController;
   final void Function() onSearch;
-  final void Function(String filter) onFilter;
+  final void Function(int filter) onFilter;
   final bool searchLoading;
   final String screen;
   const BigHeader({
@@ -76,7 +76,6 @@ class _BigHeaderState extends State<BigHeader> {
                   ),
                   child: IconButton(
                     onPressed: () {
-                      print(widget.screen);
                       Navigator.push(
                         // ignore: use_build_context_synchronously
                         context,

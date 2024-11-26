@@ -21,6 +21,9 @@ class AppLayoutNavigationProvider extends ChangeNotifier {
       case 'products_screen':
         _active = 3;
         break;
+      case 'chats_screen':
+        _active = 4;
+        break;
     }
     notifyListeners();
   }

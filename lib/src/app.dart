@@ -1,4 +1,4 @@
-import 'package:ebom/src/screens/app_layout.dart';
+import 'package:ebom/src/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'config/app_themes.dart';
 
@@ -17,7 +17,7 @@ class EbomApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
-      home: AppLayout(),
+      home: const WelcomeScreen(),
     );
   }
 }

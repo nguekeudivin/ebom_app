@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ebom/src/components/header/big_header.dart';
+import 'package:ebom/src/components/skeleton/image_skeleton.dart';
 import 'package:ebom/src/components/list/custom_list_row.dart';
+import 'package:ebom/src/components/skeleton/listing_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/service.dart';
 import 'package:ebom/src/screens/services/service_details_screen.dart';
@@ -28,15 +31,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
     services = service.items();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String searchKeyword =
-          Provider.of<SearchProvider>(context, listen: false).keyword;
-      if (searchKeyword != '') {
+      // String searchKeyword =
+      //     Provider.of<SearchProvider>(context, listen: false).keyword;
+      // if (searchKeyword != '') {
+      //   setState(() {
+      //     services = service.search(searchKeyword);
+      //     _searchController.text = searchKeyword;
+      //   });
+      // }
+      // Provider.of<SearchProvider>(context, listen: false).setKeyword('');
+
+      int categoryId =
+          Provider.of<SearchProvider>(context, listen: false).categoryId;
+      if (categoryId != 0) {
         setState(() {
-          services = service.search(searchKeyword);
-          _searchController.text = searchKeyword;
+          services = service.searchByCategory(categoryId);
         });
+        Provider.of<SearchProvider>(context, listen: false).setCategoryId(0);
       }
-      Provider.of<SearchProvider>(context, listen: false).setKeyword('');
     });
   }
 
@@ -75,9 +87,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 searchController: _searchController,
                 onSearch: search,
                 screen: 'services_screen',
-                onFilter: (String value) {
+                onFilter: (int value) {
                   setState(() {
-                    services = service.search(value);
+                    services = service.searchByCategory(value);
                   });
                 },
               ),
@@ -90,7 +102,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     future: services,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const ListingSkeleton();
                       } else if (snapshot.hasError) {
                         return const Text("Une erreur c'est produite");
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -141,8 +153,19 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                child: Image.network(
-                                                  item.image,
+                                                child: CachedNetworkImage(
+                                                  imageUrl: item.image,
+                                                  placeholder: (
+                                                    context,
+                                                    url,
+                                                  ) =>
+                                                      const ImageSkeleton(),
+                                                  errorWidget: (
+                                                    context,
+                                                    url,
+                                                    error,
+                                                  ) =>
+                                                      const ImageSkeleton(),
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),

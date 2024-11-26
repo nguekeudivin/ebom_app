@@ -1,3 +1,4 @@
+import 'package:ebom/src/components/skeleton/horizontal_list_skeleton.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
 import 'package:ebom/src/services/product_service.dart';
 import 'package:ebom/src/config/app_colors.dart';
@@ -43,13 +44,7 @@ class _SameProductsState extends State<SameProducts> {
             future: products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: CircularProgressIndicator(),
-                  ),
-                );
+                return HorizontalListSkeleton();
               } else if (snapshot.hasError) {
                 return const Text("Une erreur c'est produite");
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

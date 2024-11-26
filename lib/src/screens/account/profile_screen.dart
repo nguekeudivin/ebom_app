@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: const Text(
-          'Profile',
+          'Profil',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -74,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             FittedBox(
               fit: BoxFit.none,
               child: PrimaryButton(
-                text: 'Edit Profile',
+                text: 'Modifier le profil',
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
                 onPressed: (context) {
                   // Apply edit profile action.
@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   profileLink(
                     icon: Icons.settings,
-                    text: 'Parametres',
+                    text: 'Paramètres',
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -194,7 +194,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.group_outlined,
                     text: 'Inviter un proche',
                     onPressed: () {
-                      Share.share("Decouvrez l'application ebom.com");
+                      Share.share(
+                        "Découvre avec moi l'application E-Bom pour trouver n'importe quoi n'importe où et à n'importe quel prix en un clic. https://ebom-market.com",
+                      );
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -229,14 +231,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // ),
                   profileLink(
                     icon: Icons.logout_outlined,
-                    text: 'Deconnexion',
+                    text: 'Déconnexion',
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Deconnexion'),
-                            content: const Text('Voulez-vous vous deconnecter'),
+                            title: const Text('Déconnexion'),
+                            content: const Text('Voulez-vous vous déconnecter'),
                             actions: [
                               Row(
                                 children: [

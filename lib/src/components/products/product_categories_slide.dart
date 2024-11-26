@@ -1,3 +1,4 @@
+import 'package:ebom/src/components/skeleton/categories_horizontal_list_sekeleton.dart';
 import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/categories_service.dart';
 import 'package:ebom/src/services/search_service.dart';
@@ -29,7 +30,7 @@ class _ProductCategoriesSlideState extends State<ProductCategoriesSlide> {
       future: categories,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return CategoriesHorizontalListSkeleton();
         } else if (snapshot.hasError) {
           return const Text("Une erreur c'est produite");
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -47,7 +48,8 @@ class _ProductCategoriesSlideState extends State<ProductCategoriesSlide> {
               return GestureDetector(
                 onTap: () {
                   Provider.of<SearchProvider>(context, listen: false)
-                      .setKeyword(category['nom']);
+                      .setCategoryId(category['id']);
+
                   Provider.of<AppLayoutNavigationProvider>(
                     context,
                     listen: false,
@@ -63,8 +65,10 @@ class _ProductCategoriesSlideState extends State<ProductCategoriesSlide> {
                         SizedBox(
                           width: 60,
                           height: 60,
-                          child: Image.network(category['icone'],
-                              fit: BoxFit.cover),
+                          child: Image.network(
+                            category['icone'],
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         const SizedBox(
                           height: 8,

@@ -1,4 +1,5 @@
 import 'package:ebom/src/components/list/custom_list_row.dart';
+import 'package:ebom/src/components/skeleton/categorie_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/categories_service.dart';
@@ -47,7 +48,17 @@ class _CategoriesScreenState extends State<EntreprisesTypesScreen> {
           future: categories,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return Wrap(
+                children: List.generate(10, (index) {
+                  return CustomListRow(
+                    gap: 16,
+                    px: 16,
+                    children: List.generate(2, (index) {
+                      return const CategorieSkeleton();
+                    }),
+                  );
+                }),
+              );
             } else if (snapshot.hasError) {
               return const Text("Une erreur c'est produite");
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

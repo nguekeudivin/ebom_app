@@ -47,7 +47,7 @@ class SearchService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-        {'keyword': keyword},
+        {'search': keyword},
       ),
     )
         .then((response) {

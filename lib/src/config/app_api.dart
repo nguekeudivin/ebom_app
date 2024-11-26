@@ -3,9 +3,8 @@ final class AppApi {
   // API Données : http://test.datamarket.api.beigie-innov.com
   // API Paiements : http://test.payments.api.beigie-innov.com
 
-  static const String data = 'https://test.datamarket.api.beigie-innov.com/v1';
-  static const String account = 'https://test.accounts.api.beigie-innov.com/v1';
-  static const String chat = 'https://test.chat.api.beigie-innov.com/v1';
-  static const String search =
-      'http://test.research.api.beigie-innov.com/v1/search';
+  static const String data = 'https://api.datamarket.beigie-innov.com/v1';
+  static const String account = 'https://api.accounts.beigie-innov.com/v1';
+  static const String chat = 'https://api.chat.beigie-innov.com/v1';
+  static const String search = 'http://api.research.beigie-innov.com/v1/search';
 }

@@ -10,10 +10,12 @@ class CategoriesService {
   CategoriesService({this.baseUrl = AppApi.data});
 
   // Method to get all product categories using Completer
-  Future<List<dynamic>> productCategories() {
+  Future<List<dynamic>> productCategories({
+    String uri = 'categories/produits',
+  }) {
     final completer = Completer<List<dynamic>>();
 
-    http.get(Uri.parse('$baseUrl/categories/produits')).then((response) {
+    http.get(Uri.parse('$baseUrl/$uri')).then((response) {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         completer.complete(res['data']);
@@ -28,10 +30,12 @@ class CategoriesService {
   }
 
   // Method to get all service categories using Completer
-  Future<List<dynamic>> serviceCategories() {
+  Future<List<dynamic>> serviceCategories({
+    String uri = 'categories/services',
+  }) {
     final completer = Completer<List<dynamic>>();
 
-    http.get(Uri.parse('$baseUrl/categories/services')).then((response) {
+    http.get(Uri.parse('$baseUrl/$uri')).then((response) {
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
         completer.complete(res['data']);

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:ebom/src/components/button/primary_button.dart';
+import 'package:ebom/src/components/form/gender_choice_chip.dart';
 import 'package:ebom/src/components/form/input_date.dart';
-import 'package:ebom/src/components/form/input_select.dart';
 import 'package:ebom/src/components/form/input_text.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/connexion.dart';
@@ -20,11 +20,6 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   bool isLoading = false;
-
-  final List<SelectOption> _genderOptions = [
-    SelectOption(label: 'Masculin', value: 'Masculin'),
-    SelectOption(label: 'Feminin', value: 'Feminin'),
-  ];
 
   final TextEditingController nameCtl = TextEditingController();
   TextEditingController phoneNumberCtl = TextEditingController();
@@ -105,10 +100,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           'email': emailCtl.text,
           'naissance': birthdate,
           'sexe': gender,
+          'role': 'client',
         },
       ),
     )
         .then((status) {
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              'Succès',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content:
+                const Text('Vos informations ont été enregistrées avec succès'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
       setState(() {
         isLoading = false;
       });
@@ -221,6 +242,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Builder(
                       builder: (context) {
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
                               height: 16,
@@ -245,15 +267,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             const SizedBox(
                               height: 16,
                             ),
-                            InputSelect(
-                              value: gender,
-                              onChanged: (value) {
-                                setState(() {
-                                  gender = value;
-                                });
-                              },
-                              label: 'Sexe',
-                              options: _genderOptions,
+                            const Text(
+                              'Sexe',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: GenderChoiceChip(
+                                    text: 'Masculin',
+                                    selectedValue: gender,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        gender = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: GenderChoiceChip(
+                                    text: 'Feminin',
+                                    selectedValue: gender,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        gender = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 16,

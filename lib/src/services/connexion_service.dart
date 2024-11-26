@@ -60,10 +60,8 @@ class ConnexionService {
         .get(Uri.parse('$baseUrl/connexion/$device/active'))
         .then((response) async {
       if (response.statusCode == 200) {
-        print("active");
         completer.complete(true);
       } else {
-        print("inactive");
         completer.complete(false);
       }
     }).catchError((error) {
@@ -123,7 +121,7 @@ class ConnexionService {
 
     http
         .post(
-      Uri.parse('$baseUrl/auth/infos/user'),
+      Uri.parse('$baseUrl/auth/update/user'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'userKey': token,
@@ -134,7 +132,9 @@ class ConnexionService {
       if (response.statusCode == 200) {
         completer.complete(true);
       } else {
-        completer.completeError("Une erreur s'est produite.");
+        completer.completeError(
+          "Une erreur c'est produite veuillez ressayez plus tard",
+        );
       }
     }).catchError((error) {
       //completer.completeError("une erreur s'est produite");

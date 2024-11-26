@@ -9,6 +9,7 @@ class Service {
   int vues;
   String userRole;
   int userId;
+  int categoryId;
 
   // Constructor with default values for prix, image, and vues
   Service({
@@ -18,6 +19,7 @@ class Service {
     required this.description,
     required this.userRole,
     required this.userId,
+    required this.categoryId,
     this.prix = '',
     this.details = '',
     this.image = 'https://admin.bie-innov.com/storage/services/default.jpg',
@@ -38,6 +40,7 @@ class Service {
       vues: json['vues'] ?? 0,
       userRole: json['user_role'],
       userId: json['user_id'],
+      categoryId: json['category_id'],
     );
   }
 
@@ -54,6 +57,11 @@ class Service {
       vues: data['vues'] ?? 0,
       userRole: data['user_role'] ?? '',
       userId: data['user_id'] ?? 0,
+      categoryId: data['categorie_id'] != null
+          ? (data['categorie_id'] is String
+              ? int.parse(data['categorie_id'])
+              : data['categorie_id'])
+          : 0,
     );
   }
 

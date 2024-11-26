@@ -1,14 +1,23 @@
+import 'package:ebom/src/components/skeleton/horizontal_list_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
 import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/product_service.dart';
+import 'package:ebom/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProductsSwiper extends StatefulWidget {
   final Widget title;
-  final Widget subtitle;
+  final Widget? subtitle;
   final String apiUri;
+  final bool canViewMore;
+  final EdgeInsets headerPadding;
+
+  // CategoryId is use to filter results by category.
+  // If categoryId is not equal to zero then we apply the filtring system into display.
+  final int categoryId; //
+
   const ProductsSwiper({
     this.title = const Text(
       'Découvrez les meilleurs offres',
@@ -22,6 +31,9 @@ class ProductsSwiper extends StatefulWidget {
       style: TextStyle(fontSize: 14),
     ),
     this.apiUri = 'produits',
+    this.canViewMore = true,
+    this.headerPadding = const EdgeInsets.all(16.0),
+    this.categoryId = 0,
     super.key,
   });
 
@@ -44,29 +56,50 @@ class _ProductsSwiperState extends State<ProductsSwiper> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 16),
         FutureBuilder(
           future: products,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  padding: const EdgeInsets.all(16),
-                  child: const CircularProgressIndicator(),
-                ),
-              );
+              return HorizontalListSkeleton();
             } else if (snapshot.hasError) {
               return const Text("Une erreur c'est produite");
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Text('');
+              return Container(
+                width: double.infinity,
+                color: AppColors.gray200,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Text('Aucun produit disponible'),
+              );
+            }
+
+            // We get the product list.
+            var items = snapshot.data!;
+
+            // is categories is set. We filter the product list again the category.
+            if (widget.categoryId != 0) {
+              items = items
+                  .where(
+                    (item) =>
+                        (item['categorie_id'] is String
+                            ? int.parse(item['categorie_id'])
+                            : item['categorie_id']) ==
+                        widget.categoryId,
+                  )
+                  .toList();
+            }
+
+            // is the list is empty. We return the message.
+            if (items.isEmpty) {
+              return const SizedBox(
+                height: 1,
+              );
             }
 
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: widget.headerPadding,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -74,32 +107,35 @@ class _ProductsSwiperState extends State<ProductsSwiper> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           widget.title,
-                          widget.subtitle,
+                          if (widget.subtitle != null)
+                            widget.subtitle as Widget,
                         ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          //color: Colors.blue, // Background color
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primary,
-                          ), // Make the background circular
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            Provider.of<AppLayoutNavigationProvider>(
-                              context,
-                              listen: false,
-                            ).setActiveScreen(
-                              'products_screen',
-                            ); // 3 is the index of
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
+                      widget.canViewMore
+                          ? Container(
+                              decoration: BoxDecoration(
+                                //color: Colors.blue, // Background color
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.primary,
+                                ), // Make the background circular
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  Provider.of<AppLayoutNavigationProvider>(
+                                    context,
+                                    listen: false,
+                                  ).setActiveScreen(
+                                    'products_screen',
+                                  ); // 3 is the index of
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_forward,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            )
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -107,9 +143,9 @@ class _ProductsSwiperState extends State<ProductsSwiper> {
                   height: 220,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.length,
+                    itemCount: items.length,
                     itemBuilder: (context, index) {
-                      var product = snapshot.data![index];
+                      var product = items[index];
 
                       return GestureDetector(
                         onTap: () {
@@ -156,7 +192,10 @@ class _ProductsSwiperState extends State<ProductsSwiper> {
                                       ],
                                     ),
                                     Text(
-                                      product['nom'],
+                                      truncate(
+                                        product['nom'],
+                                        30,
+                                      ),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),

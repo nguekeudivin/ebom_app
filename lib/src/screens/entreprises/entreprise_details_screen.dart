@@ -1,9 +1,12 @@
 import 'package:ebom/src/components/button/button_with_icon.dart';
 import 'package:ebom/src/components/contact/contact_info.dart';
+import 'package:ebom/src/components/skeleton/snapshot_loader.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/entreprise.dart';
+import 'package:ebom/src/screens/chat/chat_screen.dart';
 import 'package:ebom/src/screens/home_screen/products_swiper.dart';
 import 'package:ebom/src/screens/home_screen/services_swiper.dart';
+import 'package:ebom/src/services/categories_service.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +23,22 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
   double bannerHeight = 180;
   double logoSize = 100;
   late Entreprise _details = Entreprise.fromDynamic({'id': 0});
+  late Future<dynamic> _productCategories;
+  late Future<dynamic> _serviceCategories;
+
   final EntrepriseService service = EntrepriseService();
+  final CategoriesService categoriesService = CategoriesService();
 
   @override
   void initState() {
     super.initState();
+
+    _productCategories = categoriesService.productCategories(
+      uri: 'categories/produits/entreprise/${widget.entreprise.id}',
+    );
+    _serviceCategories = categoriesService.serviceCategories(
+      uri: 'categories/services/entreprise/${widget.entreprise.id}',
+    );
 
     Future.delayed(Duration.zero, () async {
       service.getEntreprise(widget.entreprise.id).then((details) {
@@ -76,6 +90,20 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
               fixedSize: const Size.fromHeight(40),
               text: 'Contactez',
               onPressed: (context) {
+                Navigator.push(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                      conversation: {
+                        'id': null,
+                        'nom': widget.entreprise.nom,
+                        'image': widget.entreprise.image,
+                      },
+                      receiverId: widget.entreprise.id,
+                    ),
+                  ),
+                );
                 //
               },
             ),
@@ -174,19 +202,118 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
             const SizedBox(
               height: 16,
             ),
-            ProductsSwiper(
-              title: const Text(
-                'Les derniers produits',
-                style: TextStyle(fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Les produits de ${_details.nom}',
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-              apiUri: 'entreprise/${_details.id}/produits',
             ),
-            ServicesSwiper(
-              title: const Text(
-                'Les derniers services',
-                style: TextStyle(fontWeight: FontWeight.bold),
+            FutureBuilder(
+              future: _productCategories,
+              builder: (context, snapshot) {
+                return SnapshotLoader(
+                  snapshot: snapshot,
+                  // This is the message when we have no categories
+                  notFoundMessage: 'Aucun produit pour ${_details.nom}',
+                  builder: () {
+                    return Column(
+                      children: List.generate(snapshot.data!.length, (index) {
+                        var item = snapshot.data![index];
+                        return Column(
+                          children: [
+                            ProductsSwiper(
+                              headerPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              title: Text(
+                                item['nom'],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: null,
+                              categoryId: item['id'],
+                              apiUri:
+                                  'entreprise/${widget.entreprise.id}/produits',
+                              canViewMore: false,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                          ],
+                        );
+                      }),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Les services de ${_details.nom}',
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-              apiUri: 'entreprise/${_details.id}/services',
+            ),
+            FutureBuilder(
+              future: _serviceCategories,
+              builder: (context, snapshot) {
+                return SnapshotLoader(
+                  snapshot: snapshot,
+                  // Message when we have no services category
+                  notFoundMessage:
+                      'Aucun service disponible pour ${_details.nom}',
+                  builder: () {
+                    return Column(
+                      children: List.generate(snapshot.data!.length, (index) {
+                        var item = snapshot.data![index];
+
+                        return Column(
+                          children: [
+                            ServicesSwiper(
+                              headerPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              title: Text(
+                                item['nom'],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              subtitle: null,
+                              categoryId: item['id'],
+                              apiUri:
+                                  'entreprise/${widget.entreprise.id}/services',
+                              canViewMore: false,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                          ],
+                        );
+                      }),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(
+              height: 32,
             ),
           ],
         ),

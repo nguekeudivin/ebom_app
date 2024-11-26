@@ -13,6 +13,7 @@ final class AppColors {
   static const dark = Color(0xFF030712);
   static const borderGray = Color(0xFFD1D5DB);
   static const gray700 = Color(0xFF3F3F46);
+  static const gray300 = Color.fromARGB(255, 143, 143, 150);
   static const gray200 = Color(0xFFE5E7EB);
   static const gray100 = Color(0xFFF3F4F6);
 

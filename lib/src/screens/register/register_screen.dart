@@ -125,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _isLoading = false;
           });
           if (status) {
-            Navigator.push(
+            Navigator.pushReplacement(
               // ignore: use_build_context_synchronously
               context,
               MaterialPageRoute(

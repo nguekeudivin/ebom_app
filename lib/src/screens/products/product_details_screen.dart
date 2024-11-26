@@ -1,11 +1,7 @@
 import 'package:ebom/src/components/button/button_with_icon.dart';
 import 'package:ebom/src/components/products/same_products.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/models/chart.dart';
 import 'package:ebom/src/models/entreprise.dart';
-import 'package:ebom/src/models/message.dart';
-import 'package:ebom/src/models/product.dart';
-import 'package:ebom/src/resources/app_assets.dart';
 import 'package:ebom/src/screens/chat/chat_screen.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
@@ -23,13 +19,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   double bannerHeight = 180;
   double logoSize = 100;
   final EntrepriseService entrepriseService = EntrepriseService();
-  late Future<Entreprise> vendor;
+
+  // Init a vendor entreprise from dynamic.
+  Entreprise vendor = Entreprise.fromDynamic({'id': 0});
+
+  Map<String, String> entreprise = {};
 
   @override
   void initState() {
     super.initState();
 
-    vendor = entrepriseService.getEntreprise(widget.product['user_id']);
+    entrepriseService
+        .getSimpleEntreprise(widget.product['user_id'])
+        .then((vendorResult) {
+      setState(() {
+        vendor = vendorResult;
+      });
+    });
   }
 
   @override
@@ -54,31 +60,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               text: 'Contactez Vendeur',
               onPressed: (context) {
                 Navigator.push(
+                  // ignore: use_build_context_synchronously
                   context,
                   MaterialPageRoute(
                     builder: (context) => ChatScreen(
-                      receiverId: widget.product['user_id'],
-                      chat: Chat(
-                        name: 'Vendeur',
-                        image: AppAssets.productsImages[0],
-                        messages: [
-                          Message(
-                            id: 0,
-                            senderId: 0,
-                            receiverId: 1,
-                            content: 'Bonjour je suis interesse par ce produit',
-                            time: DateTime.now(),
-                            produit: Product(
-                              id: 0,
-                              nom: 'Ordinateur Lenovo',
-                              marque: 'Lenovo',
-                              prix: 200000,
-                              categorie: 'Ordinateur',
-                              description: '',
-                            ),
-                          ),
-                        ],
-                      ),
+                      conversation: {
+                        'id': null,
+                        'nom': vendor.nom,
+                        'image': vendor.image,
+                      },
+                      receiverId: vendor.id,
                     ),
                   ),
                 );
@@ -173,7 +164,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     decoration: const BoxDecoration(
                       color: AppColors.primaryLighter,
                     ),
-                    child: Text(widget.product['marque']),
+                    child: Text(widget.product['marque'] ?? ''),
                   ),
                   const SizedBox(
                     height: 10,
@@ -194,123 +185,92 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             const SizedBox(
               height: 16,
             ),
-            FutureBuilder(
-              future: vendor,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    color: AppColors.primary,
-                    child: const Text(
-                      'Les informations du vendeurs sont indisponibles',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                } else if (!snapshot.hasData) {
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    color: AppColors.primary,
-                    child: const Text(
-                      'Les informations du vendeurs sont indisponibles',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                }
-
-                var vendor = snapshot.data!;
-
-                return Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 16,
-                  ),
-                  color: AppColors.primary,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Le vendeur',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+            if (vendor.id != 0)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 16,
+                ),
+                color: AppColors.primary,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Le vendeur',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EntrepriseDetailsScreen(
-                                    entreprise: vendor,
-                                  ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EntrepriseDetailsScreen(
+                                  entreprise: vendor,
                                 ),
-                              );
-                            },
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.white, width: 3),
-                                shape: BoxShape.circle,
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  50,
-                                ), // Adjust the value to change roundness
-                                child: Image.network(
-                                  vendor.image,
-                                  fit: BoxFit.cover,
-                                ),
+                            );
+                          },
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 3),
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                50,
+                              ), // Adjust the value to change roundness
+                              child: Image.network(
+                                vendor.image,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                vendor.nom,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              vendor.nom,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
-                              Text(
-                                vendor.telephone,
-                                style: const TextStyle(
-                                  //  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                            ),
+                            Text(
+                              vendor.telephone,
+                              style: const TextStyle(
+                                //  fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
-                              Text(
-                                vendor.email,
-                                style: const TextStyle(
-                                  //   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                            ),
+                            Text(
+                              vendor.email,
+                              style: const TextStyle(
+                                //   fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             const SizedBox(
               height: 32,
             ),

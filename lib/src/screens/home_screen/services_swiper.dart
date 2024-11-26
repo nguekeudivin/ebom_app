@@ -1,3 +1,4 @@
+import 'package:ebom/src/components/skeleton/horizontal_list_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/service.dart';
 import 'package:ebom/src/screens/services/service_details_screen.dart';
@@ -9,8 +10,15 @@ import 'package:provider/provider.dart';
 
 class ServicesSwiper extends StatefulWidget {
   final Widget title;
-  final Widget subtitle;
+  final Widget? subtitle;
   final String apiUri;
+  final bool canViewMore;
+  final EdgeInsets headerPadding;
+
+  // CategoryId is use to filter results by category.
+  // If categoryId is not equal to zero then we apply the filtring system into display.
+  final int categoryId; //
+
   const ServicesSwiper({
     this.title = const Text(
       'Les services à la une',
@@ -24,6 +32,9 @@ class ServicesSwiper extends StatefulWidget {
       style: TextStyle(fontSize: 14),
     ),
     this.apiUri = 'services',
+    this.canViewMore = true,
+    this.headerPadding = const EdgeInsets.all(16.0),
+    this.categoryId = 0,
     super.key,
   });
 
@@ -39,7 +50,6 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
   void initState() {
     super.initState();
     // Initialize the futures
-
     services = serviceService.dynamicItems(widget.apiUri);
   }
 
@@ -59,18 +69,34 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
           future: services,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  padding: const EdgeInsets.all(16),
-                  child: const CircularProgressIndicator(),
-                ),
-              );
+              return HorizontalListSkeleton();
             } else if (snapshot.hasError) {
               return const Text("Une erreur c'est produite");
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Text('');
+              return Container(
+                width: double.infinity,
+                color: AppColors.gray200,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Text('Aucun service disponible 0'),
+              );
+            }
+
+            // we get the service list.
+            var items = snapshot.data!;
+
+            // is categories is set. We filter the services list again the category.
+            if (widget.categoryId != 0) {
+              items = items
+                  .where(
+                    (item) => item.categoryId == widget.categoryId,
+                  )
+                  .toList();
+            }
+
+            // is the list is empty. We return the message.
+            if (items.isEmpty) {
+              return const SizedBox(height: 1);
             }
 
             return Column(
@@ -84,31 +110,33 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           widget.title,
-                          widget.subtitle,
+                          if (widget.subtitle != null)
+                            widget.subtitle as Widget,
                         ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primary,
-                          ), // Make the background circular
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            Provider.of<AppLayoutNavigationProvider>(
-                              context,
-                              listen: false,
-                            ).setActiveScreen(
-                              'services_screen',
-                            ); // 3 is the index of
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward,
-                            color: AppColors.primary,
+                      if (widget.canViewMore)
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primary,
+                            ), // Make the background circular
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              Provider.of<AppLayoutNavigationProvider>(
+                                context,
+                                listen: false,
+                              ).setActiveScreen(
+                                'services_screen',
+                              ); // 3 is the index of
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward,
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -119,9 +147,9 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
                   height: 180,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.length,
+                    itemCount: items.length,
                     itemBuilder: (context, index) {
-                      var service = snapshot.data![index];
+                      var service = items[index];
 
                       return GestureDetector(
                         onTap: () {
@@ -136,7 +164,7 @@ class _EntreprisesSwiperState extends State<ServicesSwiper> {
                         },
                         child: Container(
                           width: 150,
-                          margin: const EdgeInsets.only(right: 16),
+                          margin: const EdgeInsets.only(right: 16, left: 16),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: AppColors.borderGray,

@@ -1,3 +1,4 @@
+import 'package:ebom/src/components/skeleton/horizontal_list_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/entreprise.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
@@ -58,14 +59,7 @@ class _EntreprisesSwiperState extends State<EntreprisesSwiper> {
           future: entreprises,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  padding: const EdgeInsets.all(16),
-                  child: const CircularProgressIndicator(),
-                ),
-              );
+              return HorizontalListSkeleton();
             } else if (snapshot.hasError) {
               return const Text("Une erreur c'est produite");
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

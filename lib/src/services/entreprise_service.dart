@@ -31,6 +31,40 @@ class EntrepriseService {
     return completer.future;
   }
 
+  Future<Entreprise> getSimpleEntreprise(int id) async {
+    final completer = Completer<Entreprise>();
+
+    http.get(Uri.parse('$baseUrl/entreprises/$id')).then((response) {
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+
+        if (res['data']['id'] == null) {
+          completer.completeError('Aucune information');
+        } else {
+          if (res['data']['id'] is String) {
+            if (res['data']['id'] == '0') {
+              completer.completeError('Aucune information');
+            } else {
+              completer.complete(Entreprise.fromDynamic(res['data']));
+            }
+          } else {
+            if (res['data']['id'] == 0) {
+              completer.completeError('Aucune information');
+            } else {
+              completer.complete(Entreprise.fromDynamic(res['data']));
+            }
+          }
+        }
+      } else {
+        completer.completeError("Un probleme est survenu c'est produite");
+      }
+    }).catchError((error) {
+      completer.completeError(error.toString());
+    });
+
+    return completer.future;
+  }
+
   Future<Entreprise> getEntreprise(int id) async {
     final completer = Completer<Entreprise>();
 
@@ -75,7 +109,7 @@ class EntrepriseService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-        {'keyword': keyword},
+        {'search': keyword},
       ),
     )
         .then((response) {
@@ -89,6 +123,32 @@ class EntrepriseService {
       } else {
         completer.complete([]);
         // completer.completeError('Failed to load product categories');
+      }
+    }).catchError((error) {
+      completer.complete([]);
+      //completer.completeError(error.toString());
+    });
+
+    return completer.future;
+  }
+
+  Future<List<Entreprise>> searchByCategory(int id) {
+    final completer = Completer<List<Entreprise>>();
+    http
+        .get(
+      Uri.parse('$baseUrl/type_entreprise/$id/entreprises'),
+    )
+        .then((response) {
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        List<Entreprise> list = [];
+        for (int i = 0; i < res['data'].length; i++) {
+          list.add(Entreprise.fromDynamic(res['data'][i]));
+        }
+        completer.complete(list);
+      } else {
+        completer.complete([]);
+        //completer.completeError('Failed to load product categories');
       }
     }).catchError((error) {
       completer.complete([]);

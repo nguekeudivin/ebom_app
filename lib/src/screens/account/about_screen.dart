@@ -1,10 +1,16 @@
-import 'package:ebom/src/components/contact/contact_detail.dart';
-import 'package:ebom/src/components/logo/logo.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  InAppWebViewController? webViewController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,46 +28,20 @@ class AboutScreen extends StatelessWidget {
           },
         ),
       ),
-      body: const SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 32,
-              ),
-              Logo(),
-              SizedBox(
-                height: 16,
-              ),
-              Text(
-                'E-bom est une entreprise qui permet à la pop-ulation Camerounaise de connaitre les pro-duits vendu par une ou plusieurs entreprises au sein de notre Pays.',
-              ),
-              SizedBox(height: 16),
-              // Phone number
-              ContactDetail(
-                icon: Icons.phone,
-                label: 'Phone',
-                value: '+2379304234',
-              ),
-
-              SizedBox(height: 12),
-              // Address
-              ContactDetail(
-                icon: Icons.location_on,
-                label: 'Address',
-                value: 'Douala, Makepe',
-              ),
-              SizedBox(height: 12),
-              // Email address
-              ContactDetail(
-                icon: Icons.email,
-                label: 'Email',
-                value: 'ebom@gmail.com',
-              ),
-            ],
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: WebUri.uri(
+            // Uri.parse(
+            //   'https://test.admin.beigie-innov.com/storage/condition_market/condition.pdf',
+            // ),
+            Uri.parse(
+              'https://ebom-market.com',
+            ),
           ),
         ),
+        onWebViewCreated: (controller) {
+          webViewController = controller;
+        },
       ),
     );
   }

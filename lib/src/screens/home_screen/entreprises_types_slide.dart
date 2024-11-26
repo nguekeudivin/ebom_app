@@ -1,5 +1,5 @@
+import 'package:ebom/src/components/skeleton/categories_horizontal_list_sekeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
-import 'package:ebom/src/screens/categories/categories_screen.dart';
 import 'package:ebom/src/screens/categories/entreprises_types_screen.dart';
 import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/categories_service.dart';
@@ -81,7 +81,7 @@ class EntrepriseTypesSlide extends State<EntreprisesTypesSlide> {
           future: categories,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return CategoriesHorizontalListSkeleton();
             } else if (snapshot.hasError) {
               return const Text("Une erreur c'est produite");
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -98,12 +98,16 @@ class EntrepriseTypesSlide extends State<EntreprisesTypesSlide> {
                   var category = snapshot.data![index];
                   return GestureDetector(
                     onTap: () {
+                      // Provider.of<SearchProvider>(context, listen: false)
+                      //     .setKeyword(category['nom']);
+
                       Provider.of<SearchProvider>(context, listen: false)
-                          .setKeyword(category['nom']);
+                          .setCategoryId(category['id']);
+
                       Provider.of<AppLayoutNavigationProvider>(
                         context,
                         listen: false,
-                      ).setActiveScreen('products_screen');
+                      ).setActiveScreen('entreprises_screen');
                     },
                     child: Container(
                       width: 100,
