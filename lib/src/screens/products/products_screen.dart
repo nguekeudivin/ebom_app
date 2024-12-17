@@ -55,7 +55,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void search() {
-    products = service.search(_searchController.text);
+    setState(() {
+      products = service.search(_searchController.text);
+    });
   }
 
   void searchByCategory(int categoryId) {
