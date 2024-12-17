@@ -98,7 +98,32 @@ class _BigHeaderState extends State<BigHeader> {
                         .circle, // Optional: to make the background circular
                   ),
                   child: IconButton(
-                    onPressed: widget.onSearch,
+                    // onPressed: widget.onSearch,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 100,
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Choisir un forfait",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                     icon: const Icon(Icons.search, color: AppColors.primary),
                   ),
                 ),

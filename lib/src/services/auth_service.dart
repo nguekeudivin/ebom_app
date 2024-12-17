@@ -237,7 +237,7 @@ class AuthService {
     return completer.future;
   }
 
-  Future<String> getDeviceId(BuildContext context) async {
+  Future<String> getDeviseId(BuildContext context) async {
     final Completer<String> completer = Completer<String>();
 
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();

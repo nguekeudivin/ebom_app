@@ -94,7 +94,6 @@ class ChatService {
     ).then((response) async {
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
-        print(responseBody['data']);
         completer.complete(responseBody['data']);
       } else {
         completer.completeError(

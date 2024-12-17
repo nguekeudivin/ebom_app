@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else {
       AuthService auth = AuthService();
 
-      auth.getDeviceId(context).then((deviceId) {
+      auth.getDeviseId(context).then((deviceId) {
         RegisterData data = RegisterData(
           appareil: deviceId,
           nom: nameCtl.text,

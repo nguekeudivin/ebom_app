@@ -70,7 +70,7 @@ class _WelcomeScreenState extends State<LoginScreen> {
     } else {
       AuthService auth = AuthService();
 
-      auth.getDeviceId(context).then((deviceId) {
+      auth.getDeviseId(context).then((deviceId) {
         RegisterData data = RegisterData(
           appareil: deviceId,
           telephone: phoneNumberCtl.text,
