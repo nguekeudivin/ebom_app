@@ -105,6 +105,9 @@ class ServicesCategoriesSlideState extends State<ServicesCategoriesSlide> {
                       Provider.of<SearchProvider>(context, listen: false)
                           .setCategoryId(category['id']);
 
+                      Provider.of<SearchProvider>(context, listen: false)
+                          .setFilters('services_screen', [category['nom']]);
+
                       Provider.of<AppLayoutNavigationProvider>(
                         context,
                         listen: false,

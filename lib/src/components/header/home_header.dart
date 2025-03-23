@@ -74,14 +74,16 @@ class HomeHeader extends StatelessWidget {
                       dimension: 40,
                       child: Container(
                         decoration: BoxDecoration(
-                          shape:
-                              BoxShape.circle, // Ensures the border is circular
+                          shape: BoxShape.circle, // Circular border
                           border: Border.all(
                             color: Colors.white, // White border
                             width: 2, // Border width
                           ),
                         ),
-                        child: const UserAvatar(), // Your custom avatar widget
+                        child: const ClipOval(
+                          // Ensures the content inside is clipped to a circle
+                          child: UserAvatar(), // Custom avatar widget
+                        ),
                       ),
                     ),
                   ),

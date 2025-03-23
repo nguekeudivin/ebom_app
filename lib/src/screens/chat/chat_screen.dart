@@ -4,10 +4,13 @@ import 'dart:convert';
 import 'package:ebom/src/components/chat/message_item.dart';
 import 'package:ebom/src/components/form/input_text_area_field.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/screens/app_layout.dart';
 import 'package:ebom/src/screens/chat/chats_list_screen.dart';
+import 'package:ebom/src/screens/subscriptions/subscribe_modal.dart';
 import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/chat_service.dart';
 import 'package:ebom/src/services/connexion_service.dart';
+import 'package:ebom/src/services/subscription_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,6 +65,50 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Is can chat.
+    Provider.of<SubscriptionProvider>(
+      context,
+      listen: false,
+    ).canChat(context).then((value) {
+      if (value) {
+        // Save the reference.
+        Provider.of<SubscriptionProvider>(
+          // ignore: use_build_context_synchronously
+          context,
+          listen: false,
+        ).start('@chat');
+
+        showModalBottomSheet(
+          // ignore: use_build_context_synchronously
+          context: context,
+          isScrollControlled: true,
+          isDismissible: false,
+          scrollControlDisabledMaxHeightRatio: 0.81,
+          builder: (BuildContext context) {
+            return SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: const SubscribeModal(),
+              ),
+            );
+          },
+        ).whenComplete(() {
+          Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+              builder: (context) => AppLayout(),
+            ),
+          );
+          // ignore: use_build_context_synchronously
+          Provider.of<AppLayoutNavigationProvider>(context, listen: false)
+              .setActive(0);
+        });
+      }
+    });
 
     _timer = Timer.periodic(const Duration(seconds: 30), (timer) {
       refreshMessages();
@@ -342,6 +389,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                         : null,
                                     child: MessageItem(
                                       message: message,
+                                      previousMessageDate: index > 0
+                                          ? messages[index - 1]['date']
+                                          : '',
                                     ),
                                   ),
                                 );
@@ -410,6 +460,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       context,
                                       listen: false,
                                     ).connexion!.role,
+                                    'date': DateTime.now().toIso8601String(),
                                   },
                                 ),
                               ),

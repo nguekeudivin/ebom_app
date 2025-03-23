@@ -105,6 +105,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     )
         .then((status) {
+      // update connexion data.
+      ConnexionService connService = ConnexionService();
+      connService
+          .update(
+        json.decode(
+          jsonEncode({
+            'nom': nameCtl.text,
+            'telephone': phoneNumberCtl.text,
+            'email': emailCtl.text,
+            'role': 'client',
+          }),
+        ),
+      )
+          .then((status) {
+        // Now load the new connexion values.
+        // ignore: use_build_context_synchronously
+        Provider.of<ConnexionProvider>(context, listen: false).loadConnexion();
+      });
+
       showDialog(
         // ignore: use_build_context_synchronously
         context: context,

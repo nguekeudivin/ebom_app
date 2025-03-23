@@ -75,19 +75,21 @@ class EntrepriseService {
         if (res['data']['id'] == null) {
           completer.completeError('Aucune information');
         } else {
-          if (res['data']['id'] is String) {
-            if (res['data']['id'] == '0') {
-              completer.completeError('Aucune information');
-            } else {
-              completer.complete(Entreprise.fromDynamic(res['data']));
-            }
-          } else {
-            if (res['data']['id'] == 0) {
-              completer.completeError('Aucune information');
-            } else {
-              completer.complete(Entreprise.fromDynamic(res['data']));
-            }
-          }
+          completer.complete(Entreprise.fromDynamic(res['data']));
+
+          // if (res['data']['id'] is String) {
+          //   if (res['data']['id'] == '0') {
+          //     completer.completeError('Aucune information');
+          //   } else {
+          //     completer.complete(Entreprise.fromDynamic(res['data']));
+          //   }
+          // } else {
+          //   if (res['data']['id'] == 0) {
+          //     completer.completeError('Aucune information');
+          //   } else {
+          //     completer.complete(Entreprise.fromDynamic(res['data']));
+          //   }
+          // }
         }
       } else {
         completer.completeError("Un probleme est survenu c'est produite");

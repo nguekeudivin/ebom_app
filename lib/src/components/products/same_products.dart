@@ -2,10 +2,12 @@ import 'package:ebom/src/components/skeleton/horizontal_list_skeleton.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
 import 'package:ebom/src/services/product_service.dart';
 import 'package:ebom/src/config/app_colors.dart';
+import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
 
 class SameProducts extends StatefulWidget {
-  const SameProducts({super.key});
+  final String categoryName;
+  const SameProducts({required this.categoryName, super.key});
 
   @override
   State<SameProducts> createState() => _SameProductsState();
@@ -14,12 +16,18 @@ class SameProducts extends StatefulWidget {
 class _SameProductsState extends State<SameProducts> {
   final ProductService service = ProductService();
   late Future<List<dynamic>> products;
+  final SearchService searchService = SearchService();
 
   @override
   void initState() {
     super.initState();
     // Initialize the futures
     products = service.items();
+
+    products = searchService.search({
+      'type': 'produits',
+      'categories': widget.categoryName,
+    });
   }
 
   @override
@@ -55,7 +63,7 @@ class _SameProductsState extends State<SameProducts> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  var product = snapshot.data![index];
+                  var product = snapshot.data![index].data;
 
                   return GestureDetector(
                     onTap: () {

@@ -3,10 +3,14 @@ import 'package:ebom/src/components/skeleton/snapshot_loader.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/chart.dart';
 import 'package:ebom/src/screens/chat/chat_screen.dart';
+import 'package:ebom/src/screens/subscriptions/subscribe_modal.dart';
+import 'package:ebom/src/services/app_service.dart';
 
 import 'package:ebom/src/services/chat_service.dart';
+import 'package:ebom/src/services/subscription_service.dart';
 import 'package:ebom/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatsListScreen extends StatefulWidget {
   const ChatsListScreen({super.key});
@@ -31,6 +35,43 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   void initState() {
     super.initState();
     conversations = chatService.getConversations();
+
+    // Is can chat.
+    Provider.of<SubscriptionProvider>(
+      context,
+      listen: false,
+    ).canChat(context).then((value) {
+      if (!value) {
+        // Save the reference.
+        Provider.of<SubscriptionProvider>(
+          // ignore: use_build_context_synchronously
+          context,
+          listen: false,
+        ).start('@chat');
+
+        showModalBottomSheet(
+          // ignore: use_build_context_synchronously
+          context: context,
+          isScrollControlled: true,
+          isDismissible: false,
+          scrollControlDisabledMaxHeightRatio: 0.81,
+          builder: (BuildContext context) {
+            return SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: const SubscribeModal(),
+              ),
+            );
+          },
+        ).whenComplete(() {
+          // ignore: use_build_context_synchronously
+          Provider.of<AppLayoutNavigationProvider>(context, listen: false)
+              .setActive(0);
+        });
+      }
+    });
   }
 
   @override
@@ -217,7 +258,7 @@ class _ConversationItemState extends State<ConversationItem> {
               children: [
                 // Text(
                 //   DateFormat('HH:mm').format(
-                //     DateTime.now(),
+                //     DateTime.parse(lastMessage['date']),
                 //   ),
                 //   style: const TextStyle(
                 //     fontSize: 12,

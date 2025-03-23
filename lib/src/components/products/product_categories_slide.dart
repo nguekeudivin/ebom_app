@@ -50,6 +50,9 @@ class _ProductCategoriesSlideState extends State<ProductCategoriesSlide> {
                   Provider.of<SearchProvider>(context, listen: false)
                       .setCategoryId(category['id']);
 
+                  Provider.of<SearchProvider>(context, listen: false)
+                      .setFilters('products_screen', [category['nom']]);
+
                   Provider.of<AppLayoutNavigationProvider>(
                     context,
                     listen: false,

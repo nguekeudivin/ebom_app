@@ -274,7 +274,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             const SizedBox(
               height: 32,
             ),
-            const SameProducts(),
+            SameProducts(categoryName: widget.product['categorie']),
           ],
         ),
       ),

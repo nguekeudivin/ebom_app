@@ -12,7 +12,9 @@ import 'package:ebom/src/screens/home_screen/products_swiper.dart';
 import 'package:ebom/src/screens/home_screen/service_categories_slide.dart';
 import 'package:ebom/src/screens/home_screen/service_result_item.dart';
 import 'package:ebom/src/screens/home_screen/services_swiper.dart';
+import 'package:ebom/src/screens/subscriptions/subscribe_modal.dart';
 import 'package:ebom/src/services/search_service.dart';
+import 'package:ebom/src/services/subscription_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,9 +50,42 @@ class _HomeScreen2State extends State<HomeScreen2> {
   }
 
   void search() {
-    Provider.of<SearchProvider>(context, listen: false)
-        .setKeyword(inputCtl.text);
-    results = searchService.search(inputCtl.text);
+    Provider.of<SubscriptionProvider>(
+      context,
+      listen: false,
+    ).canSearch(context).then((value) {
+      if (!value) {
+        // Save the reference.
+        Provider.of<SubscriptionProvider>(
+          // ignore: use_build_context_synchronously
+          context,
+          listen: false,
+        ).start('@recherche');
+
+        showModalBottomSheet(
+          // ignore: use_build_context_synchronously
+          context: context,
+          isScrollControlled: true,
+          isDismissible: false,
+          scrollControlDisabledMaxHeightRatio: 0.81,
+          builder: (BuildContext context) {
+            return SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: const SubscribeModal(),
+              ),
+            );
+          },
+        );
+      } else {
+        // ignore: use_build_context_synchronously
+        Provider.of<SearchProvider>(context, listen: false)
+            .setKeyword(inputCtl.text);
+        results = searchService.search(inputCtl.text);
+      }
+    });
   }
 
   @override

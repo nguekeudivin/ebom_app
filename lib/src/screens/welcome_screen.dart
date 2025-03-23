@@ -28,6 +28,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // phoneNumberCtl =
     // emailCtl =
 
+    print("connected");
+
     ConnexionService connService = ConnexionService();
 
     Future.delayed(Duration.zero, () async {

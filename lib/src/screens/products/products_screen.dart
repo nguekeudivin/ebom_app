@@ -6,8 +6,6 @@ import 'package:ebom/src/components/skeleton/listing_skeleton.dart';
 import 'package:ebom/src/components/products/product_label.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
-import 'package:ebom/src/services/cache_service.dart';
-import 'package:ebom/src/services/product_service.dart';
 import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,29 +19,28 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  CacheService cacheService = CacheService();
-  final ProductService service = ProductService();
-
+  final SearchService searchService = SearchService();
   late Future<List<dynamic>> products;
 
   final TextEditingController _searchController = TextEditingController();
   bool isLoading = false;
-  bool isCached = false;
 
   @override
   void initState() {
     super.initState();
 
-    products = service.items();
+    products = Future.value([]);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      int categoryId =
-          Provider.of<SearchProvider>(context, listen: false).categoryId;
+      final searchProvider =
+          Provider.of<SearchProvider>(context, listen: false);
 
-      if (categoryId != 0) {
-        // searchByCategory(categoryId);
-        Provider.of<SearchProvider>(context, listen: false).setCategoryId(0);
-      }
+      setState(() {
+        products = searchService.search({
+          'type': 'produits',
+          'categories': searchProvider.filters['products_screen']!.join(','),
+        });
+      });
     });
   }
 
@@ -54,18 +51,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
     super.dispose();
   }
 
-  void search() {
+  void search(dynamic params) {
     setState(() {
-      products = service.search(_searchController.text);
+      products = searchService.search(params);
     });
-  }
-
-  void searchByCategory(int categoryId) {
-    // service.searchByCategory(categoryId, (items) {
-    //   setState(() {
-    //     products = items;
-    //   });
-    // }).then((items) => {products = items});
   }
 
   @override
@@ -84,17 +73,96 @@ class _ProductsScreenState extends State<ProductsScreen> {
         child: Scaffold(
           body: Column(
             children: [
-              BigHeader(
-                title: 'Produits',
-                searchPlaceholder: 'Entrer un mot cle',
-                searchController: _searchController,
-                onSearch: search,
-                searchLoading: isLoading,
-                screen: 'products_screen',
-                onFilter: (int value) {
-                  setState(() {
-                    products = service.searchByCategory(value);
-                  });
+              Consumer<SearchProvider>(
+                builder: (context, state, child) {
+                  return Column(
+                    children: [
+                      BigHeader(
+                        title: 'Produits',
+                        searchController: _searchController,
+                        screen: 'products_screen',
+                        onSearch: () {
+                          search(
+                            {
+                              'search': _searchController.text,
+                              'type': 'produits',
+                              'categories':
+                                  state.filters['products_screen']!.join(','),
+                            },
+                          );
+                        },
+                        onFilter: () {
+                          search(
+                            {
+                              'search': _searchController.text,
+                              'type': 'produits',
+                              'categories':
+                                  state.filters['products_screen']!.join(','),
+                            },
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 16,
+                        ),
+                        child: Wrap(
+                          children: List.generate(
+                              state.filters['products_screen']!.length,
+                              (index) {
+                            final category =
+                                state.filters['products_screen']![index];
+                            return Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppColors.primary),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    category, // Display category name
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  GestureDetector(
+                                    onTap: () {
+                                      state.filters['products_screen']!
+                                          .remove(category);
+                                      search(
+                                        {
+                                          'search': _searchController.text,
+                                          'type': 'produits',
+                                          'categories': state
+                                              .filters['products_screen']!
+                                              .join(','),
+                                        },
+                                      );
+                                    },
+                                    child: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
+                  );
                 },
               ),
               const SizedBox(
@@ -117,8 +185,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           ),
                         );
                       }
-                      // Save data into cache.
-                      cacheService.saveToCache('product_items', snapshot.data);
 
                       double rowCount = snapshot.data!.length / 2;
 
@@ -133,7 +199,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 if (snapshot.data!.length >
                                     (index * 2 + colIndex)) {
                                   var product =
-                                      snapshot.data![index * 2 + colIndex];
+                                      snapshot.data![index * 2 + colIndex].data;
 
                                   return GestureDetector(
                                     onTap: () {

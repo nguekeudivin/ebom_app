@@ -29,9 +29,21 @@ class Header extends StatelessWidget {
               ),
             );
           },
-          child: const SizedBox.square(
+          child: SizedBox.square(
             dimension: 40,
-            child: UserAvatar(),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle, // Circular border
+                border: Border.all(
+                  color: Colors.white, // White border
+                  width: 2, // Border width
+                ),
+              ),
+              child: const ClipOval(
+                // Ensures the content inside is clipped to a circle
+                child: UserAvatar(), // Custom avatar widget
+              ),
+            ),
           ),
         ),
       ],

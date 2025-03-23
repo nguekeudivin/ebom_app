@@ -35,7 +35,7 @@ class _AboutScreenState extends State<AboutScreen> {
             //   'https://test.admin.beigie-innov.com/storage/condition_market/condition.pdf',
             // ),
             Uri.parse(
-              'https://ebom-market.com',
+              'https://info.ebom-market.com',
             ),
           ),
         ),

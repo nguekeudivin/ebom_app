@@ -16,9 +16,16 @@ class SearchProvider extends ChangeNotifier {
   int _categoryId = 0;
   String _currentScreen = '';
 
+  final Map<String, List<String>> _filters = {
+    'products_screen': [],
+    'entreprises_screen': [],
+    'services_screen': [],
+  };
+
   String get keyword => _keyword;
   int get categoryId => _categoryId;
   String get currentScreen => _currentScreen;
+  Map<String, List<String>> get filters => _filters;
 
   void setKeyword(String value) {
     _keyword = value;
@@ -34,21 +41,34 @@ class SearchProvider extends ChangeNotifier {
     _currentScreen = value;
     notifyListeners();
   }
+
+  void setFilters(String screen, List<String> values) {
+    _filters[screen] = values;
+    notifyListeners();
+  }
+
+  void toggleFilters(String screen, String id) {
+    if (_filters[screen]!.contains(id)) {
+      _filters[screen]!.remove(id);
+    } else {
+      _filters[screen]!.add(id);
+    }
+    notifyListeners();
+  }
 }
 
 class SearchService {
-  Future<List<ResultItem>> search(String keyword) {
+  Future<List<ResultItem>> search(dynamic data) {
     final completer = Completer<List<ResultItem>>();
     String url = AppApi.search;
+
     http
         .post(
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-        {'search': keyword},
-      ),
+      body: jsonEncode(data),
     )
         .then((response) {
       if (response.statusCode == 200) {

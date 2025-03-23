@@ -2,12 +2,9 @@ import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/components/connexion/user_avatar.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/account/about_screen.dart';
-import 'package:ebom/src/screens/account/addresses_screen.dart';
 import 'package:ebom/src/screens/account/edit_profile_screen.dart';
-import 'package:ebom/src/screens/account/favorites_screen.dart';
-import 'package:ebom/src/screens/account/history_screen.dart';
-import 'package:ebom/src/screens/account/payment_methods_screen.dart';
 import 'package:ebom/src/screens/account/settings_screen.dart';
+import 'package:ebom/src/screens/subscriptions/subscriptions_screen.dart';
 import 'package:ebom/src/screens/welcome_screen.dart';
 import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
@@ -104,66 +101,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // profileLink(
+                  //   icon: Icons.history_outlined,
+                  //   text: 'Historique',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const HistoryScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  // profileLink(
+                  //   icon: Icons.credit_card_outlined,
+                  //   text: 'Methode de paiements',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const PaymentMethodsScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   profileLink(
-                    icon: Icons.settings,
-                    text: 'Paramètres',
+                    icon: Icons.credit_score,
+                    text: 'Mes abonnements',
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SettingsScreen(),
+                          builder: (context) => const SubscriptionsScreen(),
                         ),
                       );
                     },
                   ),
-                  profileLink(
-                    icon: Icons.history_outlined,
-                    text: 'Historique',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HistoryScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  profileLink(
-                    icon: Icons.credit_card_outlined,
-                    text: 'Methode de paiements',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PaymentMethodsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  profileLink(
-                    icon: Icons.pin_drop,
-                    text: 'Adresse',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddressesScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  profileLink(
-                    icon: Icons.favorite_outlined,
-                    text: 'Favoris',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FavoritesScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  // profileLink(
+                  //   icon: Icons.pin_drop,
+                  //   text: 'Adresse',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const AddressesScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  // profileLink(
+                  //   icon: Icons.favorite_outlined,
+                  //   text: 'Favoris',
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const FavoritesScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -190,6 +187,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   //     );
                   //   },
                   // ),
+                  profileLink(
+                    icon: Icons.settings,
+                    text: 'Paramètres',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   profileLink(
                     icon: Icons.group_outlined,
                     text: 'Inviter un proche',

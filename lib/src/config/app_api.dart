@@ -9,5 +9,7 @@ final class AppApi {
   static const String search =
       'https://api.research.beigie-innov.com/v1/search';
   static const String subscription =
-      'https://api.abonnements.beigie-innov.com/v1/services-abonnements';
+      'https://api.abonnements.beigie-innov.com/v1';
+
+  static const String payment = 'https://api.payments.beigie-innov.com/v1';
 }

@@ -104,13 +104,16 @@ class EntrepriseTypesSlide extends State<EntreprisesTypesSlide> {
                       Provider.of<SearchProvider>(context, listen: false)
                           .setCategoryId(category['id']);
 
+                      Provider.of<SearchProvider>(context, listen: false)
+                          .setFilters('entreprises_screen', [category['nom']]);
+
                       Provider.of<AppLayoutNavigationProvider>(
                         context,
                         listen: false,
                       ).setActiveScreen('entreprises_screen');
                     },
                     child: Container(
-                      width: 100,
+                      width: 120,
                       margin: const EdgeInsets.symmetric(horizontal: 12),
                       child: Center(
                         child: Column(

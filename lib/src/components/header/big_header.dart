@@ -2,15 +2,17 @@ import 'package:ebom/src/components/form/input_text_field.dart';
 import 'package:ebom/src/components/header/header.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/search/filter_screen.dart';
+import 'package:ebom/src/screens/subscriptions/subscribe_modal.dart';
+import 'package:ebom/src/services/subscription_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BigHeader extends StatefulWidget {
   final String title;
   final String searchPlaceholder;
   final TextEditingController searchController;
   final void Function() onSearch;
-  final void Function(int filter) onFilter;
-  final bool searchLoading;
+  final void Function() onFilter;
   final String screen;
   const BigHeader({
     required this.title,
@@ -18,8 +20,7 @@ class BigHeader extends StatefulWidget {
     required this.onSearch,
     required this.onFilter,
     required this.screen,
-    this.searchPlaceholder = '',
-    this.searchLoading = false,
+    this.searchPlaceholder = 'Entre un mot clé',
     super.key,
   });
 
@@ -100,29 +101,41 @@ class _BigHeaderState extends State<BigHeader> {
                   child: IconButton(
                     // onPressed: widget.onSearch,
                     onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            height: 100,
-                            width: double.infinity,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Choisir un forfait",
-                                    style: TextStyle(fontSize: 18),
+                      Provider.of<SubscriptionProvider>(
+                        context,
+                        listen: false,
+                      ).canSearch(context).then((value) {
+                        if (!value) {
+                          // Save the reference.
+                          Provider.of<SubscriptionProvider>(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            listen: false,
+                          ).start('@recherche');
+
+                          showModalBottomSheet(
+                            // ignore: use_build_context_synchronously
+                            context: context,
+                            isScrollControlled: true,
+                            isDismissible: false,
+                            scrollControlDisabledMaxHeightRatio: 0.81,
+                            builder: (BuildContext context) {
+                              return SingleChildScrollView(
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
                                   ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  child: const SubscribeModal(),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
+                        } else {
+                          widget.onSearch();
+                        }
+                      });
                     },
                     icon: const Icon(Icons.search, color: AppColors.primary),
                   ),

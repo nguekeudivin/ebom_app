@@ -22,6 +22,21 @@ class ConnexionService {
     return completer.future;
   }
 
+  Future<bool> isConnected() async {
+    final Completer<bool> completer = Completer();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String connexionJsonString = prefs.getString('ebom_connexion') ?? '';
+
+    if (connexionJsonString == '') {
+      completer.complete(false);
+    } else {
+      completer.complete(true);
+    }
+
+    return completer.future;
+  }
+
   Future<bool> logout() async {
     final Completer<bool> completer = Completer<bool>();
 
@@ -47,6 +62,24 @@ class ConnexionService {
     );
     prefs.setString('ebom_connexion', connexion.toJsonString());
     prefs.setString('ebom_token', data['token']);
+  }
+
+  Future<bool> update(dynamic data) async {
+    Completer<bool> completer = Completer();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Connexion? currentConnexion = await getConnexion();
+    Connexion connexion = currentConnexion!;
+
+    // Update the connexion by the new value.
+    connexion.nom = data['nom'];
+    connexion.telephone = data['telephone'];
+    connexion.email = data['email'];
+
+    prefs.setString('ebom_connexion', connexion.toJsonString());
+
+    completer.complete(true);
+
+    return completer.future;
   }
 
   Future<dynamic> checkConnexionStatus() async {

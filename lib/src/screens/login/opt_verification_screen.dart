@@ -40,12 +40,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => AppLayout(),
         ),
+        (Route<dynamic> route) => false,
       );
     }).catchError((response) {
       setState(() {

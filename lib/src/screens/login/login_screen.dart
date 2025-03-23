@@ -6,6 +6,7 @@ import 'package:ebom/src/screens/app_layout.dart';
 import 'package:ebom/src/screens/login/opt_verification_screen.dart';
 import 'package:ebom/src/screens/terms_screen.dart';
 import 'package:ebom/src/services/auth_service.dart';
+import 'package:ebom/src/services/connexion_service.dart';
 import 'package:ebom/src/services/validation_service.dart';
 import 'package:flutter/material.dart';
 
@@ -13,15 +14,32 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _WelcomeScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _WelcomeScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController phoneNumberCtl = TextEditingController();
   List<String> _errors = [];
   bool _isLoading = false;
 
   final ValidationService validator = ValidationService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Check if there is a connexion go to app layout.
+    ConnexionService connexionService = ConnexionService();
+    connexionService.isConnected().then((value) {
+      if (value) {
+        Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(builder: (context) => AppLayout()),
+        );
+      }
+    });
+  }
 
   void showValidationErrors(BuildContext context) {
     showDialog(

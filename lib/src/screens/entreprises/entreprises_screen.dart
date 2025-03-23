@@ -6,39 +6,39 @@ import 'package:ebom/src/components/skeleton/listing_skeleton.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/models/entreprise.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
-import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:ebom/src/services/search_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EntreprisesScreen extends StatefulWidget {
   const EntreprisesScreen({super.key});
-
   @override
   State<EntreprisesScreen> createState() => _EntreprisesScreenState();
 }
 
 class _EntreprisesScreenState extends State<EntreprisesScreen> {
-  final EntrepriseService service = EntrepriseService();
-  late Future<List<Entreprise>> entreprises;
+  final SearchService searchService = SearchService();
+
+  late Future<List<dynamic>> entreprises;
   final TextEditingController _searchController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the futures
-    entreprises = service.items();
+
+    entreprises = Future.value([]);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      int categoryId =
-          Provider.of<SearchProvider>(context, listen: false).categoryId;
+      final searchProvider =
+          Provider.of<SearchProvider>(context, listen: false);
 
-      if (categoryId != 0) {
-        setState(() {
-          entreprises = service.searchByCategory(categoryId);
+      setState(() {
+        entreprises = searchService.search({
+          'type': 'entreprises',
+          'categories': searchProvider.filters['entreprises_screen']!.join(','),
         });
-        Provider.of<SearchProvider>(context, listen: false).setCategoryId(0);
-      }
+      });
     });
   }
 
@@ -49,9 +49,9 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
     super.dispose();
   }
 
-  void search() {
+  void search(dynamic params) {
     setState(() {
-      entreprises = service.search(_searchController.text);
+      entreprises = searchService.search(params);
     });
   }
 
@@ -71,16 +71,98 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
         child: Scaffold(
           body: Column(
             children: [
-              BigHeader(
-                title: 'Nos entreprises',
-                searchController: _searchController,
-                searchPlaceholder: 'Entrer un mot cle',
-                onSearch: search,
-                screen: 'entreprises_screen',
-                onFilter: (int value) {
-                  setState(() {
-                    entreprises = service.search('$value');
-                  });
+              Consumer<SearchProvider>(
+                builder: (context, state, child) {
+                  return Column(
+                    children: [
+                      BigHeader(
+                        title: 'Entreprises',
+                        searchController: _searchController,
+                        screen: 'entreprises_screen',
+                        onSearch: () {
+                          search(
+                            {
+                              'search': _searchController.text,
+                              'type': 'entreprises',
+                              'type_entreprises': state
+                                  .filters['entreprises_screen']!
+                                  .join(','),
+                            },
+                          );
+                        },
+                        onFilter: () {
+                          search(
+                            {
+                              'search': _searchController.text,
+                              'type': 'entreprises',
+                              'type_entreprises': state
+                                  .filters['entreprises_screen']!
+                                  .join(','),
+                            },
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 16,
+                        ),
+                        child: Wrap(
+                          children: List.generate(
+                              state.filters['entreprises_screen']!.length,
+                              (index) {
+                            final category =
+                                state.filters['entreprises_screen']![index];
+                            return Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppColors.primary),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    category, // Display category name
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  GestureDetector(
+                                    onTap: () {
+                                      state.filters['entreprises_screen']!
+                                          .remove(category);
+                                      search(
+                                        {
+                                          'search': _searchController.text,
+                                          'type': 'entreprises',
+                                          'type_entreprises': state
+                                              .filters['entreprises_screen']!
+                                              .join(','),
+                                        },
+                                      );
+                                    },
+                                    child: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
+                  );
                 },
               ),
               const SizedBox(
@@ -115,7 +197,8 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                               if (snapshot.data!.length >
                                   (index * 2 + colIndex)) {
                                 var entreprise =
-                                    snapshot.data![index * 2 + colIndex];
+                                    snapshot.data![index * 2 + colIndex].data;
+
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -123,7 +206,9 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             EntrepriseDetailsScreen(
-                                          entreprise: entreprise,
+                                          entreprise: Entreprise.fromDynamic(
+                                            entreprise,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -157,7 +242,8 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                                     ), // Set the desired radius for top-right corner
                                                   ),
                                                   child: CachedNetworkImage(
-                                                    imageUrl: entreprise.image,
+                                                    imageUrl:
+                                                        entreprise['image'],
                                                     placeholder: (
                                                       context,
                                                       url,
@@ -195,7 +281,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                                       20.0,
                                                     ), // Adjust the value to change roundness
                                                     child: Image.network(
-                                                      entreprise.image,
+                                                      entreprise['image'],
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
@@ -210,7 +296,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                             right: 8.0,
                                             bottom: 8.0,
                                           ),
-                                          child: Text(entreprise.nom),
+                                          child: Text(entreprise['nom']),
                                         ),
                                       ],
                                     ),

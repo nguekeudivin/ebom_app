@@ -9,6 +9,7 @@ import 'package:ebom/src/screens/products/products_screen.dart';
 import 'package:ebom/src/screens/services/services_screen.dart';
 import 'package:ebom/src/services/app_service.dart';
 import 'package:ebom/src/services/connexion_service.dart';
+import 'package:ebom/src/services/subscription_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,9 @@ class _AppLayoutState extends State<AppLayout> {
 
     // Check login status.
     Future.delayed(Duration.zero, () async {
+      // Check login status.
       ConnexionService connService = ConnexionService();
+
       connService.checkConnexionStatus().then((status) {
         if (!status) {
           connService.logout();
@@ -45,6 +48,11 @@ class _AppLayoutState extends State<AppLayout> {
               builder: (context) => const LoginScreen(),
             ),
           );
+        } else {
+          // ignore: use_build_context_synchronously
+          Provider.of<SubscriptionProvider>(context, listen: false)
+              // ignore: use_build_context_synchronously
+              .loadOngoing(context);
         }
       });
     });

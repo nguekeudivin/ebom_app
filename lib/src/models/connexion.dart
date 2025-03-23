@@ -2,10 +2,10 @@ import 'dart:convert';
 
 class Connexion {
   final String? id;
-  final String nom;
+  String nom;
   final String? sigle;
-  final String email;
-  final String telephone;
+  String email;
+  String telephone;
   final String image;
   final String role;
   final String? status;
