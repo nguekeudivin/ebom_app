@@ -1,24 +1,13 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
 class CacheService {
-  Future<void> saveToCache(String key, dynamic data) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final jsonString = jsonEncode(data);
-    await prefs.setString(key, jsonString);
+  final Box box = Hive.box('cacheBox');
+
+  void save(String key, List<dynamic> data) {
+    box.put(key, data);
   }
 
-  dynamic getFromCache(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString(key);
-    if (jsonString != null) {
-      return jsonDecode(jsonString);
-    }
-    return null;
-  }
-
-  Future<void> clearCache(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(key);
+  List<dynamic>? get(String key) {
+    return box.get(key)?.cast<dynamic>();
   }
 }

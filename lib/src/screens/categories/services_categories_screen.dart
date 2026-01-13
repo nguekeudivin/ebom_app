@@ -85,11 +85,11 @@ class _CategoriesScreenState extends State<ServicesCategoriesScreen> {
 
                         return GestureDetector(
                           onTap: () {
-                            // Provider.of<SearchProvider>(context, listen: false)
-                            //     .setKeyword(category['nom']);
-
                             Provider.of<SearchProvider>(context, listen: false)
                                 .setCategoryId(category['id']);
+                            
+                            Provider.of<SearchProvider>(context, listen: false)
+                              .setFilters('services_screen', [category['nom']]);
 
                             Provider.of<AppLayoutNavigationProvider>(
                               context,

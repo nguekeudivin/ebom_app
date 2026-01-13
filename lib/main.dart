@@ -7,13 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import 'src/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb) setPathUrlStrategy();
+
+  await Hive.initFlutter();
+  await Hive.openBox('cacheBox');
 
   runApp(
     MultiProvider(

@@ -20,52 +20,40 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   final SearchService searchService = SearchService();
-  late Future<List<dynamic>> products;
-
   final TextEditingController _searchController = TextEditingController();
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    products = Future.value([]);
-
+    // Lance la recherche initiale après le build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final searchProvider =
           Provider.of<SearchProvider>(context, listen: false);
 
-      setState(() {
-        products = searchService.search({
-          'type': 'produits',
-          'categories': searchProvider.filters['products_screen']!.join(','),
-        });
+      search({
+        'type': 'produits',
+        'categories': searchProvider.filters['products_screen']!.join(','),
       });
     });
   }
 
   @override
   void dispose() {
-    // Dispose the controller when the widget is removed
     _searchController.dispose();
     super.dispose();
   }
 
   void search(dynamic params) {
-    setState(() {
-      products = searchService.search(params);
-    });
+    searchService.search(params);
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double widthReference = 400;
-
     double imageHeight =
         width < widthReference ? 120 : 120 + (width - widthReference) * 0.1;
-
-    // Adjust child aspect ratio based on screen size
 
     return Container(
       color: AppColors.primary,
@@ -82,24 +70,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         searchController: _searchController,
                         screen: 'products_screen',
                         onSearch: () {
-                          search(
-                            {
-                              'search': _searchController.text,
-                              'type': 'produits',
-                              'categories':
-                                  state.filters['products_screen']!.join(','),
-                            },
-                          );
+                          search({
+                            'search': _searchController.text,
+                            'type': 'produits',
+                            'categories':
+                                state.filters['products_screen']!.join(','),
+                          });
                         },
                         onFilter: () {
-                          search(
-                            {
-                              'search': _searchController.text,
-                              'type': 'produits',
-                              'categories':
-                                  state.filters['products_screen']!.join(','),
-                            },
-                          );
+                          search({
+                            'search': _searchController.text,
+                            'type': 'produits',
+                            'categories':
+                                state.filters['products_screen']!.join(','),
+                          });
                         },
                       ),
                       Padding(
@@ -128,7 +112,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    category, // Display category name
+                                    category,
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: AppColors.primary,
@@ -139,15 +123,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     onTap: () {
                                       state.filters['products_screen']!
                                           .remove(category);
-                                      search(
-                                        {
-                                          'search': _searchController.text,
-                                          'type': 'produits',
-                                          'categories': state
-                                              .filters['products_screen']!
-                                              .join(','),
-                                        },
-                                      );
+                                      search({
+                                        'search': _searchController.text,
+                                        'type': 'produits',
+                                        'categories': state
+                                            .filters['products_screen']!
+                                            .join(','),
+                                      });
                                     },
                                     child: const Icon(
                                       Icons.close,
@@ -165,95 +147,86 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   );
                 },
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Expanded(
                 child: SingleChildScrollView(
-                  child: FutureBuilder(
-                    future: products,
+                  child: StreamBuilder<List<ResultItem>>(
+                    stream: searchService.stream('produits'),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData) {
                         return const ListingSkeleton();
                       } else if (snapshot.hasError) {
-                        return const Text("Une erreur c'est produite");
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text("Une erreur s'est produite");
+                      } else if (snapshot.data!.isEmpty) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            "Nous n'avons trouvez aucun produit correspondant a votre recherche",
+                            "Nous n'avons trouvé aucun produit correspondant à votre recherche",
                           ),
                         );
                       }
 
-                      double rowCount = snapshot.data!.length / 2;
+                      final data = snapshot.data!;
+                      double rowCount = data.length / 2;
 
                       return Wrap(
                         children: List.generate(rowCount.ceil(), (index) {
                           return CustomListRow(
                             px: 16,
                             gap: 16,
-                            children: List.generate(
-                              2,
-                              (colIndex) {
-                                if (snapshot.data!.length >
-                                    (index * 2 + colIndex)) {
-                                  var product =
-                                      snapshot.data![index * 2 + colIndex].data;
+                            children: List.generate(2, (colIndex) {
+                              if (data.length > (index * 2 + colIndex)) {
+                                final product = data[index * 2 + colIndex].data;
 
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetailsScreen(
-                                            product: product,
-                                          ),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductDetailsScreen(
+                                          product: product,
                                         ),
-                                      );
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: AppColors.gray100,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: imageHeight,
-                                            width: double.infinity,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: CachedNetworkImage(
-                                                imageUrl: product['image'],
-                                                placeholder: (context, url) =>
-                                                    const ImageSkeleton(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const ImageSkeleton(),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: ProductLabel(
-                                              product: product,
-                                            ),
-                                          ),
-                                        ],
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: AppColors.gray100,
                                       ),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                  );
-                                } else {
-                                  return const Text('');
-                                }
-                              },
-                            ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: imageHeight,
+                                          width: double.infinity,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: CachedNetworkImage(
+                                              imageUrl: product['image'],
+                                              placeholder: (context, url) =>
+                                                  const ImageSkeleton(),
+                                              errorWidget: (context, url, error) =>
+                                                  const ImageSkeleton(),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: ProductLabel(product: product),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            }),
                           );
                         }),
                       );
@@ -268,3 +241,4 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 }
+

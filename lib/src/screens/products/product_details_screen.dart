@@ -6,6 +6,7 @@ import 'package:ebom/src/screens/chat/chat_screen.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final dynamic product;
@@ -137,12 +138,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             size: 16,
                           ),
                           const Text('4.5'),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     // Add product to favorite.
+                          //   },
+                          //   icon: const Icon(Icons.favorite_outline),
+                          //   color: Colors.red,
+                          // ),
                           IconButton(
                             onPressed: () {
                               // Add product to favorite.
+                              Share.share(
+                                'Découvre le produit ${widget.product['nom']} sur la plateforme E-Bom Market. '
+                                'Clique juste sur le lien ci-contre - '
+                                'https://ebom-market.com/produit/${widget.product['categorie_id']}/${widget.product['categorie']}/${widget.product['id']}/${widget.product['nom']}'
+                              );
                             },
-                            icon: const Icon(Icons.favorite_outline),
-                            color: Colors.red,
+                            icon: const Icon(Icons.share),
+                            color: AppColors.primary
                           ),
                         ],
                       ),
@@ -274,7 +287,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             const SizedBox(
               height: 32,
             ),
-            SameProducts(categoryName: widget.product['categorie']),
+            SameProducts(categoryName: widget.product['categorie'], productId: widget.product['id']),
           ],
         ),
       ),

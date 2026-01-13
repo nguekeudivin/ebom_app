@@ -46,6 +46,20 @@ class LoginResponse {
   });
 }
 
+class DeleteAccountData {
+  final String appareil;
+  final String email;
+
+  DeleteAccountData({
+    required this.appareil,
+    required this.email,
+  });
+}
+
+class DeleteAccountResponse {
+  
+}
+
 class AuthService {
   final String? baseUrl;
 
@@ -232,6 +246,66 @@ class AuthService {
       // print(error);
       completer.completeError(
         'Verifiez votre connexion internet.E2',
+      ); // Handle network error
+    });
+    return completer.future;
+  }
+
+  Future<bool> deleteAccount(DeleteAccountData data) {
+    final Completer<bool> completer = Completer<bool>();
+    final url = Uri.parse(
+      '$baseUrl/auth/delete/user',
+    );
+
+    http
+        .post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(
+        {
+          'appareil': data.appareil,
+          'email': data.email,
+        },
+      ),
+    )
+        .then((response) {
+      final responseBody = json.decode(response.body);
+      //print(responseBody);
+
+      if (responseBody['data'] is String) {
+        switch (responseBody['data']) {
+          case '0':
+            completer.completeError(
+              'Un problème est survenu',
+            );
+            break;
+          case '-99':
+            completer.completeError(
+              "La session de l'utilisateur a expiré",
+            );
+            break;
+          case '-2':
+            completer.completeError(
+              'Le téléphone est déjà utilisé',
+            );
+            break;
+          default:
+            completer.complete(true);
+            break;
+        }
+      } else {
+        if (responseBody['data']['telephone'] != null) {
+          completer.complete(true);
+        } else {
+          completer.completeError('Vérifiez votre connexion internet. E1');
+        }
+      }
+    }).catchError((error) {
+      // print(error);
+      completer.completeError(
+        'Vérifiez votre connexion internet. E2',
       ); // Handle network error
     });
     return completer.future;

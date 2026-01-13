@@ -89,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
       AuthService auth = AuthService();
 
       auth.getDeviseId(context).then((deviceId) {
+
         RegisterData data = RegisterData(
           appareil: deviceId,
           telephone: phoneNumberCtl.text,
@@ -98,10 +99,12 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = true;
         });
+
         auth.login(data).then((response) {
           setState(() {
             _isLoading = false;
           });
+          
           if (response.status) {
             // if it's a new session then we send the code to phone number.
             if (response.newSession) {

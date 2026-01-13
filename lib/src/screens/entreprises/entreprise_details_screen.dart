@@ -9,6 +9,7 @@ import 'package:ebom/src/screens/home_screen/services_swiper.dart';
 import 'package:ebom/src/services/categories_service.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class EntrepriseDetailsScreen extends StatefulWidget {
   final Entreprise entreprise;
@@ -165,12 +166,12 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               margin: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                _details.nom,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                    _details.nom,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
             ),
             const SizedBox(
               height: 8,
@@ -183,6 +184,34 @@ class _EntrepriseDetailsScreenState extends State<EntrepriseDetailsScreen> {
                 address:
                     '${_details.pays} - ${_details.ville} - ${_details.quartier}',
                 email: _details.email,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: TextButton.icon(
+                onPressed: () {
+                  final String shareMessage =
+                      'Découvre le produit ${widget.entreprise.nom} sur la plateforme E-Bom Market. '
+                      'Clique juste sur le lien ci-contre - '
+                      'https://ebom-market.com/entreprise/${widget.entreprise.typeEntrepriseId}/${widget.entreprise.typeEntreprise}/${widget.entreprise.id}/${widget.entreprise.nom}';
+
+                  Share.share(shareMessage);
+                },
+                icon: const Icon(
+                  Icons.share,
+                  color: AppColors.primary,
+                ),
+                label: const Text(
+                  'Partager',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary, // Couleur assortie à l'icône
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero, // Pour coller au bord si nécessaire
+                  alignment: Alignment.centerLeft, // Aligne le contenu à gauche
+                ),
               ),
             ),
             Padding(

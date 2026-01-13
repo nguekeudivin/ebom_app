@@ -20,51 +20,40 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   final SearchService searchService = SearchService();
-  late Future<List<dynamic>> services;
   final TextEditingController _searchController = TextEditingController();
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    services = searchService.search({'type': 'services'});
-
+    // Recherche initiale après le build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final searchProvider =
           Provider.of<SearchProvider>(context, listen: false);
 
-      setState(() {
-        services = searchService.search({
-          'type': 'services',
-          'categories': searchProvider.filters['services_screen']!.join(','),
-        });
+      search({
+        'type': 'services',
+        'categories': searchProvider.filters['services_screen']!.join(','),
       });
     });
   }
 
   @override
   void dispose() {
-    // Dispose the controller when the widget is removed
     _searchController.dispose();
     super.dispose();
   }
 
   void search(dynamic params) {
-    setState(() {
-      services = searchService.search(params);
-    });
+    searchService.search(params);
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double widthReference = 400;
-
     double imageHeight =
         width < widthReference ? 120 : 120 + (width - widthReference) * 0.1;
-
-    // Adjust child aspect ratio based on screen size
 
     return Container(
       color: AppColors.primary,
@@ -81,24 +70,20 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         searchController: _searchController,
                         screen: 'services_screen',
                         onSearch: () {
-                          search(
-                            {
-                              'search': _searchController.text,
-                              'type': 'services',
-                              'categories':
-                                  state.filters['services_screen']!.join(','),
-                            },
-                          );
+                          search({
+                            'search': _searchController.text,
+                            'type': 'services',
+                            'categories':
+                                state.filters['services_screen']!.join(','),
+                          });
                         },
                         onFilter: () {
-                          search(
-                            {
-                              'search': _searchController.text,
-                              'type': 'services',
-                              'categories':
-                                  state.filters['services_screen']!.join(','),
-                            },
-                          );
+                          search({
+                            'search': _searchController.text,
+                            'type': 'services',
+                            'categories':
+                                state.filters['services_screen']!.join(','),
+                          });
                         },
                       ),
                       Padding(
@@ -127,7 +112,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    category, // Display category name
+                                    category,
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: AppColors.primary,
@@ -138,15 +123,13 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     onTap: () {
                                       state.filters['services_screen']!
                                           .remove(category);
-                                      search(
-                                        {
-                                          'search': _searchController.text,
-                                          'type': 'services',
-                                          'categories': state
-                                              .filters['services_screen']!
-                                              .join(','),
-                                        },
-                                      );
+                                      search({
+                                        'search': _searchController.text,
+                                        'type': 'services',
+                                        'categories': state
+                                            .filters['services_screen']!
+                                            .join(','),
+                                      });
                                     },
                                     child: const Icon(
                                       Icons.close,
@@ -164,28 +147,27 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   );
                 },
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Expanded(
                 child: SingleChildScrollView(
-                  child: FutureBuilder(
-                    future: services,
+                  child: StreamBuilder<List<ResultItem>>(
+                    stream: searchService.stream('services'),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData) {
                         return const ListingSkeleton();
                       } else if (snapshot.hasError) {
-                        return const Text("Une erreur c'est produite");
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text("Une erreur s'est produite");
+                      } else if (snapshot.data!.isEmpty) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            "Nous n'avons trouvez aucun service correspondant a votre recherche",
+                            "Nous n'avons trouvé aucun service correspondant à votre recherche",
                           ),
                         );
                       }
 
-                      double rowCount = snapshot.data!.length / 2;
+                      final data = snapshot.data!;
+                      double rowCount = data.length / 2;
 
                       return Wrap(
                         children: List.generate(rowCount.ceil(), (index) {
@@ -193,10 +175,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                             px: 16,
                             gap: 16,
                             children: List.generate(2, (colIndex) {
-                              if (snapshot.data!.length >
-                                  (index * 2 + colIndex)) {
-                                var item =
-                                    snapshot.data![index * 2 + colIndex].data;
+                              if (data.length > (index * 2 + colIndex)) {
+                                final item = data[index * 2 + colIndex].data;
 
                                 return GestureDetector(
                                   onTap: () {
@@ -229,17 +209,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                                     BorderRadius.circular(10),
                                                 child: CachedNetworkImage(
                                                   imageUrl: item['image'],
-                                                  placeholder: (
-                                                    context,
-                                                    url,
-                                                  ) =>
-                                                      const ImageSkeleton(),
-                                                  errorWidget: (
-                                                    context,
-                                                    url,
-                                                    error,
-                                                  ) =>
-                                                      const ImageSkeleton(),
+                                                  placeholder:
+                                                      (context, url) =>
+                                                          const ImageSkeleton(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          const ImageSkeleton(),
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -273,10 +248,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                         Padding(
                                           padding: const EdgeInsets.all(8),
                                           child: Text(
-                                            truncate(
-                                              item['description'],
-                                              50,
-                                            ),
+                                            truncate(item['description'], 50),
                                           ),
                                         ),
                                       ],
@@ -284,7 +256,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                   ),
                                 );
                               } else {
-                                return const Text('');
+                                return const SizedBox();
                               }
                             }),
                           );
@@ -301,3 +273,4 @@ class _ServicesScreenState extends State<ServicesScreen> {
     );
   }
 }
+

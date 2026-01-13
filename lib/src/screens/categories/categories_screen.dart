@@ -85,10 +85,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
                         return GestureDetector(
                           onTap: () {
-                            // Provider.of<SearchProvider>(context, listen: false)
-                            //     .setKeyword(category['nom']);
+                            
                             Provider.of<SearchProvider>(context, listen: false)
                                 .setCategoryId(category['id']);
+
+                            Provider.of<SearchProvider>(context, listen: false)
+                              .setFilters('products_screen', [category['nom']]);
 
                             Provider.of<AppLayoutNavigationProvider>(
                               context,
@@ -96,6 +98,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             ).setActiveScreen('products_screen');
 
                             Navigator.of(context).pop();
+                                
                           },
                           child: Container(
                             width: 130,

@@ -12,57 +12,46 @@ import 'package:provider/provider.dart';
 
 class EntreprisesScreen extends StatefulWidget {
   const EntreprisesScreen({super.key});
+
   @override
   State<EntreprisesScreen> createState() => _EntreprisesScreenState();
 }
 
 class _EntreprisesScreenState extends State<EntreprisesScreen> {
   final SearchService searchService = SearchService();
-
-  late Future<List<dynamic>> entreprises;
   final TextEditingController _searchController = TextEditingController();
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    entreprises = Future.value([]);
-
+    // Recherche initiale après le build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final searchProvider =
           Provider.of<SearchProvider>(context, listen: false);
 
-      setState(() {
-        entreprises = searchService.search({
-          'type': 'entreprises',
-          'categories': searchProvider.filters['entreprises_screen']!.join(','),
-        });
+      search({
+        'type': 'entreprises',
+        'type_entreprises': searchProvider.filters['entreprises_screen']!.join(','),
       });
     });
   }
 
   @override
   void dispose() {
-    // Dispose the controller when the widget is removed
     _searchController.dispose();
     super.dispose();
   }
 
   void search(dynamic params) {
-    setState(() {
-      entreprises = searchService.search(params);
-    });
+    searchService.search(params);
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double widthReference = 400;
-
-    double imageHeight =
-        width < widthReference ? 120 : 120 + (width - widthReference) * 0.1;
-    // double descriptionHeight = 80;
+    double imageHeight = width < widthReference ? 120 : 120 + (width - widthReference) * 0.1;
     double avatarSize = 40;
 
     return Container(
@@ -80,45 +69,28 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                         searchController: _searchController,
                         screen: 'entreprises_screen',
                         onSearch: () {
-                          search(
-                            {
-                              'search': _searchController.text,
-                              'type': 'entreprises',
-                              'type_entreprises': state
-                                  .filters['entreprises_screen']!
-                                  .join(','),
-                            },
-                          );
+                          search({
+                            'search': _searchController.text,
+                            'type': 'entreprises',
+                            'type_entreprises': state.filters['entreprises_screen']!.join(','),
+                          });
                         },
                         onFilter: () {
-                          search(
-                            {
-                              'search': _searchController.text,
-                              'type': 'entreprises',
-                              'type_entreprises': state
-                                  .filters['entreprises_screen']!
-                                  .join(','),
-                            },
-                          );
+                          search({
+                            'search': _searchController.text,
+                            'type': 'entreprises',
+                            'type_entreprises': state.filters['entreprises_screen']!.join(','),
+                          });
                         },
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 16,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                         child: Wrap(
-                          children: List.generate(
-                              state.filters['entreprises_screen']!.length,
-                              (index) {
-                            final category =
-                                state.filters['entreprises_screen']![index];
+                          children: List.generate(state.filters['entreprises_screen']!.length, (index) {
+                            final category = state.filters['entreprises_screen']![index];
                             return Container(
                               margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
                                 color: AppColors.primary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(16),
@@ -128,32 +100,20 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    category, // Display category name
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.primary,
-                                    ),
+                                    category,
+                                    style: const TextStyle(fontSize: 12, color: AppColors.primary),
                                   ),
                                   const SizedBox(width: 4),
                                   GestureDetector(
                                     onTap: () {
-                                      state.filters['entreprises_screen']!
-                                          .remove(category);
-                                      search(
-                                        {
-                                          'search': _searchController.text,
-                                          'type': 'entreprises',
-                                          'type_entreprises': state
-                                              .filters['entreprises_screen']!
-                                              .join(','),
-                                        },
-                                      );
+                                      state.filters['entreprises_screen']!.remove(category);
+                                      search({
+                                        'search': _searchController.text,
+                                        'type': 'entreprises',
+                                        'type_entreprises': state.filters['entreprises_screen']!.join(','),
+                                      });
                                     },
-                                    child: const Icon(
-                                      Icons.close,
-                                      size: 16,
-                                      color: AppColors.primary,
-                                    ),
+                                    child: const Icon(Icons.close, size: 16, color: AppColors.primary),
                                   ),
                                 ],
                               ),
@@ -161,32 +121,29 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                           }),
                         ),
                       ),
-                    ],
+                    ]
                   );
                 },
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Expanded(
                 child: SingleChildScrollView(
-                  child: FutureBuilder(
-                    future: entreprises,
+                  child: StreamBuilder<List<ResultItem>>(
+                    stream: searchService.stream('entreprises'),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData) {
                         return const ListingSkeleton();
                       } else if (snapshot.hasError) {
-                        return const Text("Une erreur c'est produite");
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text("Une erreur s'est produite");
+                      } else if (snapshot.data!.isEmpty) {
                         return const Padding(
                           padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            "Nous n'avons trouvez aucune entreprise correspondante a votre recherche",
-                          ),
+                          child: Text("Aucune entreprise trouvée pour votre recherche"),
                         );
                       }
 
-                      double rowCount = snapshot.data!.length / 2;
+                      final data = snapshot.data!;
+                      double rowCount = data.length / 2;
 
                       return Wrap(
                         children: List.generate(rowCount.ceil(), (index) {
@@ -194,35 +151,27 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                             px: 16,
                             gap: 16,
                             children: List.generate(2, (colIndex) {
-                              if (snapshot.data!.length >
-                                  (index * 2 + colIndex)) {
-                                var entreprise =
-                                    snapshot.data![index * 2 + colIndex].data;
+                              if (data.length > (index * 2 + colIndex)) {
+                                final entreprise = data[index * 2 + colIndex].data;
 
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            EntrepriseDetailsScreen(
-                                          entreprise: Entreprise.fromDynamic(
-                                            entreprise,
-                                          ),
+                                        builder: (context) => EntrepriseDetailsScreen(
+                                          entreprise: Entreprise.fromDynamic(entreprise),
                                         ),
                                       ),
                                     );
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: AppColors.borderGray,
-                                      ),
+                                      border: Border.all(color: AppColors.borderGray),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
                                           height: imageHeight + avatarSize / 2,
@@ -232,54 +181,30 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                                 width: double.infinity,
                                                 height: imageHeight,
                                                 child: ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    topLeft: Radius.circular(
-                                                      10,
-                                                    ), // Set the desired radius for top-left corner
-                                                    topRight: Radius.circular(
-                                                      10,
-                                                    ), // Set the desired radius for top-right corner
+                                                  borderRadius: const BorderRadius.only(
+                                                    topLeft: Radius.circular(10),
+                                                    topRight: Radius.circular(10),
                                                   ),
                                                   child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        entreprise['image'],
-                                                    placeholder: (
-                                                      context,
-                                                      url,
-                                                    ) =>
-                                                        const ImageSkeleton(),
-                                                    errorWidget: (
-                                                      context,
-                                                      url,
-                                                      error,
-                                                    ) =>
-                                                        const ImageSkeleton(),
+                                                    imageUrl: entreprise['image'],
+                                                    placeholder: (context, url) => const ImageSkeleton(),
+                                                    errorWidget: (context, url, error) => const ImageSkeleton(),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
                                               Positioned(
-                                                top: imageHeight -
-                                                    avatarSize / 2 -
-                                                    2,
+                                                top: imageHeight - avatarSize / 2 - 2,
                                                 right: 4,
-                                                // Layer 2 with manual translation (acts like a higher z-index)
                                                 child: Container(
                                                   width: avatarSize,
                                                   height: avatarSize,
                                                   decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: Colors.white,
-                                                      width: 2,
-                                                    ),
+                                                    border: Border.all(color: Colors.white, width: 2),
                                                     shape: BoxShape.circle,
                                                   ),
                                                   child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      20.0,
-                                                    ), // Adjust the value to change roundness
+                                                    borderRadius: BorderRadius.circular(20),
                                                     child: Image.network(
                                                       entreprise['image'],
                                                       fit: BoxFit.cover,
@@ -291,11 +216,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 8.0,
-                                            right: 8.0,
-                                            bottom: 8.0,
-                                          ),
+                                          padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                                           child: Text(entreprise['nom']),
                                         ),
                                       ],
@@ -303,7 +224,7 @@ class _EntreprisesScreenState extends State<EntreprisesScreen> {
                                   ),
                                 );
                               } else {
-                                return const Text('');
+                                return const SizedBox();
                               }
                             }),
                           );

@@ -54,7 +54,7 @@ class _TermsScreenState extends State<TermsScreen> {
                 //   'https://test.admin.beigie-innov.com/storage/condition_market/condition.pdf',
                 // ),
                 Uri.parse(
-                  'https://ebom-market.com/conditions_utilisation',
+                  'https://www.notion.so/Confidentialit-EBom-Market-224766eec95e809588d3df2183222696',
                 ),
               ),
             ),

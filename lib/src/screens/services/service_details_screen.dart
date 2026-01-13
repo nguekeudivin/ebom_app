@@ -4,6 +4,7 @@ import 'package:ebom/src/models/service.dart';
 import 'package:ebom/src/screens/entreprises/entreprise_details_screen.dart';
 import 'package:ebom/src/services/entreprise_service.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
   final Service service;
@@ -79,14 +80,31 @@ class _ServiceDetailsState extends State<ServiceDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${widget.service.prix} XAF',
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Optionnel : pour espacer le prix et l'icône
+                    children: [
+                      Text(
+                        '${widget.service.prix} XAF',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Share.share(
+                            'Découvre le produit ${widget.service.nom} sur la plateforme E-Bom Market. '
+                            'Clique juste sur le lien ci-contre - '
+                            'https://ebom-market.com/service/${widget.service.categoryId}/${widget.service.categorie}/${widget.service.id}/${widget.service.nom}',
+                          );
+                        },
+                        icon: const Icon(Icons.share),
+                        color: AppColors.primary,
+                      ),
+                    ],
                   ),
+                  
                   const SizedBox(height: 12),
                   Text(
                     widget.service.description,

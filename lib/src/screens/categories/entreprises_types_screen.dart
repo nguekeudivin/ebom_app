@@ -87,6 +87,10 @@ class _CategoriesScreenState extends State<EntreprisesTypesScreen> {
                           onTap: () {
                             Provider.of<SearchProvider>(context, listen: false)
                                 .setKeyword(category['nom']);
+
+                            Provider.of<SearchProvider>(context, listen: false)
+                              .setFilters('entreprises_screen', [category['nom']]);
+
                             Provider.of<AppLayoutNavigationProvider>(
                               context,
                               listen: false,

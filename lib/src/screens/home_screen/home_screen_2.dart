@@ -34,7 +34,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
   void initState() {
     super.initState();
 
-    results = searchService.search('');
+    results = searchService.search({'search':''});
 
     // Initialize the futures
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -44,12 +44,18 @@ class _HomeScreen2State extends State<HomeScreen2> {
         setState(() {
           inputCtl.text = searchKeyword;
         });
-        results = searchService.search(searchKeyword);
+        results = searchService.search({'search':searchKeyword});
       }
     });
   }
 
   void search() {
+
+    Provider.of<SearchProvider>(context, listen: false)
+            .setKeyword(inputCtl.text);
+
+        results = searchService.search({'search':inputCtl.text});
+
     Provider.of<SubscriptionProvider>(
       context,
       listen: false,
@@ -83,7 +89,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
         // ignore: use_build_context_synchronously
         Provider.of<SearchProvider>(context, listen: false)
             .setKeyword(inputCtl.text);
-        results = searchService.search(inputCtl.text);
+        results = searchService.search({'search': inputCtl.text});
       }
     });
   }
@@ -220,15 +226,18 @@ class _HomeScreen2State extends State<HomeScreen2> {
                           ],
                         );
                       } else {
-                        return FutureBuilder(
-                          future: results,
+                        return StreamBuilder<List<ResultItem>>(
+                          // Création d'un stream temporaire à partir du Future de la recherche globale
+                          stream: (() async* {
+                            final results = await searchService.search({'search': inputCtl.text});
+                            yield results; // On émet directement la liste de résultats
+                          })(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
                               return Column(
                                 children: List.generate(20, (index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(16),
+                                  return  Padding(
+                                    padding: EdgeInsets.all(16),
                                     child: SearchResultSkeleton(),
                                   );
                                 }),
@@ -236,41 +245,26 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             } else if (snapshot.hasError) {
                               return const Padding(
                                 padding: EdgeInsets.all(16.0),
-                                child: Text(
-                                  'Aucun resultat',
-                                ),
+                                child: Text('Aucun resultat'),
                               );
-                            } else if (!snapshot.hasData ||
-                                snapshot.data!.isEmpty) {
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                               return const Padding(
                                 padding: EdgeInsets.all(16.0),
-                                child: Text(
-                                  'Aucun resultat',
-                                ),
+                                child: Text('Aucun resultat'),
                               );
                             }
 
+                            // Affichage des résultats
                             return Column(
-                              children:
-                                  List.generate(snapshot.data!.length, (index) {
-                                var item = snapshot.data![index];
-
+                              children: List.generate(snapshot.data!.length, (index) {
+                                final item = snapshot.data![index];
                                 switch (item.type) {
                                   case 'Produit':
-                                    return ProductResultItem(
-                                      index: index,
-                                      item: item,
-                                    );
+                                    return ProductResultItem(index: index, item: item);
                                   case 'Entreprise':
-                                    return EntrepriseResultItem(
-                                      index: index,
-                                      item: item,
-                                    );
+                                    return EntrepriseResultItem(index: index, item: item);
                                   case 'Service':
-                                    return ServiceResultItem(
-                                      index: index,
-                                      item: item,
-                                    );
+                                    return ServiceResultItem(index: index, item: item);
                                   default:
                                     return Text(item.type);
                                 }

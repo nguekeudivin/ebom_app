@@ -2,96 +2,126 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:ebom/src/config/app_api.dart';
 import 'package:http/http.dart' as http;
+import 'cache_service.dart';
 
 class ProductService {
   final String baseUrl;
+  final CacheService cacheService = CacheService();
 
   ProductService({this.baseUrl = AppApi.data});
 
-  // Method to get all product categories using Completer
+  // 🔹 Stream pour notifier l'UI
+  final StreamController<List<dynamic>> _streamController = StreamController.broadcast();
+  Stream<List<dynamic>> get cacheStream => _streamController.stream;
+
+  void _notifyCache(List<dynamic> data) {
+    _streamController.add(data);
+  }
+
+  // 🔹 Fonction pour comparer deux listes
+  bool _listEquals(List<dynamic>? a, List<dynamic>? b) {
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (jsonEncode(a[i]) != jsonEncode(b[i])) return false;
+    }
+    return true;
+  }
+
+  // 🔹 Tous les produits
   Future<List<dynamic>> items() async {
-    final completer = Completer<List<dynamic>>();
+    final cacheKey = 'items';
+    final cached = cacheService.get(cacheKey);
+    if (cached != null) _notifyCache(cached);
 
-    final url = '$baseUrl/produits';
-
-    http.get(Uri.parse(url)).then((response) {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/produits'));
       if (response.statusCode == 200) {
-        final res = json.decode(response.body);
-        // Return the result.
-        completer.complete(res['data']);
-      } else {
-        completer.completeError('Failed to load product categories');
+        final data = json.decode(response.body)['data'];
+        if (!_listEquals(cached, data)) {
+          cacheService.save(cacheKey, data);
+          _notifyCache(data);
+        }
+        return data;
       }
-    }).catchError((error) {
-      completer.completeError(error.toString());
-    });
+    } catch (e) {
+      return cached ?? [];
+    }
 
-    return completer.future;
+    return cached ?? [];
   }
 
+  // 🔹 Produits dynamiques
   Future<List<dynamic>> dynamicItems(String apiUri) async {
-    final completer = Completer<List<dynamic>>();
+    final cacheKey = 'dynamic_$apiUri';
+    final cached = cacheService.get(cacheKey);
+    if (cached != null) _notifyCache(cached);
 
-    http.get(Uri.parse('$baseUrl/$apiUri')).then((response) {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/$apiUri'));
       if (response.statusCode == 200) {
-        final res = json.decode(response.body);
-        completer.complete(res['data']);
-      } else {
-        completer.completeError('Failed to load product categories');
+        final data = json.decode(response.body)['data'];
+        if (!_listEquals(cached, data)) {
+          cacheService.save(cacheKey, data);
+          _notifyCache(data);
+        }
+        return data;
       }
-    }).catchError((error) {
-      completer.completeError(error.toString());
-    });
+    } catch (e) {
+      return cached ?? [];
+    }
 
-    return completer.future;
+    return cached ?? [];
   }
 
+  // 🔹 Recherche par mot clé
   Future<List<dynamic>> search(String keyword) async {
-    final completer = Completer<List<dynamic>>();
+    final cacheKey = 'search_$keyword';
+    final cached = cacheService.get(cacheKey);
+    if (cached != null) _notifyCache(cached);
 
-    String url = AppApi.search;
+    try {
+      final response = await http.post(
+        Uri.parse(AppApi.search),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode({'search': keyword}),
+      );
 
-    // Initial request
-    http
-        .post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        {'search': keyword},
-      ),
-    )
-        .then((response) {
       if (response.statusCode == 200) {
-        final res = json.decode(response.body);
-        completer.complete(res['data']['produits']);
-      } else {
-        completer.complete([]);
+        final data = json.decode(response.body)['data']['produits'];
+        if (!_listEquals(cached, data)) {
+          cacheService.save(cacheKey, data);
+          _notifyCache(data);
+        }
+        return data;
       }
-    }).catchError((error) {
-      completer.complete([]);
-    });
+    } catch (e) {
+      return cached ?? [];
+    }
 
-    return completer.future;
+    return cached ?? [];
   }
 
+  // 🔹 Recherche par catégorie
   Future<List<dynamic>> searchByCategory(int id) async {
-    final completer = Completer<List<dynamic>>();
+    final cacheKey = 'category_$id';
+    final cached = cacheService.get(cacheKey);
+    if (cached != null) _notifyCache(cached);
 
-    // Load the initial request.
-    http.get(Uri.parse('$baseUrl/produits/categorie/$id')).then((response) {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/produits/categorie/$id'));
       if (response.statusCode == 200) {
-        final res = json.decode(response.body);
-        // Save to cache.
-        completer.complete(res['data']);
-      } else {
-        completer.complete([]);
+        final data = json.decode(response.body)['data'];
+        if (!_listEquals(cached, data)) {
+          cacheService.save(cacheKey, data);
+          _notifyCache(data);
+        }
+        return data;
       }
-    }).catchError((error) {
-      completer.complete([]);
-    });
+    } catch (e) {
+      return cached ?? [];
+    }
 
-    return completer.future;
+    return cached ?? [];
   }
 }

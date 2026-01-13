@@ -1,11 +1,13 @@
 import 'package:ebom/src/components/button/primary_button.dart';
 import 'package:ebom/src/components/connexion/user_avatar.dart';
+import 'package:ebom/src/components/profile/delete_account_dialog.dart';
 import 'package:ebom/src/config/app_colors.dart';
 import 'package:ebom/src/screens/account/about_screen.dart';
 import 'package:ebom/src/screens/account/edit_profile_screen.dart';
 import 'package:ebom/src/screens/account/settings_screen.dart';
 import 'package:ebom/src/screens/subscriptions/subscriptions_screen.dart';
 import 'package:ebom/src/screens/welcome_screen.dart';
+import 'package:ebom/src/services/auth_service.dart';
 import 'package:ebom/src/services/connexion_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  AuthService authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,30 +106,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // profileLink(
-                  //   icon: Icons.history_outlined,
-                  //   text: 'Historique',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const HistoryScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // profileLink(
-                  //   icon: Icons.credit_card_outlined,
-                  //   text: 'Methode de paiements',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const PaymentMethodsScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                   profileLink(
                     icon: Icons.credit_score,
                     text: 'Mes abonnements',
@@ -137,30 +118,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  // profileLink(
-                  //   icon: Icons.pin_drop,
-                  //   text: 'Adresse',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const AddressesScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // profileLink(
-                  //   icon: Icons.favorite_outlined,
-                  //   text: 'Favoris',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const FavoritesScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                 ],
               ),
             ),
@@ -175,18 +132,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // profileLink(
-                  //   icon: Icons.contact_mail_outlined,
-                  //   text: 'Contactez-nous',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => ContactScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                   profileLink(
                     icon: Icons.settings,
                     text: 'Paramètres',
@@ -206,12 +151,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Share.share(
                         "Découvre avec moi l'application E-Bom pour trouver n'importe quoi n'importe où et à n'importe quel prix en un clic. https://ebom-market.com",
                       );
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const SettingsScreen(),
-                      //   ),
-                      // );
                     },
                   ),
                   profileLink(
@@ -226,18 +165,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  // profileLink(
-                  //   icon: Icons.feedback_outlined,
-                  //   text: 'Feedback',
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => ContactScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                   profileLink(
                     icon: Icons.logout_outlined,
                     text: 'Déconnexion',
@@ -295,8 +222,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                  const SizedBox(
-                    height: 48,
+                  
+                ],
+              ),
+            ),
+            const Divider(
+              color: AppColors.borderGray, // Line color
+              thickness: 1.0, // Line thickness
+              indent: 16.0, // Left spacing
+              endIndent: 16.0, // Right spacing
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  profileLink(
+                    icon: Icons.delete,
+                    text: 'Désactiver le compte',
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const DeleteAccountDialog(),
+                      );
+                    },
                   ),
                 ],
               ),

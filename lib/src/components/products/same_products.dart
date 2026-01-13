@@ -1,3 +1,4 @@
+
 import 'package:ebom/src/components/skeleton/horizontal_list_skeleton.dart';
 import 'package:ebom/src/screens/products/product_details_screen.dart';
 import 'package:ebom/src/services/product_service.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class SameProducts extends StatefulWidget {
   final String categoryName;
-  const SameProducts({required this.categoryName, super.key});
+  final int productId;
+  const SameProducts({required this.categoryName, required this.productId, super.key});
 
   @override
   State<SameProducts> createState() => _SameProductsState();
@@ -64,6 +66,10 @@ class _SameProductsState extends State<SameProducts> {
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   var product = snapshot.data![index].data;
+
+                  if(product['id'] == widget.productId){
+                    return Container(width:0);
+                  }
 
                   return GestureDetector(
                     onTap: () {

@@ -20,6 +20,8 @@ class Entreprise {
   String description;
   String url;
   String banniere;
+  String typeEntreprise;
+  int typeEntrepriseId;
 
   // Constructor with default values for sigle, pays, and image
   Entreprise({
@@ -44,6 +46,8 @@ class Entreprise {
     this.description = '',
     this.url = '',
     this.banniere = '',
+    this.typeEntreprise = '',
+    this.typeEntrepriseId = 0
   });
 
   // Factory method for creating an instance from JSON
@@ -71,6 +75,8 @@ class Entreprise {
       description: json['description'] ?? '',
       url: json['url'] ?? '',
       banniere: json['banniere'] ?? '',
+      typeEntreprise: json['type_entreprise'] ?? '',
+      typeEntrepriseId: json['type_entreprise_id'] ?? 0
     );
   }
 
@@ -100,6 +106,8 @@ class Entreprise {
       url: data['url'] ?? '',
       banniere: data['banniere'] ??
           'https://admin.bie-innov.com/storage/users/default.png',
+      typeEntreprise: data['type_entreprise'] ?? '',
+      typeEntrepriseId: data['type_entreprise_id'] ?? 0
     );
   }
 
@@ -127,6 +135,8 @@ class Entreprise {
       'description': description,
       'url': url,
       'banniere': banniere,
+      'type_entreprise': typeEntreprise,
+      'type_entreprise_id': typeEntrepriseId
     };
   }
 }
